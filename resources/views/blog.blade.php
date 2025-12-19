@@ -11,6 +11,8 @@
 <!-- search -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+
 
 
 <div data-aos="fade-up" data-aos-anchor-placement="bottom-center">

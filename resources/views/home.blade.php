@@ -1,4 +1,4 @@
-@extends('layouts.Tailwind')
+@extends('layouts.user')
 @section('title', 'Dashboard Home')
 
 @section('content')
@@ -50,8 +50,6 @@
 </style>
 
 <div class="flex h-screen bg-gray-100">
-    {{-- include sidebar --}}
-    @include('layouts.user')
 
     {{-- Overlay สำหรับ Sidebar บนมือถือ --}}
     <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black opacity-50 z-40 hidden md:hidden">

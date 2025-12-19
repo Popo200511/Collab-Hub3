@@ -57,7 +57,6 @@
 
 
 <div class="flex h-[calc(100vh-64px)] overflow-hidden">
-    <!-- Aside Sidebar -->
 
 
     <!-- Main Content -->

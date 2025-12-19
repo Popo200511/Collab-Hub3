@@ -7,6 +7,9 @@
 <!-- Export To Excel -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
+<!--sweetalert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="https://unpkg.com/lucide@latest"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons/css/all/all.css">
 
@@ -19,6 +22,7 @@
 
 
 
+
 <!-- Hover สำหรับ Filter -->
 <style>
     .filter-active i {
@@ -27,6 +31,10 @@
 
     thead th:hover .filter-icon:not(.filter-active) i {
         color: #93c5fd;
+    }
+
+    .font-sarabun {
+        font-family: 'Sarabun', sans-serif !important;
     }
 </style>
 
@@ -74,169 +82,225 @@
 
         <div class="bg-white p-4 rounded-xl shadow-md">
             <div class="flex items-center justify-between mb-1">
-                <h2 class="text-2xl font-bold text-blue-900">Request Added Job </h2>
+                <h2 class="text-2xl font-sarabun text-blue-900">Request Added Job </h2>
 
-                <button type="button" id="exportPOToExcel" onclick="exportPOToExcel()" class="px-4 py-2 rounded-lg font-semibold text-white
+                <button type="button" id="exportPOToExcel" onclick="exportPOToExcel()" class="px-4 py-2 rounded-lg font-sarabun text-white
               bg-gradient-to-r from-green-600 to-green-500
               shadow-md hover:shadow-lg hover:scale-105 transition-all">
                     <i class="fas fa-file-excel mr-2"></i> Export visible Data
                 </button>
             </div>
 
-            <div class="overflow-y-auto h-[500px]">
+            <div class="overflow-y-auto h-[566px]">
                 <table class="min-w-full border-collapse table-auto">
                     <thead class="bg-blue-950 text-white text-base sticky top-0 z-10">
                         <tr>
-                            <th class="py-3 px-3  border-b whitespace-nowrap text-center">
-                                <div class="flex items-center justify-center gap-2">
-                                    <span>Refcode</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="0">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span
+                                        class="tracking-wide font-sarabun text-base font-medium text-white/90">Refcode</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="0">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
+                                    </span>
+                                </div>
+                            </th>
+
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span
+                                        class="tracking-wide font-sarabun text-base font-medium text-white/90">Job<br>Adding
+                                        Status</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="1">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
+                                    </span>
+                                </div>
+                            </th>
+
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="tracking-wide font-sarabun text-base font-medium text-white/90">Refcode
+                                        On ERP</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="2">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
+                                    </span>
+                                </div>
+                            </th>
+
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="tracking-wide font-sarabun text-base font-medium text-white/90">Site
+                                        Code</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="3">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
                                 <div class="flex items-center justify-center gap-2">
-                                    <span>Job <br>Adding Status</span>
+                                    <span class="tracking-wide font-sarabun text-base font-medium text-white/90">Site
+                                        Name</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="1">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="4">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
                                 <div class="flex items-center justify-center gap-2">
-                                    <span>Refcode On ERP</span>
+                                    <span class="tracking-wide font-sarabun text-base font-medium text-white/90">Job
+                                        <br> Description</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="2">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="5">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
-                                <div class="flex items-center justify-center gap-2">
-                                    <span>Site Code</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="3">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="tracking-wide font-sarabun text-base font-medium text-white/90">Project
+                                        Code</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="6">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
-                                <div class="flex items-center justify-center gap-2">
-                                    <span>Site Name</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="4">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="tracking-wide font-sarabun text-base font-medium text-white/90">Office
+                                        Code</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="7">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
-                                <div class="flex items-center justify-center gap-2">
-                                    <span>Job <br> Description</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="5">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span
+                                        class="tracking-wide font-sarabun text-base font-medium text-white/90">Customer<br>Region</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="8">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
                                 <div class="flex items-center justify-center gap-2">
-                                    <span>Project Code</span>
+                                    <span
+                                        class="tracking-wide font-sarabun text-base font-medium text-white/90">Estimated
+                                        <br> Revenue</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="6">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="9">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
                                 <div class="flex items-center justify-center gap-2">
-                                    <span>Office Code</span>
+                                    <span
+                                        class="tracking-wide font-sarabun text-base font-medium text-white/90">Estimated
+                                        <br> Service Cost</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="7">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="10">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
                                 <div class="flex items-center justify-center gap-2">
-                                    <span>Customer<br>Region</span>
+                                    <span
+                                        class="tracking-wide font-sarabun text-base font-medium text-white/90">Estimated
+                                        <br> Material Cost</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="8">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="11">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
                                 <div class="flex items-center justify-center gap-2">
-                                    <span>Estimated <br> Revenue</span>
+                                    <span
+                                        class="tracking-wide font-sarabun text-base font-medium text-white/90">Estimated
+                                        <br> Gross Profit</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="9">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="12">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
                                 <div class="flex items-center justify-center gap-2">
-                                    <span>Estimated <br> Service Cost</span>
+                                    <span
+                                        class="tracking-wide font-sarabun text-base font-medium text-white/90">Estimated
+                                        <br> GrossProfit Margin</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="10">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="13">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
+                            <th class="py-3 px-4 whitespace-nowrap text-center border-b border-blue-900 group">
                                 <div class="flex items-center justify-center gap-2">
-                                    <span>Estimated <br> Material Cost</span>
+                                    <span
+                                        class="tracking-wide font-sarabun text-base font-medium text-white/90">Requester</span>
 
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="11">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        data-col="14">
+                                        <i class="fi fi-br-bars-filter text-base text-white"></i>
                                     </span>
                                 </div>
                             </th>
 
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
-                                <div class="flex items-center justify-center gap-2">
-                                    <span>Estimated <br> Gross Profit</span>
-
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="12">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
-                                    </span>
-                                </div>
-                            </th>
-
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
-                                <div class="flex items-center justify-center gap-2">
-                                    <span>Estimated <br> GrossProfit Margin</span>
-
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="13">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
-                                    </span>
-                                </div>
-                            </th>
-
-                            <th class="py-3 px-3 border-b whitespace-nowrap text-center">
-                                <div class="flex items-center justify-center gap-2">
-                                    <span>Requester</span>
-
-                                    <span class="filter-icon cursor-pointer inline-flex items-center" data-col="14">
-                                        <i class="fi fi-br-bars-filter text-white"></i>
-                                    </span>
-                                </div>
-                            </th>
 
                         </tr>
                     </thead>
@@ -290,11 +354,13 @@
                                             @method('PUT')
                                             @foreach (['Approved', 'Rejected'] as $status)
                                             @php $c = $statusColors[$status]; @endphp
-                                            <button type="submit" name="Job_Adding_Status" value="{{ $status }}"
+                                            <button type="button" onclick="confirmStatusChange(this)"
+                                                data-status="{{ $status }}"
                                                 class="w-full px-4 py-2 text-left hover:bg-gray-100 {{ $c['text'] }} flex items-center gap-2 text-sm">
                                                 <span class="w-2 h-2 {{ $c['dot'] }} rounded-full"></span>
                                                 {{ $status }}
                                             </button>
+
                                             @endforeach
                                         </form>
                                     </div>
@@ -344,38 +410,60 @@
             </div>
 
             <div id="listViewPagination"
-                class="mt-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 p-4 bg-gray-50 rounded-b-xl border border-t-0 border-gray-200">
-                <!-- Row Count Dropdown -->
-                <div class="flex items-center space-x-3">
-                    <label for="rowsPerPage" class="text-sm font-medium text-gray-600">แสดงรายการ:</label>
-                    <select id="rowsPerPageList" onchange="changeRowsPerPage(this.value)"
-                        class="py-2 px-4 border border-gray-300 rounded-lg text-sm font-semibold bg-white cursor-pointer shadow-sm transition duration-150 hover:border-indigo-400 focus:ring-indigo-500 focus:border-indigo-500 appearance-none">
-                        <option value="5">5 แถว</option>
-                        <option value="10" selected>10 แถว</option>
-                        <option value="20">20 แถว</option>
-                    </select>
+                class="mt-4 flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0 p-5 bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-300">
+
+                <div class="flex items-center space-x-3 order-2 lg:order-1">
+                    <label for="rowsPerPageList"
+                        class="text-xs font-bold uppercase tracking-widest text-gray-400">แสดงรายการ:</label>
+                    <div class="relative">
+                        <select id="rowsPerPageList" onchange="changeRowsPerPage(this.value)"
+                            class="block py-2 pl-4 pr-10 border border-gray-200 rounded-xl text-sm font-bold bg-gray-50 cursor-pointer appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                            <option value="5">5 รายการ</option>
+                            <option value="10" selected>10 รายการ</option>
+                            <option value="20">20 รายการ</option>
+                        </select>
+                        {{-- Custom Arrow Icon --}}
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Pagination -->
-                <nav class="flex items-center space-x-1" aria-label="Pagination">
+                <nav class="flex items-center space-x-2 order-1 lg:order-2" aria-label="Pagination">
+                    {{-- Previous Button --}}
                     <button id="prevPageBtnList" onclick="goToPage(currentPage - 1)"
-                        class="pagination-btn p-3 rounded-full text-indigo-600 hover:bg-indigo-100 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-                        < </button>
+                        class="pagination-btn group flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none shadow-sm">
+                        <i
+                            class="fa-solid fa-chevron-left text-xs transition-transform group-hover:-translate-x-0.5"></i>
+                    </button>
 
-                            <div id="pageNumbersList" class="flex space-x-1">
-                                <!-- Page buttons -->
-                            </div>
+                    {{-- Page Numbers Container --}}
+                    <div id="pageNumbersList" class="flex items-center space-x-1">
+                        {{-- ตัวอย่างปุ่ม Active --}}
+                        <button
+                            class="w-10 h-10 rounded-xl bg-indigo-600 text-white font-bold text-sm shadow-md shadow-indigo-200">1</button>
+                        <button
+                            class="w-10 h-10 rounded-xl bg-white text-gray-600 font-semibold text-sm hover:bg-indigo-50 transition-all">2</button>
+                        <button
+                            class="w-10 h-10 rounded-xl bg-white text-gray-600 font-semibold text-sm hover:bg-indigo-50 transition-all">3</button>
+                    </div>
 
-                            <button id="nextPageBtnList" onclick="goToPage(currentPage + 1)"
-                                class="pagination-btn p-3 rounded-full text-indigo-600 hover:bg-indigo-100 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-                                >
-                            </button>
+                    {{-- Next Button --}}
+                    <button id="nextPageBtnList" onclick="goToPage(currentPage + 1)"
+                        class="pagination-btn group flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none shadow-sm">
+                        <i
+                            class="fa-solid fa-chevron-right text-xs transition-transform group-hover:translate-x-0.5"></i>
+                    </button>
                 </nav>
 
-                <!-- Status/Summary Text -->
-                <span id="paginationSummaryList" class="text-sm text-gray-600">
-                    แสดง 1-10 จากทั้งหมด 15 รายการ
-                </span>
+                <div class="order-3 text-right">
+                    <span id="paginationSummaryList"
+                        class="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
+                        แสดง <span class="text-indigo-600 font-bold">1-10</span> จากทั้งหมด <span
+                            class="text-gray-900 font-bold">15</span> รายการ
+                    </span>
+                </div>
             </div>
         </div>
     </main>
@@ -866,6 +954,55 @@ function changeRowsPerPage(v) {
     XLSX.writeFile(wb, "Visible_Table_Data.xlsx");
 }
 
+</script>
+
+
+<script>
+function confirmStatusChange(button) {
+    const status = button.dataset.status;
+    const form = button.closest('form');
+
+    let config = {
+        Approved: {
+            icon: 'question',
+            title: 'ยืนยันการอนุมัติ?',
+            text: 'คุณต้องการอนุมัติรายการนี้ใช่หรือไม่',
+            confirmColor: '#22c55e'
+        },
+        Rejected: {
+            icon: 'warning',
+            title: 'ยืนยันการปฏิเสธ?',
+            text: 'คุณต้องการปฏิเสธรายการนี้ใช่หรือไม่',
+            confirmColor: '#ef4444'
+        }
+    };
+
+    Swal.fire({
+        icon: config[status].icon,
+        title: config[status].title,
+        text: config[status].text,
+        showCancelButton: true,
+        confirmButtonText: 'ยืนยัน',
+        cancelButtonText: 'ยกเลิก',
+        confirmButtonColor: config[status].confirmColor,
+        cancelButtonColor: '#9ca3af',
+        customClass: {
+            title: 'swal-title',
+            popup: 'font-sarabun'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // สร้าง hidden input แล้ว submit
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'Job_Adding_Status';
+            input.value = status;
+            form.appendChild(input);
+
+            form.submit();
+        }
+    });
+}
 </script>
 
 @endsection
