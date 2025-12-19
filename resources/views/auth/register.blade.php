@@ -81,7 +81,7 @@
                     <span class="text-xl text-slate-700 tracking-tight">Add Member</span>
                 </h3>
 
-                <button type="button" onclick="confirmSubmission()" class="group relative inline-flex items-center gap-2 h-10 px-6 rounded-xl text-sm font-bold text-white transition-all duration-300 
+                <button type="button" class="group relative inline-flex items-center gap-2 h-10 px-6 rounded-xl text-sm font-bold text-white transition-all duration-300 
                bg-gradient-to-r from-teal-500 to-emerald-600 
                hover:from-teal-600 hover:to-emerald-700 
                hover:shadow-[0_8px_20px_-6px_rgba(20,184,166,0.5)] 
