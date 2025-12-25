@@ -41,12 +41,14 @@
 
         <aside class="w-64 bg-blue-950 text-white flex flex-col p-2 space-y-1">
 
-            <div class="flex justify-center items-center py-2 mx-3 mt-2 
+            <div class="flex justify-center items-center py-2 mx-3 mt-2
             bg-white/10 rounded-xl backdrop-blur-sm shadow-sm">
-                <h2 class="text-xl tracking-wide font-extrabold text-rose-500 tracking-wider uppercase">
-                    Collab <span class="text-blue-700">Hub</span>
+                <h2 class="text-xl font-extrabold tracking-wide">
+                    <span class="text-rose-500">Collab</span>
+                    <span class="text-blue-700">Hub</span>
                 </h2>
             </div>
+
 
             <div class="mt-4 space-y-4 overflow-y-auto h-[calc(98vh-120px)] pr-1">
 

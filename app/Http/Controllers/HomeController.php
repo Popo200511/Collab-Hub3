@@ -68,8 +68,6 @@ class HomeController extends Controller
     
         return response()->json(['error' => 'ไม่สามารถอัปเดตสถานะได้']);
     }
-
-    
     
 
 }
