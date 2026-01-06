@@ -98,19 +98,19 @@
                 <!-- Reject -->
                 <div class="bg-white p-2 rounded-xl shadow-md min-h-[60px]">
                     <h3 class="text-sm font-sarabun text-gray-500 mb-2">Reject</h3>
-                    <div class="text-4xl font-bold text-red-600 text-center"></div>
+                    <div class="text-4xl font-bold text-red-600 text-center">10</div>
                 </div>
 
                 <!-- Pending -->
                 <div class="bg-white p-2 rounded-xl shadow-md min-h-[60px]">
                     <h3 class="text-sm font-sarabun text-gray-500 mb-2 ">Pending</h3>
-                    <div class="text-4xl font-bold text-orange-400 text-center"></div>
+                    <div class="text-4xl font-bold text-orange-400 text-center">10</div>
                 </div>
 
                 <!-- Approved -->
                 <div class="bg-white p-2 rounded-xl shadow-md min-h-[60px]">
                     <h3 class="text-sm font-sarabun text-gray-500 mb-2 ">Approved</h3>
-                    <div class="text-4xl font-bold text-green-600 text-center"></div>
+                    <div class="text-4xl font-bold text-green-600 text-center">10</div>
                 </div>
 
             </div>
@@ -132,7 +132,7 @@
 
             </div>
 
-            <div class="relative overflow-x-auto mt-2 h-[406px] font-sarabun">
+            <div class="relative overflow-x-auto mt-2 h-[395px] font-sarabun">
                 <table class="min-w-max table-fixed border-separate border-spacing-0
                                 [--th-h:20px]
                                 [--th-w:20px]
@@ -1214,15 +1214,6 @@ function clearAllTableFilters() {
     window.addEventListener('scroll', () => dropdown.classList.add('hidden'), true);
     window.addEventListener('resize', () => dropdown.classList.add('hidden'));
 </script>
-
-
-
-
-
-
-
-
-
 
 
 <!-- ฟังชันสำหรับ Export -->

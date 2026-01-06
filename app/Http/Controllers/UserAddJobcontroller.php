@@ -20,7 +20,7 @@ class UserAddJobcontroller extends Controller
         $projectCodes = DB::table('collab_projectcode')->get();
         $officeCodes  = DB::table('collab_officecode')->get();
 
-        return view('user.about.about', compact('officeCodes', 'projectCodes'));
+        return view('home', compact('officeCodes', 'projectCodes'));
     }
 
     public function markAsRead($id)
@@ -58,13 +58,13 @@ class UserAddJobcontroller extends Controller
             ->where('Requester', $requester)
             ->orderByRaw("
             CASE Job_Adding_Status
-                WHEN 'Approved' THEN 1
-                WHEN 'Pending' THEN 2
+                WHEN 'Approved' THEN 2 
+                WHEN 'Pending' THEN 1
                 WHEN 'Rejected' THEN 3
                 ELSE 4
             END
         ")
-            ->orderBy('Refcode', 'asc')
+            ->orderByDesc('id')   // เรียงใหม่สุดก่อน (ใช้ id หรือ created_at)
             ->get();
 
         $countApproved = DB::table('collab_newjob')
@@ -105,7 +105,7 @@ class UserAddJobcontroller extends Controller
     public function sda(Request $request)
     {
         $newjob = DB::table('collab_newjob')
-            ->orderByRaw("
+    ->orderByRaw("
         CASE Job_Adding_Status
             WHEN 'Approved' THEN 2
             WHEN 'Pending' THEN 1
@@ -113,8 +113,10 @@ class UserAddJobcontroller extends Controller
             ELSE 4
         END
     ")
-            ->orderBy('Refcode', 'asc')
-            ->get();
+    ->orderByDesc('id')   // เรียงใหม่สุดก่อน (ใช้ id หรือ created_at)
+    ->get();
+
+    //dd($newjob);
 
         // ดึงงานที่ Pending
         $pendingJobs = DB::table('collab_newjob')

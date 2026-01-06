@@ -41,14 +41,13 @@
 
         <aside class="w-64 bg-blue-950 text-white flex flex-col p-2 space-y-1">
 
-            <div class="flex justify-center items-center py-2 mx-3 mt-2
+            <div
+                class="flex justify-center items-center py-2 mx-3 mt-2 
             bg-white/10 rounded-xl backdrop-blur-sm shadow-sm">
-                <h2 class="text-xl font-extrabold tracking-wide">
-                    <span class="text-rose-500">Collab</span>
-                    <span class="text-blue-700">Hub</span>
+                <h2 class="text-xl tracking-wide font-extrabold text-rose-500 tracking-wider uppercase">
+                    Collab <span class="text-blue-700">Hub</span>
                 </h2>
             </div>
-
 
             <div class="mt-4 space-y-4 overflow-y-auto h-[calc(98vh-120px)] pr-1">
 
@@ -63,7 +62,8 @@
                 <!-- PR Dropdown -->
                 <div x-data="{ open: false }" class="flex flex-col">
                     <!-- ปุ่ม PR -->
-                    <button type="button" @click="open = !open" class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
+                    <button type="button" @click="open = !open"
+                        class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
                hover:bg-white hover:text-blue-800">
                         <div class="flex items-center gap-2">
                             <i class="fas fa-database"></i>
@@ -79,42 +79,12 @@
 
                         <!-- Project View -->
                         @if ($showProjectView16)
-                        <a href="{{ route('project.projectview') }}"
-                            class="px-3 py-1 rounded-md transition font-sarabun
+                            <a href="{{ route('project.projectview') }}"
+                                class="px-3 py-1 rounded-md transition font-sarabun
        {{ Route::currentRouteName() === 'pr.purchase' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
-                            Project View 16
-                        </a>
+                                Project View 16
+                            </a>
                         @endif
-
-                        <!--  New Site -->
-                        <a href="/blog"
-                            class="px-3 py-1 rounded-md transition font-sarabun {{ Route::currentRouteName() === 'pr.home' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
-                            New Site
-                        </a>
-
-                        @php
-                        $isAuthorized = Auth::check() && Auth::user()->status == 4;
-                        @endphp
-
-                        <!-- 54_NT_BTO -->
-                        <a href="{{ $isAuthorized ? '/towerDismantle/home' : '#' }}"
-                            class="px-3 py-1 rounded-md transition font-sarabun {{ $isAuthorized ? '' : 'opacity-50 cursor-not-allowed' }} {{ Route::currentRouteName() === 'pr.purchase' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}"
-                            @if(! $isAuthorized) onclick="event.preventDefault(); alert('คุณไม่มีสิทธิ์เพิ่มสมาชิก');"
-                            @endif>
-                            54_NT_BTO
-                        </a>
-
-                        <!-- Implement -->
-                        <a href="#"
-                            class="px-3 py-1 rounded-md transition font-sarabun {{ Route::currentRouteName() === 'pr.purchase' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
-                            Implement
-                        </a>
-
-                        <!-- 98_True -->
-                        <a href="/projectdatabases/98true/home"
-                            class="px-3 py-1 rounded-md transition font-sarabun {{ Route::currentRouteName() === 'pr.purchase' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
-                            98_True
-                        </a>
 
 
                     </div>
@@ -124,7 +94,8 @@
                 <!-- ERP -->
                 <div x-data="{ open: false }" class="flex flex-col">
                     <!-- ปุ่ม PR -->
-                    <button type="button" @click="open = !open" class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
+                    <button type="button" @click="open = !open"
+                        class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
                hover:bg-white hover:text-blue-800">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-building"></i>
@@ -139,12 +110,12 @@
 
                         <!-- Refcode -->
                         @if (Auth::check())
-                        <a href="refcode/home"
-                            class="px-3 py-1 rounded-md transition font-sarabun {{ Route::currentRouteName() === 'pr.home' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
-                            Refcode
-                        </a>
+                            <a href="refcode/home"
+                                class="px-3 py-1 rounded-md transition font-sarabun {{ Route::currentRouteName() === 'pr.home' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
+                                Refcode
+                            </a>
 
-                        <!-- Billing -->
+                            <!-- Billing
                         <a href="billing/home"
                             class="px-3 py-1 rounded-md transition font-sarabun {{ Route::currentRouteName() === 'pr.purchase' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             Billing
@@ -156,7 +127,7 @@
                             Inventory
 
                         </a>
-
+-->
                         @endif
                     </div>
                 </div>
@@ -164,7 +135,8 @@
 
                 <div x-data="{ open: false }" class="flex flex-col">
                     <!-- ปุ่ม IT Support -->
-                    <button type="button" @click="open = !open" class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
+                    <button type="button" @click="open = !open"
+                        class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
                hover:bg-white hover:text-blue-800">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-headset"></i>
@@ -191,11 +163,11 @@
                         </a>
 
                         @php
-                        $isAuthorized = Auth::check() && Auth::user()->status == 4;
+                            $isAuthorized = Auth::check() && Auth::user()->status == 'Admin';
                         @endphp
 
                         <a href="{{ $isAuthorized ? 'https://onedrive.live.com/:x:/g/personal/83EA148C542F6F94/EZRvL1SMFOoggIOW3wAAAAABlgZcLYR_-c6XGPd8omyOUA?resid=83EA148C542F6F94!57238&ithint=file%2Cxlsx&e=4%3Af683edb2bd394b05a4823a9a2d7762b8&sharingv2=true&fromShare=true&at=9&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy84M0VBMTQ4QzU0MkY2Rjk0L0VaUnZMMVNNRk9vZ2dJT1czd0FBQUFBQmxnWmNMWVJfLWM2WEdQZDhvbXlPVUE_ZT00OmY2ODNlZGIyYmQzOTRiMDVhNDgyM2E5YTJkNzc2MmI4JnNoYXJpbmd2Mj10cnVlJmZyb21TaGFyZT10cnVlJmF0PTk' : '#' }}"
-                            class="px-3 py-1 rounded-md transition font-sarabun {{ $isAuthorized ? 'target=_blank' : 'onclick=event.preventDefault();' }} {{ Route::currentRouteName() === 'pr.purchase' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
+                            target="blank" class="px-3 py-1 rounded-md transition font-sarabun {{ $isAuthorized ? 'target=_blank' : 'onclick=event.preventDefault();' }} {{ Route::currentRouteName() === 'pr.purchase' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             Databases
                         </a>
                     </div>
@@ -204,7 +176,8 @@
 
                 <div x-data="{ open: false }" class="flex flex-col">
                     <!-- ปุ่ม IT Support -->
-                    <button type="button" @click="open = !open" class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
+                    <button type="button" @click="open = !open"
+                        class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
                hover:bg-white hover:text-blue-800">
                         <div class="flex items-center gap-2">
                             <i class="fa-regular fa-user"></i>
@@ -218,30 +191,35 @@
                         class="flex flex-col pl-8 mt-2 space-y-1">
 
                         @php
-                        $isAuthorized = Auth::check() && Auth::user()->status == 4;
+                            $isAuthorized = Auth::check() && Auth::user()->status == 'Admin';
                         @endphp
 
-                        <!-- Add Member -->
-                        <a href="{{ route('sda.register') }}" class="px-3 py-1 rounded-md transition font-sarabun 
-    {{ Route::currentRouteName() === 'pr.purchase'
-        ? 'bg-white text-blue-800'
-        : 'text-blue hover:bg-white hover:text-blue-800' }}">
-                            Add Member
-                        </a>
+                        @if ($isAuthorized)
+                            <!-- Add Member -->
+                            <a href="{{ route('sda.register') }}"
+                                class="px-3 py-1 rounded-md transition font-sarabun
+       {{ Route::currentRouteName() === 'pr.purchase'
+           ? 'bg-white text-blue-800'
+           : 'text-blue hover:bg-white hover:text-blue-800' }}">
+                                Add Member
+                            </a>
+                        @endif
 
-                        <!-- Member Total -->
+
+                        <!-- Member Total
                         <a href="#"
                             class="px-3 py-1 rounded-md transition font-sarabun {{ Route::currentRouteName() === 'pr.purchase' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             Member Total
                         </a>
-
+ -->
                     </div>
                 </div>
 
 
                 <div x-data="{ open: false }" class="flex flex-col">
                     <!-- ปุ่ม IT Support -->
-                    <button type="button" @click="open = !open" class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
+                    <button type="button" @click="open = !open"
+                        class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
                hover:bg-white hover:text-blue-800">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-briefcase"></i>
@@ -255,11 +233,11 @@
                         class="flex flex-col pl-8 mt-2 space-y-1">
 
                         @php
-                        $isAuthorized = Auth::check() && Auth::user()->status == 4;
+                            $isAuthorized = Auth::check() && Auth::user()->status == 'Admin';
                         @endphp
 
                         <!-- Add Member -->
-                        <a href="{{ $isAuthorized ? route('user.sda.home') : route('addjob.user') }}"
+                        <a href="{{ $isAuthorized ? route('user.sda.home') : route('addjob.user') }}" target="_blank"
                             class="px-3 py-1 rounded-md transition font-sarabun {{ Route::currentRouteName() === 'newjobassignment.addjob' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             Add Job
                         </a>
@@ -280,7 +258,8 @@
             <!-- ปุ่มออกจากระบบ -->
             <div class="mt-auto px-2 pb-4 mt-2">
                 <a href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center justify-center gap-2 w-full 
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    class="flex items-center justify-center gap-2 w-full 
                bg-red-600 text-white font-sarabun py-2 rounded-lg shadow-md
                transition transform hover:bg-red-700 hover:scale-[1.02]">
                     <i class="fas fa-sign-out-alt"></i>
@@ -295,8 +274,7 @@
         </aside>
 
         {{-- ===== Main Content ===== --}}
-        <main class="flex-1 overflow-auto
-        ">
+        <main class="flex-1 overflow-auto">
             @yield('content')
         </main>
 

@@ -56,8 +56,14 @@ class UserProjectDatabasescontroller extends Controller
                 })
         );
 
-        // 2️⃣ ดึงข้อมูลจาก project16 มาแสดง
+                                            // 2️⃣ ดึงข้อมูลจาก project16 มาแสดงตาม status ของ user
+        $userStatus = Auth::user()->status; // เช่น "01_BKK" หรือ "admin"
+
         $projectData = DB::table('collab_table_project16')
+            ->when($userStatus !== 'Admin', function ($query) use ($userStatus) {
+                // ถ้าไม่ใช่ admin ให้กรองตาม Office_Code_PJ
+                return $query->where('Office_Code_PJ', $userStatus);
+            })
             ->orderBy('Refcode_PJ')
             ->get();
 
@@ -86,23 +92,39 @@ class UserProjectDatabasescontroller extends Controller
     // update or insert permissions
     public function save(Request $request)
     {
-        $userIds = array_keys($request->member_status); // user IDs
+        $userIds = array_keys($request->member_status);
 
         foreach ($userIds as $userId) {
+
             $data = [
-                'member_status' => $request->member_status[$userId] ?? 'no',
-                'project_role'  => $request->project_role[$userId] ?? null,
+                'member_status'                    => $request->member_status[$userId] ?? 'no',
+                'project_role'                     => $request->project_role[$userId] ?? null,
+
+                // ✅ อ่านจาก *_permission
+                'Customer_Region_PJ'               => $request->Customer_Region_PJ_permission[$userId] ?? 'invisible',
+                'Estimated_Revenue_PJ'             => $request->Estimated_Revenue_PJ_permission[$userId] ?? 'invisible',
+                'Estimated_Service_Cost_PJ'        => $request->Estimated_Service_Cost_PJ_permission[$userId] ?? 'invisible',
+                'Estimated_Material_Cost_PJ'       => $request->Estimated_Material_Cost_PJ_permission[$userId] ?? 'invisible',
+
+                // 🔥 เพิ่ม 2 ตัวนี้
+                'Estimated_Gross_Profit_PJ'        => $request->Estimated_Gross_Profit_PJ_permission[$userId] ?? 'invisible',
+                'Estimated_Gross_Profit_Margin_PJ' => $request->Estimated_Gross_Profit_Margin_PJ_permission[$userId] ?? 'invisible',
             ];
 
-            // loop col1 - col50
+            //dd($data);
+
+            // col 1 - col 50
             for ($i = 1; $i <= 50; $i++) {
-                $colName        = "col{$i}";
-                $data[$colName] = $request->{"col{$i}_permission"}[$userId] ?? 'invisible';
+                $data["col{$i}"] = $request->{"col{$i}_permission"}[$userId] ?? 'invisible';
             }
 
-            // update หรือ insert
+            //dd($data);
+
             DB::table('collab_user_permissions')->updateOrInsert(
-                ['user_id' => $userId, 'project_code' => $request->project_code],
+                [
+                    'user_id'      => $userId,
+                    'project_code' => $request->project_code,
+                ],
                 $data
             );
         }
@@ -118,21 +140,25 @@ class UserProjectDatabasescontroller extends Controller
             'value' => 'nullable|string',
         ]);
 
-        // อนุญาตเฉพาะ col1 - col50
-        $allowedFields = [];
+        // ===== col1 - col50 =====
+        $allowedCols = [];
         for ($i = 1; $i <= 50; $i++) {
-            $allowedFields[] = 'col' . $i;
+            $allowedCols[] = 'col' . $i;
         }
 
-        if (! in_array($request->field, $allowedFields)) {
+        // ===== project money fields =====
+        $projectFields = [
+            'Customer_Region_PJ',
+            'Estimated_Revenue_PJ',
+            'Estimated_Service_Cost_PJ',
+            'Estimated_Material_Cost_PJ',
+        ];
+
+        if (! in_array($request->field, array_merge($allowedCols, $projectFields))) {
             return response()->json(['success' => false], 403);
         }
 
-        if (! in_array($request->field, $allowedFields)) {
-            return response()->json(['success' => false], 403);
-        }
-
-        // permission ของ user
+        // ===== permission =====
         $permission = DB::table('collab_user_permissions')
             ->where('user_id', Auth::id())
             ->where('project_code', '16')
@@ -142,22 +168,106 @@ class UserProjectDatabasescontroller extends Controller
             return response()->json(['success' => false], 403);
         }
 
-        // ต้องเป็น write เท่านั้น
-        if ($permission->{$request->field} !== 'write') {
+        if (
+            ! isset($permission->{$request->field}) ||
+            $permission->{$request->field} !== 'write'
+        ) {
             return response()->json(['success' => false], 403);
         }
 
-        // update จริง 
-        $updated = DB::table('collab_table_project16')
-            ->where('Refcode_PJ', $request->id)
-            ->update([
-                $request->field => $request->value,
-            ]);
+        DB::beginTransaction();
 
-        return response()->json([
-            'success' => true,
-            'updated' => $updated,
-        ]);
+        try {
+
+            /* ===============================
+           1) เตรียม value (ล้าง comma ถ้าเป็นเงิน)
+           =============================== */
+            $value = $request->value;
+
+            if (in_array($request->field, [
+                'Estimated_Revenue_PJ',
+                'Estimated_Service_Cost_PJ',
+                'Estimated_Material_Cost_PJ',
+            ])) {
+                $value = str_replace(',', '', $value);
+            }
+
+            /* ===============================
+           2) update collab_table_project16
+           =============================== */
+            DB::table('collab_table_project16')
+                ->where('Refcode_PJ', $request->id)
+                ->update([
+                    $request->field => $value,
+                ]);
+
+            /* ===============================
+           3) sync basic fields → collab_newjob
+           =============================== */
+            $syncMap = [
+                'Customer_Region_PJ'         => 'Customer_Region',
+                'Estimated_Revenue_PJ'       => 'Estimated_Revenue',
+                'Estimated_Service_Cost_PJ'  => 'Estimated_Service_Cost',
+                'Estimated_Material_Cost_PJ' => 'Estimated_Material_Cost',
+            ];
+
+            if (isset($syncMap[$request->field])) {
+                DB::table('collab_newjob')
+                    ->where('Refcode', $request->id)
+                    ->update([
+                        $syncMap[$request->field] => $value,
+                    ]);
+            }
+
+            /* ===============================
+           4) คำนวณ Gross (เฉพาะ field เงิน)
+           =============================== */
+            if (in_array($request->field, [
+                'Estimated_Revenue_PJ',
+                'Estimated_Service_Cost_PJ',
+                'Estimated_Material_Cost_PJ',
+            ])) {
+
+                $row = DB::table('collab_table_project16')
+                    ->where('Refcode_PJ', $request->id)
+                    ->first();
+
+                $revenue  = (float) str_replace(',', '', $row->Estimated_Revenue_PJ ?? 0);
+                $service  = (float) str_replace(',', '', $row->Estimated_Service_Cost_PJ ?? 0);
+                $material = (float) str_replace(',', '', $row->Estimated_Material_Cost_PJ ?? 0);
+
+                $grossProfit = $revenue - $service - $material;
+                $grossMargin = $revenue > 0
+                    ? ($grossProfit / $revenue) * 100
+                    : 0;
+
+                // update project table
+                DB::table('collab_table_project16')
+                    ->where('Refcode_PJ', $request->id)
+                    ->update([
+                        'Estimated_Gross_Profit_PJ'       => number_format($grossProfit, 2, '.', ''),
+                        'Estimated_Gross_ProfitMargin_PJ' => number_format($grossMargin, 2, '.', ''),
+                    ]);
+
+                // sync ไป collab_newjob
+                DB::table('collab_newjob')
+                    ->where('Refcode', $request->id)
+                    ->update([
+                        'Estimated_Gross_Profit'       => number_format($grossProfit, 2, '.', ''),
+                        'Estimated_Gross_ProfitMargin' => number_format($grossMargin, 2, '.', ''),
+                    ]);
+            }
+
+            DB::commit();
+            return response()->json(['success' => true]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
 };

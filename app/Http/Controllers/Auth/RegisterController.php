@@ -50,8 +50,8 @@ class RegisterController extends Controller
         // Redirect if the user's status is not 1   NEW
         $this->middleware(function ($request, $next) {
 
-            // ต้องเช็ค status เท่ากับ 4
-            if (Auth::check() && Auth::user()->status != 4) {
+            // ต้องเช็ค status เท่ากับ admin
+            if (Auth::check() && Auth::user()->status != 'Admin') {
                 return redirect('/home');
             }
 

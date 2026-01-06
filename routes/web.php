@@ -50,6 +50,11 @@ Route::post('user/permissions/save/{project_code}', [UserProjectDatabasescontrol
 // Inline update for collab_newjob
 Route::post('user/newjob/inline-update', [UserProjectDatabasescontroller::class, 'inlineUpdate'])->name('newjob.inlineUpdate');
 
+Route::post('user/permissions/save/{project_code}', [UserProjectDatabasescontroller::class, 'save'])->name('permissions.save');
+
+// Inline update for collab_newjob
+Route::post('user/newjob/inline-update', [UserProjectDatabasescontroller::class, 'inlineUpdate'])->name('newjob.inlineUpdate');
+
 
 
 
