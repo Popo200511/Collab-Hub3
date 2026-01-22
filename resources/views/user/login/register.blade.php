@@ -4,8 +4,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 <style>
     :root {
@@ -136,10 +135,15 @@
                                     <tbody class="bg-white divide-y divide-gray-100">
                                         @foreach ($users as $index => $user)
                                         <tr class="hover:bg-gray-50 transition-colors">
+
+                                            <!-- ID -->
                                             <td class="px-4 py-4 text-sm text-gray-600">{{ $index + 1 }}</td>
+                                            <!-- Name -->
                                             <td class="px-4 py-4 text-sm font-medium text-gray-900">{{ $user->name }}
                                             </td>
+                                            <!-- Email -->
                                             <td class="px-4 py-4 text-sm text-gray-500">{{ $user->email }}</td>
+                                            <!-- Status -->
                                             <td class="px-4 py-4 text-sm">
                                                 <select class="status-dropdown bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-lg
            focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" data-user-id="{{ $user->id }}"
@@ -152,9 +156,9 @@
                                                     </option>
                                                     @endforeach
                                                 </select>
-
-
                                             </td>
+
+                                            <!-- ลบ -->
                                             <td class="px-4 py-4 text-center">
                                                 <form action="{{ route('user.delete', $user->id) }}" method="POST"
                                                     class="delete-form">
@@ -523,16 +527,24 @@ document.getElementById('confirmModal').addEventListener('click', function(e) {
 
 
 
-<script>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        let isReverting = false;
+
 $(document).on('change', '.status-dropdown', function () {
-    let select = $(this);
-    let userId = select.data('user-id');            // ✅ แก้
-    let newStatus = select.val();
-    let oldStatus = select.data('current-status'); // ✅ แก้
+    if (isReverting) return;
+
+    const select = $(this);
+    const userId = select.data('user-id');
+    const newStatus = select.val();
+    const oldStatus = select.data('current-status');
 
     Swal.fire({
-        title: 'ยืนยันการเปลี่ยนสถานะ?',
-        text: 'คุณต้องการเปลี่ยนสถานะใช่หรือไม่',
+        title: 'ยืนยันการเปลี่ยนสถานะ',
+        text: `คุณต้องการเปลี่ยนสถานะจาก "${oldStatus}" เป็น "${newStatus}" ใช่หรือไม่?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'ยืนยัน',
@@ -541,35 +553,37 @@ $(document).on('change', '.status-dropdown', function () {
 
         if (result.isConfirmed) {
             $.ajax({
-                url: "{{ route('update.job.status', '') }}/" + userId,
-                method: "PUT",
+                url: "{{ route('update.job.status', ['id' => '__id__']) }}".replace('__id__', userId),
+                type: "PUT",
                 data: {
                     _token: "{{ csrf_token() }}",
                     status: newStatus
                 },
                 success: function () {
                     Swal.fire('สำเร็จ', 'เปลี่ยนสถานะเรียบร้อย', 'success');
-
-                    // ✅ update ค่าเดิมใหม่
                     select.data('current-status', newStatus);
+                },
+                error: function () {
+                    Swal.fire('ผิดพลาด', 'ไม่สามารถเปลี่ยนสถานะได้', 'error');
+                    isReverting = true;
+                    select.val(oldStatus);
+                    isReverting = false;
                 }
             });
         } else {
-            // ❗ revert ค่าเดิม
+            isReverting = true;
             select.val(oldStatus);
+            isReverting = false;
         }
     });
 });
 
 
-
-</script>
-
-
+    </script>
+    @endpush
 
 
-
-
+    @stack('scripts')
 
 
 @endsection

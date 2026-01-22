@@ -34,26 +34,58 @@ Route::get('user/home', [UserAddJobcontroller::class, 'home'])->name('user.home'
 
 // Add job User
 Route::get('user/addjob/home', [UserAddJobcontroller::class, 'index'])->name('addjob.user');
+Route::post('user/addjob/savenewjob', [UserAddJobcontroller::class, 'savenewjob'])->name('addjob.savenewjob');
+        // import new job
+Route::post('user/addjob/home/import', [UserAddJobcontroller::class, 'importnewjob'])->name('addjob.importnewjob');
+        // save import new job
+Route::post('user/addjob/home/saveaddjob', [UserAddJobcontroller::class, 'saveimportnewjob'])->name('addjob.saveimportnewjob');
+
+
 // Add job SDA
 Route::get('user/sda/home', [UserAddJobcontroller::class, 'sda'])->name('user.sda.home');
-Route::get('/notification/read/{id}', [UserAddJobController::class, 'markAsRead'])->name('notification.read');
+Route::get('/notification/read/{id}', [UserAddJobcontroller::class, 'markAsRead'])->name('notification.read');
+Route::put('/job/status/{id}', [UserAddJobcontroller::class, 'updateStatus'])->name('update.job.status');
 
 // Admin register
 Route::get('user/sda/register', [RegisterController::class, 'showRegistrationForm'])->name('sda.register');
 Route::post('user/sda/register', [RegisterController::class, 'register'])->name('sda.register');
 
-// Project Databases
-Route::get('user/project/projectview', [UserProjectDatabasescontroller::class, 'project16'])->name('project.projectview');
-
+// Project Databases 90
+Route::get('user/project/projectview', [UserProjectDatabasescontroller::class, 'project90'])->name('project.projectview');
 Route::post('user/permissions/save/{project_code}', [UserProjectDatabasescontroller::class, 'save'])->name('permissions.save');
 
-// Inline update for collab_newjob
-Route::post('user/newjob/inline-update', [UserProjectDatabasescontroller::class, 'inlineUpdate'])->name('newjob.inlineUpdate');
+        // Inline update for collab_newjob
+        Route::post('user/newjob/inline-update', [UserProjectDatabasescontroller::class, 'inlineUpdate'])->name('newjob.inlineUpdate');
 
-Route::post('user/permissions/save/{project_code}', [UserProjectDatabasescontroller::class, 'save'])->name('permissions.save');
 
-// Inline update for collab_newjob
-Route::post('user/newjob/inline-update', [UserProjectDatabasescontroller::class, 'inlineUpdate'])->name('newjob.inlineUpdate');
+// Project Databases 83
+    Route::get('user/project/projectview_83', [UserProjectDatabasescontroller::class, 'project83'])->name('project.projectview_83');
+    // Project 83 permission
+    Route::post('user/permissions/save/83/{project_code}',[UserProjectDatabasescontroller::class, 'save83'])->name('permissions.save_83');
+    // Inline update for collab_newjob
+    Route::post('user/newjob/inline-update83', [UserProjectDatabasescontroller::class, 'inlineUpdate83'])->name('newjob.inlineUpdate_83');
+
+
+// Project Databases 85
+    Route::get('user/project/projectview_85', [UserProjectDatabasescontroller::class, 'project85'])->name('project.projectview_85');
+    // Project 85 permission
+    Route::post('user/permissions/save/85/{project_code}',[UserProjectDatabasescontroller::class, 'save85'])->name('permissions.save_85');
+    // Inline update for collab_newjob
+    Route::post('user/newjob/inline-update85', [UserProjectDatabasescontroller::class, 'inlineUpdate85'])->name('newjob.inlineUpdate_85');
+
+
+//END Collab HUB
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -67,14 +99,29 @@ Route::post('user/newjob/inline-update', [UserProjectDatabasescontroller::class,
 Route::get('projectdatabases/98true/home', [Truecontroller::class, 'index'])->name('98true.home');
 
 // New Job Assignment
-Route::get('newjobassignment/addjob', [AddJobcontroller::class, 'index'])->name('addjob.index');
-Route::post('newjobassignment/savenewjob', [AddJobcontroller::class, 'savenewjob'])->name('addjob.savenewjob');
-Route::post('newjobassignment/addjob', [AddJobcontroller::class, 'importnewjob'])->name('addjob.importnewjob');
-Route::post('newjobassignment/saveaddjob', [AddJobcontroller::class, 'saveimportnewjob'])->name('addjob.saveimportnewjob');
-Route::put('/job/status/{id}', [AddJobcontroller::class, 'updateStatus'])->name('update.job.status');
+        //Route::get('newjobassignment/addjob', [AddJobcontroller::class, 'index'])->name('addjob.index');
+        //Route::post('newjobassignment/savenewjob', [AddJobcontroller::class, 'savenewjob'])->name('addjob.savenewjob');
+        //Route::post('newjobassignment/addjob', [AddJobcontroller::class, 'importnewjob'])->name('addjob.importnewjob');
+        //Route::post('newjobassignment/saveaddjob', [AddJobcontroller::class, 'saveimportnewjob'])->name('addjob.saveimportnewjob');
+        //Route::put('/job/status/{id}', [AddJobcontroller::class, 'updateStatus'])->name('update.job.status');
 
 // SDA
-Route::get('newjobassignment/sda/home', [AddJobcontroller::class, 'sda'])->name('sda.home');
+        //Route::get('newjobassignment/sda/home', [AddJobcontroller::class, 'sda'])->name('sda.home');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Implement
 Route::get('/implement/home', [Implementcontroller::class, 'index'])->name('implement.home');
@@ -141,7 +188,7 @@ Route::get('/test/user', [Dropdowncontroller::class, 'user'])->name('user');
 // Module ERP
 
 // Search Refcode
-Route::get('refcode/home', [Refcodecontroller::class, 'index']);
+Route::get('refcode/home', [Refcodecontroller::class, 'index'])->name('refcode.home');
 Route::get('/search-refcode', [RefcodeController::class, 'searchRefcode'])->name('searchRefcode');
 
 //import refcode

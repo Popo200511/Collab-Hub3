@@ -51,7 +51,7 @@ class HomeController extends Controller
         }
 
         // Redirect กลับไปยังหน้าหลักพร้อมกับข้อความ
-        return redirect()->route('home')->with('success', 'ลบผู้ใช้สำเร็จ');
+        return redirect()->route('sda.register')->with('success', 'ลบผู้ใช้สำเร็จ');
     }
 
 

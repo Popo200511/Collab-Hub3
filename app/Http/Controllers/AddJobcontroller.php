@@ -151,6 +151,18 @@ class AddJobcontroller extends Controller
         return redirect()->back()->with('success', 'New job added successfully!');
     }
 
+
+
+
+
+
+
+
+
+
+
+
+    
     public function importnewjob(Request $request)
     {
         $newjob = DB::table('collab_newjob')->get();
@@ -258,6 +270,12 @@ class AddJobcontroller extends Controller
 
         return view('NewJobAssignment.addjob.addjob', compact('dataToSave', 'newjob', 'countData', 'officeCodes', 'projectCodes'));
     }
+
+
+
+
+
+    
 
     public function saveimportnewjob(Request $request)
     {

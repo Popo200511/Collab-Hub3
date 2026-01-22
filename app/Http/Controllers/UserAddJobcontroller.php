@@ -23,20 +23,11 @@ class UserAddJobcontroller extends Controller
         return view('home', compact('officeCodes', 'projectCodes'));
     }
 
-    public function markAsRead($id)
-    {
-        DB::table('collab_newjob')
-            ->where('id', $id)
-            ->update([
-                'is_read' => 1,
-            ]);
-
-        return redirect()->route('addjob.user');
-    }
-
     public function index(Request $request)
     {
         $requester = Auth::user()->name;
+		
+		
 
         // ✔ แจ้งเตือนเฉพาะ Approved / Rejected ที่ยังไม่อ่าน
         $countNotifications = DB::table('collab_newjob')
@@ -53,19 +44,20 @@ class UserAddJobcontroller extends Controller
             ->orderBy('id', 'desc')     // อันใหม่กว่าอยู่บน
             ->get();
 
-        // ส่วนอื่นคงเดิม…
-        $newjob = DB::table('collab_newjob')
+ $newjob = DB::table('collab_newjob')
             ->where('Requester', $requester)
             ->orderByRaw("
             CASE Job_Adding_Status
-                WHEN 'Approved' THEN 2 
+                WHEN 'Approved' THEN 2
                 WHEN 'Pending' THEN 1
                 WHEN 'Rejected' THEN 3
                 ELSE 4
             END
         ")
-            ->orderByDesc('id')   // เรียงใหม่สุดก่อน (ใช้ id หรือ created_at)
+            ->orderByDesc('id') // เรียงใหม่สุดก่อน (ใช้ id หรือ created_at)
             ->get();
+
+
 
         $countApproved = DB::table('collab_newjob')
             ->where('Requester', $requester)
@@ -104,8 +96,9 @@ class UserAddJobcontroller extends Controller
 
     public function sda(Request $request)
     {
+	
         $newjob = DB::table('collab_newjob')
-    ->orderByRaw("
+            ->orderByRaw("
         CASE Job_Adding_Status
             WHEN 'Approved' THEN 2
             WHEN 'Pending' THEN 1
@@ -113,28 +106,46 @@ class UserAddJobcontroller extends Controller
             ELSE 4
         END
     ")
-    ->orderByDesc('id')   // เรียงใหม่สุดก่อน (ใช้ id หรือ created_at)
-    ->get();
-
-    //dd($newjob);
-
-        // ดึงงานที่ Pending
-        $pendingJobs = DB::table('collab_newjob')
-            ->where('Job_Adding_Status', 'Pending')
+            ->orderByDesc('id') // เรียงใหม่สุดก่อน (ใช้ id หรือ created_at)
             ->get();
 
-        // จำนวน Pending
-        $countPending = $pendingJobs->count();
+        //dd($newjob);
+        $requester = Auth::user()->name;
 
-        // ชื่อ Requester
-        $pendingRequesters = $pendingJobs->pluck('Requester')->unique();
+        // จำนวนที่ Approved
+        $countApproved = DB::table('collab_newjob')
+            ->where('Job_Adding_Status', 'Approved')
+            ->count();
+        //dd($countApproved);
 
-        //dd($pendingJobs,$countPending,$pendingRequesters);
+        // จำนวนที่ Pending
+        $countPending = DB::table('collab_newjob')
+            ->where('Job_Adding_Status', 'Pending')
+            ->count();
+        //dd($countPending);
+
+        // จำนวนที่ Rejected
+        $countRejected = DB::table('collab_newjob')
+            ->where('Job_Adding_Status', 'Rejected')
+            ->count();
+        //dd($countRejected);
+
+        // จำนวนทั้งหมด
+        $countAll = DB::table('collab_newjob')->count();
+        //dd($countAll);
 
         $projectCodes = DB::table('collab_projectcode')->get();
         $officeCodes  = DB::table('collab_officecode')->get();
 
-        return view('user.newjobassignment.sda', compact('newjob', 'officeCodes', 'projectCodes'));
+        return view('user.newjobassignment.sda', compact(
+            'newjob',
+            'officeCodes',
+            'projectCodes',
+            'countApproved',
+            'countPending',
+            'countRejected',
+            'countAll'
+        ));
 
     }
 
@@ -146,9 +157,10 @@ class UserAddJobcontroller extends Controller
 
         // Gen Refcode เฉพาะ Approved และยังไม่มี Refcode
         $refcode = $job->Refcode;
+
         if ($status === 'Approved' && empty($refcode)) {
             $projectPrefix = substr($job->Project_Code, 0, 2);
-            $yearPrefix    = '26'; // ปี ค.ศ. 2 หลัก
+            $yearPrefix    = now()->format('y'); // 2 หลัก เช่น 25, 26
             $officePrefix  = substr($job->Office_Code, 0, 2);
 
             $prefix = $projectPrefix . '-' . $yearPrefix . '-' . $officePrefix;
@@ -171,9 +183,37 @@ class UserAddJobcontroller extends Controller
         DB::table('collab_newjob')->where('id', $id)->update([
             'Job_Adding_Status' => $status,
             'Refcode'           => $refcode, // จะเป็น null ถ้าไม่ Approved
+            'admin_read'        => 1,        // แจ้งไปยัง USER
+            'updated_at'        => now(),
         ]);
 
         return back()->with('success', 'Status updated successfully!');
+    }
+
+    public function markAsRead($id)
+    {
+        $user = Auth::user();
+
+        if ($user->status === 'Admin') {
+            DB::table('collab_newjob')
+                ->where('id', $id)
+                ->update([
+                    'admin_read' => 1,
+                    'updated_at' => now(),
+                ]);
+
+            return redirect()->route('user.sda.home');
+
+        } else {
+            DB::table('collab_newjob')
+                ->where('id', $id)
+                ->update([
+                    'user_read'  => 1,
+                    'updated_at' => now(),
+                ]);
+
+            return redirect()->route('addjob.user');
+        }
     }
 
     // บันทึกข้อมูลครั้งแรก → Status = Pending
@@ -195,23 +235,29 @@ class UserAddJobcontroller extends Controller
         $office  = $request->input('office_code');
 
         $newdata = [
-            'site_code'                    => $request->input('site_code'),
-            'site_name'                    => $request->input('site_name'),
-            'Job_Description'              => $request->input('job_description'),
+            'site_code'                     => $request->input('site_code'),
+            'site_name'                     => $request->input('site_name'),
+            'Job_Description'               => $request->input('job_description'),
 
-            'Project_Code'                 => $project,
-            'Office_Code'                  => $office,
-            'Customer_Region'              => $request->input('customer_region'),
+            'Project_Code'                  => $project,
+            'Office_Code'                   => $office,
+            'Customer_Region'               => $request->input('customer_region'),
 
-            'Estimated_Revenue'            => $request->input('estimated_revenue'),
-            'Estimated_Service_Cost'       => $request->input('estimated_service_cost'),
-            'Estimated_Material_Cost'      => $request->input('estimated_material_cost'),
-            'Estimated_Gross_Profit'       => $request->input('estimated_gross_profit'),
-            'Estimated_Gross_ProfitMargin' => $request->input('estimated_gross_profit_margin'),
+            'Estimated_Revenue'             => $request->input('estimated_revenue'),
+            'Estimated_Service_Cost'        => $request->input('estimated_service_cost'),
+            'Estimated_Material_Cost'       => $request->input('estimated_material_cost'),
+            'Estimated_Transportation_Cost' => $request->input('estimated_transportation_cost'),
+            'Estimated_Other_Cost'          => $request->input('estimated_other_cost'),
 
-            'Requester'                    => $user,
-            'Job_Adding_Status'            => 'Pending', // เริ่มต้น Pending
-            'Refcode'                      => null,      // ยังไม่ Gen
+            'Estimated_Gross_Profit'        => $request->input('estimated_gross_profit'),
+            'Estimated_Gross_ProfitMargin'  => $request->input('estimated_gross_profit_margin'),
+
+            'admin_read'                    => 0, // ⭐ สำคัญ
+            'user_read'                     => 0, // ⭐ สำคัญ
+
+            'Requester'                     => $user,
+            'Job_Adding_Status'             => 'Pending', // เริ่มต้น Pending
+            'Refcode'                       => null,      // ยังไม่ Gen
         ];
 
         //dd($newdata);
@@ -223,8 +269,29 @@ class UserAddJobcontroller extends Controller
 
     public function importnewjob(Request $request)
     {
-        $newjob = DB::table('collab_newjob')->get();
 
+        $requester = Auth::user()->name;
+
+        $countApproved = DB::table('collab_newjob')
+            ->where('Requester', $requester)
+            ->where('Job_Adding_Status', 'Approved')
+            ->count();
+
+        $countPending = DB::table('collab_newjob')
+            ->where('Requester', $requester)
+            ->where('Job_Adding_Status', 'Pending')
+            ->count();
+
+        $countRejected = DB::table('collab_newjob')
+            ->where('Requester', $requester)
+            ->where('Job_Adding_Status', 'Rejected')
+            ->count();
+
+        $countAll = DB::table('collab_newjob')
+            ->where('Requester', $requester)
+            ->count();
+
+        $newjob       = DB::table('collab_newjob')->get();
         $projectCodes = DB::table('collab_projectcode')->get();
         $officeCodes  = DB::table('collab_officecode')->get();
 
@@ -246,9 +313,10 @@ class UserAddJobcontroller extends Controller
             $zip = new ZipArchive;
             if ($zip->open($file->getRealPath()) === true) {
 
-                // อ่าน sharedStrings
+                /* ================= sharedStrings ================= */
                 $sharedStringsXML = $zip->getFromName('xl/sharedStrings.xml');
                 $sharedStrings    = [];
+
                 if ($sharedStringsXML) {
                     $xml = simplexml_load_string($sharedStringsXML);
                     foreach ($xml->si as $si) {
@@ -264,12 +332,72 @@ class UserAddJobcontroller extends Controller
                     }
                 }
 
-                // อ่าน sheet1
+                /* ================= sheet1 ================= */
                 $sheetXML = $zip->getFromName('xl/worksheets/sheet1.xml');
                 $rows     = simplexml_load_string($sheetXML)->sheetData->row ?? [];
 
+                /* ==================================================
+               ✅ CHECK HEADER (หัว Column)
+            =================================================== */
+                $expectedHeaders = [
+                    'Site Code',
+                    'Site Name',
+                    'Job Description',
+                    'Project Code',
+                    'Office Code',
+                    'Customer Region',
+                    'Estimated Revenue',
+                    'Estimated Service Cost',
+                    'Estimated Material Cost',
+                    'Estimated Transportation Cost',
+                    'Estimated Other Cost',
+                ];
+
+                $headerRow = $rows[0] ?? null;
+
+                if (! $headerRow) {
+                    return back()->withErrors([
+                        'xlsx_file_add' => 'ไม่พบหัวตารางในไฟล์ Excel',
+                    ], 'importErrors');
+
+                }
+
+                $actualHeaders  = [];
+
+                foreach ($headerRow->c as $cell) {
+                    $val = (string) $cell->v;
+
+                    if (isset($cell['t']) && $cell['t'] == 's') {
+                        $val = $sharedStrings[(int) $val] ?? $val;
+                    }
+
+                    $actualHeaders[] = trim($val);
+                }
+
+                // ❌ ต้องตรงทั้งชื่อและจำนวน
+                if ($actualHeaders !== $expectedHeaders) {
+                    return back()->withErrors([
+                        'xlsx_file_add' => 'หัว Column ไม่ตรงตาม Template (มีเกิน / ขาด / เรียงผิด)',
+                    ], 'importErrors');
+                }
+                /* ================= END CHECK HEADER ================= */
+
+                /* ================= Import Data ================= */
                 $isFirstRow = true;
                 $cols       = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
+
+                function excelNumber($value)
+                {
+                    if ($value === null || $value === '') {
+                        return null;
+                    }
+
+                    // ลบ comma ถ้ามี
+                    $value = str_replace(',', '', $value);
+
+                    // แปลงเป็น float
+                    return is_numeric($value) ? (float) $value : null;
+                }
 
                 foreach ($rows as $row) {
                     if ($isFirstRow) {
@@ -300,23 +428,43 @@ class UserAddJobcontroller extends Controller
                     }
 
                     if (! empty(array_filter($finalRow))) {
+
+                        $revenue  = excelNumber($finalRow[6]);
+                        $service  = excelNumber($finalRow[7]);
+                        $material = excelNumber($finalRow[8]);
+
+                        $Transportation = excelNumber($finalRow[9]);
+                        $Other          = excelNumber($finalRow[10]);
+
+                        $grossProfit = $revenue - $service - $material - $Transportation - $Other;
+                        $grossMargin = $revenue != 0
+                            ? round(($grossProfit / $revenue) * 100, 2)
+                            : 0;
+
                         $dataToSave[] = [
-                            'Site_Code'                    => $finalRow[0],
-                            'Site_Name'                    => $finalRow[1],
-                            'Job_Description'              => $finalRow[2],
-                            'Project_Code'                 => $finalRow[3],
-                            'Office_Code'                  => $finalRow[4],
-                            'Customer_Region'              => $finalRow[5],
-                            'Estimated_Revenue'            => $finalRow[6],
-                            'Estimated_Service_Cost'       => $finalRow[7],
-                            'Estimated_Material_Cost'      => $finalRow[8],
-                            'Estimated_Gross_Profit'       => $finalRow[9],
-                            'Estimated_Gross_ProfitMargin' => $finalRow[10],
-                            'Requester'                    => auth()->user()->name ?? '-',
-                            'Job_Adding_Status'            => $finalRow[12],
-                            'Refcode'                      => $finalRow[13],
+                            'Site_Code'                     => $finalRow[0],
+                            'Site_Name'                     => $finalRow[1],
+                            'Job_Description'               => $finalRow[2],
+                            'Project_Code'                  => $finalRow[3],
+                            'Office_Code'                   => $finalRow[4],
+                            'Customer_Region'               => $finalRow[5],
+
+                            'Estimated_Revenue'             => $revenue,
+                            'Estimated_Service_Cost'        => $service,
+                            'Estimated_Material_Cost'       => $material,
+
+                            'Estimated_Transportation_Cost' => $Transportation,
+                            'Estimated_Other_Cost'          => $Other,
+
+                            'Estimated_Gross_Profit'        => $grossProfit,
+                            'Estimated_Gross_ProfitMargin'  => $grossMargin,
+
+                            'Requester'                     => auth()->user()->name ?? '-',
+                            'Job_Adding_Status'             => $finalRow[12],
+                            'Refcode'                       => $finalRow[13],
                         ];
                     }
+                    // dd($dataToSave);
                 }
 
                 $zip->close();
@@ -324,50 +472,92 @@ class UserAddJobcontroller extends Controller
 
             // ⭐ นับจำนวนข้อมูลที่ import แล้ว
             $countData = count($dataToSave);
+
+            //dd($dataToSave, $countData);
         }
 
-        return view('user.newjobassignment.addjob', compact('dataToSave', 'newjob', 'countData', 'officeCodes', 'projectCodes'));
+        return view('user.newjobassignment.addjob', compact('dataToSave', 'newjob', 'countData', 'officeCodes', 'projectCodes',
+            'countApproved',
+            'countPending',
+            'countRejected',
+            'countAll'));
     }
 
     public function saveimportnewjob(Request $request)
     {
-        if (! $request->has('dataToSave') || empty($request->dataToSave)) {
+
+        //dd('SAVE IMPORT HIT');
+
+        if (! $request->filled('dataToSave')) {
             return redirect()->back()->with('error', 'ไม่พบข้อมูลสำหรับบันทึก');
         }
 
         $dataList = $request->dataToSave;
 
-        // ⭐ ดูข้อมูลก่อนบันทึกทั้งหมด (debug)
-        //dd($dataList);
-
         try {
+            DB::beginTransaction();
+
+            $insertData = [];
+
             foreach ($dataList as $data) {
-                DB::table('collab_newjob')->insert([
-                    'Site_Code'                    => $data['Site_Code'],
-                    'Site_Name'                    => $data['Site_Name'],
-                    'Job_Description'              => $data['Job_Description'],
-                    'Project_Code'                 => $data['Project_Code'],
-                    'Office_Code'                  => $data['Office_Code'],
-                    'Customer_Region'              => $data['Customer_Region'],
-                    'Estimated_Revenue'            => $data['Estimated_Revenue'],
-                    'Estimated_Service_Cost'       => $data['Estimated_Service_Cost'],
-                    'Estimated_Material_Cost'      => $data['Estimated_Material_Cost'],
-                    'Estimated_Gross_Profit'       => $data['Estimated_Gross_Profit'],
-                    'Estimated_Gross_ProfitMargin' => $data['Estimated_Gross_ProfitMargin'],
 
-                    'Requester'                    => auth()->user()->name ?? '-',
+                $revenue  = (float) str_replace(',', '', $data['Estimated_Revenue'] ?? 0);
+                $service  = (float) str_replace(',', '', $data['Estimated_Service_Cost'] ?? 0);
+                $material = (float) str_replace(',', '', $data['Estimated_Material_Cost'] ?? 0);
 
-                    'Refcode'                      => $data['Refcode'],
+                $Transportation = (float) str_replace(',', '', $data['Estimated_Transportation_Cost'] ?? 0);
+                $Other          = (float) str_replace(',', '', $data['Estimated_Other_Cost'] ?? 0);
 
-                ]);
+                $grossProfit = $revenue - $service - $material - $Transportation - $Other;
+
+                $grossMargin = $revenue != 0
+                    ? round(($grossProfit / $revenue) * 100, 2)
+                    : 0;
+
+                $insertData[] = [
+                    'Site_Code'                     => $data['Site_Code'],
+                    'Site_Name'                     => $data['Site_Name'],
+                    'Job_Description'               => $data['Job_Description'],
+                    'Project_Code'                  => $data['Project_Code'],
+                    'Office_Code'                   => $data['Office_Code'],
+                    'Customer_Region'               => $data['Customer_Region'],
+
+                    // ใช้ number_format(ตัวเลข, ทศนิยม, จุดทศนิยม, comma)
+                    'Estimated_Revenue'             => number_format($revenue, 2, '.', ','),
+                    'Estimated_Service_Cost'        => number_format($service, 2, '.', ','),
+                    'Estimated_Material_Cost'       => number_format($material, 2, '.', ','),
+
+                    'Estimated_Transportation_Cost' => number_format($Transportation, 2, '.', ','),
+                    'Estimated_Other_Cost'          => number_format($Other, 2, '.', ','),
+
+                    'Estimated_Gross_Profit'        => number_format($grossProfit, 2, '.', ','),
+                    'Estimated_Gross_ProfitMargin'  => number_format($grossMargin, 2, '.', ',') . '%', // เพิ่ม % ถ้าต้องการ
+
+                    'Requester'                     => auth()->user()->name ?? '-',
+                    'Refcode'                       => $data['Refcode'],
+                    'is_read'                       => 0,
+
+                    'created_at'                    => now(),
+                    'updated_at'                    => now(),
+                ];
             }
+
+            //dd($insertData);
+
+            DB::table('collab_newjob')->insert($insertData);
+
+            DB::commit();
+
+            return redirect()
+                ->route('addjob.user')
+                ->with('success', 'บันทึกข้อมูลที่ Import สำเร็จแล้ว จำนวน: ' . count($insertData));
+
+        } catch (\Exception $e) {
+            DB::rollBack();
 
             return redirect()
                 ->back()
-                ->with('success', 'บันทึกข้อมูลที่ Import สำเร็จแล้ว จำนวน: ' . count($dataList));
-
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());
+                ->with('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());
         }
     }
 

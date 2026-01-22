@@ -2,7 +2,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,52 +20,82 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
-    */
-    
+     */
+
     public function boot(): void
     {
-        View::composer('layouts.Tailwind', function ($view) {
+        View::composer('*', function ($view) {
 
-            // Pending
-            $pendingJobs = DB::table('collab_newjob')
-                ->where('Job_Adding_Status', 'Pending')
-                ->get();
-
-            // Notifications
-            if (Auth::check()) {
-                $requester = Auth::user()->name;
-
-                $countNotifications = DB::table('collab_newjob')
-                    ->where('Requester', $requester)
-                    ->where('is_read', 0)
-                    ->whereIn('Job_Adding_Status', ['Approved', 'Rejected'])
-                    ->count();
-
-                $notifications = DB::table('collab_newjob')
-                    ->where('Requester', $requester)
-                    ->whereIn('Job_Adding_Status', ['Approved', 'Rejected'])
-                    ->orderBy('is_read', 'asc')
-                    ->orderBy('id', 'desc')
-                    ->get();
-            } else {
-                $countNotifications = 0;
-                $notifications      = collect([]);
+            if (! Auth::check()) {
+                return;
             }
 
-            $view->with([
-                'pendingJobs'        => $pendingJobs,
-                'countPending'       => $pendingJobs->count(),
-                'notifications'      => $notifications,
-                'countNotifications' => $countNotifications,
-            ]);
+            $user = Auth::user();
+
+            // ================= ADMIN =================
+            if ($user->status === 'Admin') {
+
+                // 🔵 งานที่ต้องพิจารณา
+                $unreadNotifications = DB::table('collab_newjob')
+                    ->where('admin_read', 0)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+                $readNotifications = DB::table('collab_newjob')
+                    ->where('admin_read', 1)
+                    ->orderBy('updated_at', 'desc')
+                    ->limit(20)
+                    ->get();
+            }
+
+            // ================= USER =================
+            else {
+
+                // 🔔 ผลการอนุมัติใหม่
+                $unreadNotifications = DB::table('collab_newjob')
+                    ->where('Requester', $user->name)
+                    ->where('user_read', 0)
+                    ->whereIn('Job_Adding_Status', ['Approved', 'Rejected'])
+                    ->orderBy('updated_at', 'desc')
+                    ->get();
+
+                $readNotifications = DB::table('collab_newjob')
+                    ->where('Requester', $user->name)
+                    ->where('user_read', 1)
+                    ->orderBy('updated_at', 'desc')
+                    ->limit(20)
+                    ->get();
+            }
+
+            $view->with(compact('unreadNotifications', 'readNotifications'));
         });
 
         View::composer('layouts.user', function ($view) {
 
-                                             // ตรวจสอบ Project 16 ว่ามี member_status = 'yes' หรือไม่
+            // ตรวจสอบ Project 90 ว่ามี member_status = 'yes' หรือไม่
             $userId            = Auth::id(); // หรือ user ที่ต้องการเช็ค
-            $showProjectView16 = DB::table('collab_user_permissions')
-                ->where('project_code', 'like', '16%')
+            $showProjectView16 = DB::table('collab_user_permissions90')
+                ->where('project_code', 'like', '90%')
+                ->where('user_id', $userId)
+                ->where('member_status', 'yes')
+                ->exists();
+            //dd($showProjectView16);
+
+
+            // ตรวจสอบ Project 90 ว่ามี member_status = 'yes' หรือไม่
+            $userId            = Auth::id(); // หรือ user ที่ต้องการเช็ค
+            $showProjectView83 = DB::table('collab_user_permissions83')
+                ->where('project_code', 'like', '83%')
+                ->where('user_id', $userId)
+                ->where('member_status', 'yes')
+                ->exists();
+            //dd($showProjectView16);
+
+
+            // ตรวจสอบ Project 90 ว่ามี member_status = 'yes' หรือไม่
+            $userId            = Auth::id(); // หรือ user ที่ต้องการเช็ค
+            $showProjectView85 = DB::table('collab_user_permissions85')
+                ->where('project_code', 'like', '85%')
                 ->where('user_id', $userId)
                 ->where('member_status', 'yes')
                 ->exists();
@@ -73,6 +103,8 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with([
                 'showProjectView16' => $showProjectView16,
+                'showProjectView83' => $showProjectView83,
+                'showProjectView85' => $showProjectView85,
             ]);
         });
 
