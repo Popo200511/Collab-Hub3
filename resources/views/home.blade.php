@@ -150,7 +150,7 @@
                                                                     {{ $item->Site_Code }}
                                                                 </span>
                                                             @else
-                                                                งาน
+                                                                คำขอเพิ่ม Site
                                                                 <span class="font-mono bg-gray-100 px-1 rounded">
                                                                     {{ $item->Site_Code }}
                                                                 </span>
@@ -199,7 +199,7 @@
                                                                         {{ $item->Site_Code }}
                                                                     </span>
                                                                 @else
-                                                                    งาน {{ $item->Site_Code }} ถูก
+                                                                    คำขอเพิ่ม Site {{$item->Site_Code}}ถูก
                                                                     <span
                                                                         class="{{ $item->Job_Adding_Status === 'Approved' ? 'text-green-600' : 'text-red-600' }}">
                                                                         {{ $item->Job_Adding_Status }}
@@ -243,6 +243,12 @@
 
 
 
+
+
+
+
+
+            
             {{-- ****************************************************** --}}
 
             {{-- Content View (Dashboards & Modules) --}}

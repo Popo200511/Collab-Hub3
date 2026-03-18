@@ -73,38 +73,56 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.user', function ($view) {
 
             // ตรวจสอบ Project 90 ว่ามี member_status = 'yes' หรือไม่
-            $userId            = Auth::id(); // หรือ user ที่ต้องการเช็ค
+            $userId            = Auth::id(); 
             $showProjectView16 = DB::table('collab_user_permissions90')
                 ->where('project_code', 'like', '90%')
                 ->where('user_id', $userId)
                 ->where('member_status', 'yes')
                 ->exists();
-            //dd($showProjectView16);
+           
 
 
-            // ตรวจสอบ Project 90 ว่ามี member_status = 'yes' หรือไม่
-            $userId            = Auth::id(); // หรือ user ที่ต้องการเช็ค
+            // ตรวจสอบ Project 83 ว่ามี member_status = 'yes' หรือไม่
+            $userId            = Auth::id(); 
             $showProjectView83 = DB::table('collab_user_permissions83')
                 ->where('project_code', 'like', '83%')
                 ->where('user_id', $userId)
                 ->where('member_status', 'yes')
                 ->exists();
-            //dd($showProjectView16);
+           
 
 
-            // ตรวจสอบ Project 90 ว่ามี member_status = 'yes' หรือไม่
-            $userId            = Auth::id(); // หรือ user ที่ต้องการเช็ค
+            // ตรวจสอบ Project 85 ว่ามี member_status = 'yes' หรือไม่
+            $userId            = Auth::id(); 
             $showProjectView85 = DB::table('collab_user_permissions85')
                 ->where('project_code', 'like', '85%')
                 ->where('user_id', $userId)
                 ->where('member_status', 'yes')
                 ->exists();
-            //dd($showProjectView16);
+            
+
+            // ตรวจสอบ Project 88 ว่ามี member_status = 'yes' หรือไม่
+            $userId            = Auth::id(); 
+            $showProjectView88 = DB::table('collab_user_permissions88')
+                ->where('project_code', 'like', '88%')
+                ->where('user_id', $userId)
+                ->where('member_status', 'yes')
+                ->exists();
+			
+			// ตรวจสอบ Project 84 ว่ามี member_status = 'yes' หรือไม่
+            $userId            = Auth::id(); 
+            $showProjectView84  = DB::table('collab_user_permissions84')
+                ->where('project_code', 'like', '84%')
+                ->where('user_id', $userId)
+                ->where('member_status', 'yes')
+                ->exists();  
 
             $view->with([
                 'showProjectView16' => $showProjectView16,
                 'showProjectView83' => $showProjectView83,
                 'showProjectView85' => $showProjectView85,
+                'showProjectView88' => $showProjectView88,
+				'showProjectView84' => $showProjectView84
             ]);
         });
 

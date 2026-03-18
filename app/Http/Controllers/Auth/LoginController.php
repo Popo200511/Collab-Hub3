@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -26,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = 'user/home';
 
     /**
      * Create a new controller instance.
@@ -46,12 +45,14 @@ class LoginController extends Controller
             // ลบค่าเซสชั่นหมด
             session()->forget('session_expired');
         }
-    
-        // เปลี่ยนเส้นทางไปยังหน้า Home ทุกครั้ง
-        return redirect()->route('home');
+
+        // ถ้าชื่อเป็น admin → ไปหน้า home
+        if ($user->name === 'admin') {
+            return redirect()->route('home');
+        }
+
+        // ถ้าไม่ใช่ admin → ไปหน้า user.home
+        return redirect()->route('user.home');
     }
-
-
-  
 
 }

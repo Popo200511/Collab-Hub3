@@ -2,6 +2,8 @@
 @extends('layouts.user')
 @section('title', 'Add Member')
 
+@section('content')
+
 @push('styles')
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap">
 
@@ -56,7 +58,6 @@
 </style>
 @endpush
 
-@section('content')
 <div class="min-h-screen flex items-center justify-center p-4" style="background: hsl(210 20% 98%);">
     <div class="w-full max-w-lg animate-slide-up">
 
@@ -115,6 +116,7 @@
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
+
                                             <th
                                                 class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                                 Id</th>
@@ -146,16 +148,23 @@
                                             <!-- Status -->
                                             <td class="px-4 py-4 text-sm">
                                                 <select class="status-dropdown bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-lg
-           focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" data-user-id="{{ $user->id }}"
-                                                    data-current-status="{{ $user->status }}">
+    focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" data-user-id="{{ $user->id }}"
+                                                    data-current-status="{{ trim($user->status) }}">
 
                                                     @foreach ($officecodes as $officeCode)
-                                                    <option value="{{ $officeCode }}" {{ $officeCode==$user->status ?
-                                                        'selected' : '' }}>
+                                                    <option value="{{ $officeCode }}" {{
+                                                        trim($officeCode)===trim($user->status) ? 'selected' : '' }}>
                                                         {{ $officeCode }}
                                                     </option>
                                                     @endforeach
+
+                                                    <option value="Admin" {{ $user->status === 'Admin' ? 'selected' : ''
+                                                        }}>
+                                                        Admin
+                                                    </option>
                                                 </select>
+
+
                                             </td>
 
                                             <!-- ลบ -->
@@ -312,77 +321,6 @@
                             </path>
                         </svg>
                     </div>
-
-                    {{-- Status Legend --}}
-                    <div class="mt-4 p-4 g-3 rounded-xl border"
-                        style="background: hsl(210 15% 93% / 0.5); border-color: hsl(214 20% 90%);">
-                        <p class="text-xs font-medium mb-3" style="color: hsl(215 15% 50%);">คำอธิบายสถานะ:</p>
-                        <div class="grid grid-cols-3 gap-2 text-xs" style="color: hsl(215 15% 50%);">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-3.5 h-3.5" style="color: hsl(175 70% 40%);" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4">
-                                    </path>
-                                </svg>
-                                <span>Admin</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="w-3.5 h-3.5" style="color: hsl(175 70% 40%);" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
-                                    </path>
-                                </svg>
-                                <span>01_BKK</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="w-3.5 h-3.5" style="color: hsl(175 70% 40%);" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                                    </path>
-                                </svg>
-                                <span>02_CMI</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="w-3.5 h-3.5" style="color: hsl(175 70% 40%);" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                                <span>03_KKN</span>
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <svg class="w-3.5 h-3.5" style="color: hsl(175 70% 40%);" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                                <span>04_BUN</span>
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <svg class="w-3.5 h-3.5" style="color: hsl(175 70% 40%);" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                                <span>05_HYI</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="w-3.5 h-3.5" style="color: hsl(175 70% 40%);" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                                <span>06_PLK</span>
-                            </div>
-
-
-                        </div>
-                    </div>
                 </div>
 
                 {{-- Buttons --}}
@@ -414,11 +352,6 @@
                 </div>
             </form>
         </div>
-
-        {{-- Footer --}}
-        <p class="text-center text-xs mt-6" style="color: hsl(215 15% 50%);">
-            ระบบจัดการสมาชิก • Member Management System
-        </p>
     </div>
 </div>
 
@@ -531,16 +464,21 @@ document.getElementById('confirmModal').addEventListener('click', function(e) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
-        let isReverting = false;
+<script>
+    let isReverting = false;
+
+// ✅ จำค่าเดิม "ก่อนเปลี่ยน"
+$(document).on('focus', '.status-dropdown', function () {
+    $(this).data('previous-status', $(this).val());
+});
 
 $(document).on('change', '.status-dropdown', function () {
     if (isReverting) return;
 
-    const select = $(this);
-    const userId = select.data('user-id');
-    const newStatus = select.val();
-    const oldStatus = select.data('current-status');
+    const dropdown = $(this);
+    const userId = dropdown.data('user-id');
+    const newStatus = dropdown.val();
+    const oldStatus = dropdown.data('previous-status');
 
     Swal.fire({
         title: 'ยืนยันการเปลี่ยนสถานะ',
@@ -552,38 +490,44 @@ $(document).on('change', '.status-dropdown', function () {
     }).then((result) => {
 
         if (result.isConfirmed) {
+
             $.ajax({
-                url: "{{ route('update.job.status', ['id' => '__id__']) }}".replace('__id__', userId),
-                type: "PUT",
+                url: "/update-status/" + userId,
+                type: "POST",
                 data: {
                     _token: "{{ csrf_token() }}",
+                    _method: "PUT",
                     status: newStatus
                 },
                 success: function () {
                     Swal.fire('สำเร็จ', 'เปลี่ยนสถานะเรียบร้อย', 'success');
-                    select.data('current-status', newStatus);
+
+                    // ✅ อัปเดตค่าเดิมใหม่
+                    dropdown.data('previous-status', newStatus);
                 },
                 error: function () {
-                    Swal.fire('ผิดพลาด', 'ไม่สามารถเปลี่ยนสถานะได้', 'error');
-                    isReverting = true;
-                    select.val(oldStatus);
-                    isReverting = false;
+                    revert(dropdown, oldStatus);
                 }
             });
+
         } else {
-            isReverting = true;
-            select.val(oldStatus);
-            isReverting = false;
+            revert(dropdown, oldStatus);
         }
     });
 });
 
+function revert(dropdown, oldStatus) {
+    isReverting = true;
+    dropdown.val(oldStatus).trigger('change.select2'); // กันบาง browser
+    isReverting = false;
+}
+</script>
 
-    </script>
-    @endpush
+
+@endpush
 
 
-    @stack('scripts')
+@stack('scripts')
 
 
 @endsection

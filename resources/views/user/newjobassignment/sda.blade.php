@@ -117,24 +117,68 @@
 
 
             </div>
+            <style>
+                /* cell ปกติ */
+                .truncate-cell {
+                    max-width: 100px;
+                    /* กำหนดความกว้างคอลัมน์ */
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    cursor: pointer;
+                    position: relative;
+                }
+
+                /* ตอนขยาย */
+                .truncate-cell.expanded {
+                    white-space: normal;
+                    overflow: visible;
+                    background: #fff;
+                    z-index: 50;
+                    box-shadow: 0 8px 24px rgba(0, 0, 0, .15);
+                    padding: 8px;
+                    border-radius: 8px;
+                    min-width: 300px;
+                }
+
+                .truncate-cell.expanded {
+                    position: absolute;
+                    white-space: normal;
+                    width: 400px;
+                    background: #fff;
+                    z-index: 100;
+                }
+            </style>
 
 
             <div class="bg-white p-4 rounded-xl shadow-md">
                 <div class="flex items-center justify-between mb-1">
                     <h2 class="text-2xl font-sarabun text-blue-900">Job Approval Request </h2>
 
-                    <button type="button" id="exportPOToExcel" onclick="exportPOToExcel()"
-                        class="px-3 py-1.5 rounded-md font-sarabun text-sm text-white
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="exportTenderProject()"
+                            class="px-3 py-1.5 rounded-md font-sarabun text-sm text-white
+    bg-gradient-to-r from-orange-600 to-orange-500
+    shadow hover:shadow-md hover:scale-[1.02] transition-all">
+                            <i class="fas fa-file-excel mr-1 text-sm"></i>
+                            Export Tender Project
+                        </button>
+
+
+
+                        <button type="button" id="exportToExcel" onclick="exportToExcel()"
+                            class="px-3 py-1.5 rounded-md font-sarabun text-sm text-white
                 bg-gradient-to-r from-green-600 to-green-500
                 shadow hover:shadow-md hover:scale-[1.02] transition-all">
-                        <i class="fas fa-file-excel mr-1 text-sm"></i>
-                        Export visible Data
-                    </button>
+                            <i class="fas fa-file-excel mr-2 text-lg"></i>
+                            Export Visible Data
+                        </button>
+                    </div>
 
                 </div>
 
                 <div class="relative overflow-x-auto mt-2 h-[395px] font-sarabun">
-                    <table
+                    <table id="table"
                         class="min-w-max table-fixed border-separate border-spacing-0
                                 [--th-h:20px]
                                 [--th-w:20px]
@@ -204,8 +248,7 @@
                                 </th>
 
 
-                                <th
-                                    class=" whitespace-nowrap text-center border-b border-blue-900 group">
+                                <th class=" whitespace-nowrap text-center border-b border-blue-900 group">
                                     <div class="flex items-center justify-center gap-2">
                                         <span class="tracking-wide font-sarabun text-xs text-white/90">Site
                                             Name</span>
@@ -218,8 +261,7 @@
                                     </div>
                                 </th>
 
-                                <th
-                                    class=" whitespace-nowrap text-center border-b border-blue-900 group ">
+                                <th class=" whitespace-nowrap text-center border-b border-blue-900 group ">
                                     <div class="flex items-center justify-center gap-2">
                                         <span class="tracking-wide font-sarabun text-xs text-white/90">Job
                                             <br> Description</span>
@@ -316,7 +358,7 @@
                                 <th class=" whitespace-nowrap text-center border-b border-blue-900 group">
                                     <div class="flex items-center justify-center gap-2">
                                         <span class="tracking-wide font-sarabun text-xs text-white/90">Estimated
-                                            <br> Gross Profit</span>
+                                            <br> Transportation Cost</span>
 
                                         <span
                                             class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
@@ -329,7 +371,7 @@
                                 <th class=" whitespace-nowrap text-center border-b border-blue-900 group">
                                     <div class="flex items-center justify-center gap-2">
                                         <span class="tracking-wide font-sarabun text-xs text-white/90">Estimated
-                                            <br> GrossProfit Margin</span>
+                                            <br> Other Cost</span>
 
                                         <span
                                             class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
@@ -341,11 +383,37 @@
 
                                 <th class=" whitespace-nowrap text-center border-b border-blue-900 group">
                                     <div class="flex items-center justify-center gap-2">
-                                        <span class="tracking-wide font-sarabun text-xs text-white/90">Requester</span>
+                                        <span class="tracking-wide font-sarabun text-xs text-white/90">Estimated
+                                            <br> Gross Profit</span>
 
                                         <span
                                             class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
                                             data-col="14">
+                                            <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th class=" whitespace-nowrap text-center border-b border-blue-900 group">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="tracking-wide font-sarabun text-xs text-white/90">Estimated
+                                            <br> GrossProfit Margin</span>
+
+                                        <span
+                                            class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                            data-col="15">
+                                            <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th class=" whitespace-nowrap text-center border-b border-blue-900 group">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="tracking-wide font-sarabun text-xs text-white/90">Requester</span>
+
+                                        <span
+                                            class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                            data-col="16">
                                             <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                         </span>
                                     </div>
@@ -356,8 +424,7 @@
                         </thead>
                         <tbody>
                             @foreach ($newjob as $item)
-                                <tr
-                                    class="hover:bg-red-100 group transition-colors font-sarabun duration-200 text-xs ">
+                                <tr class="hover:bg-red-100 group transition-colors font-sarabun duration-200 text-xs ">
                                     <td
                                         class="border-b whitespace-nowrap text-left sticky left-0 z-[70] bg-white group-hover:bg-red-100 transition">
                                         {{ $item->Refcode }}
@@ -412,61 +479,90 @@
                                         @endif
                                     </td>
 
+
+
+                                    @php
+                                        $isGreen = in_array($item->Refcode, $greenRefcodes);
+                                    @endphp
+
                                     <td
-                                        class="sticky left-[calc(var(--col-1)+var(--col-2))] z-[60] py-1 px-1 border-b whitespace-nowrap bg-white text-center group-hover:bg-red-100 transition">
+                                        class="sticky left-[calc(var(--col-1)+var(--col-2))] z-[60] bg-white py-1 px-1 border-b whitespace-nowrap group-hover:bg-red-100 transition text-center">
                                         <span
-                                            class="inline-flex items-center bg-red-100 text-red-800
-        text-xs font-sarabun px-1 py-1 rounded-full">
-                                            <span class="w-1 h-1 mr-1 bg-red-500 rounded-full"></span>
-                                            Not Ready
+                                            class="inline-flex items-center justify-center min-w-[90px]
+        {{ $isGreen ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}
+        text-xs font-sarabun px-2 py-1 rounded-full">
+
+                                            <span
+                                                class="w-1 h-1 mr-1
+            {{ $isGreen ? 'bg-green-500' : 'bg-red-500' }}
+            rounded-full">
+                                            </span>
+
+                                            {{ $isGreen ? 'Ready' : 'Not Ready' }}
                                         </span>
                                     </td>
+
+
+
+
+
+
+
+
 
                                     <td
                                         class="border-b whitespace-nowrap text-left sticky left-[calc(var(--col-1)+var(--col-2)+var(--col-3))] z-[55] bg-white group-hover:bg-red-100 transition">
                                         {{ $item->Site_Code }}
                                     </td>
 
-                                    <td
-                                        class="border-b whitespace-nowrap text-left z-[60] bg-white group-hover:bg-red-100 transition">
-                                        {{ $item->Site_Name }}
-                                    </td>
+                                    <td class="truncate-cell border-b whitespace-nowrap text-left"
+                                        onclick="toggleExpand(this)">
+                                        {{ $item->Site_Name }}</td>
 
-                                    <td
-                                        class="border-b whitespace-nowrap text-left z-[50] bg-white group-hover:bg-red-100 transition">
-                                        {{ $item->Job_Description }}</td>
+                                    <td class="truncate-cell border-b whitespace-nowrap text-left"
+                                        onclick="toggleExpand(this)">
+                                        {{ $item->Job_Description }} </td>
 
-                                    <td class="border-b whitespace-nowrap text-left">{{ $item->Project_Code }}
-                                    </td>
+
+                                    <td class="truncate-cell border-b whitespace-nowrap text-left"
+                                        onclick="toggleExpand(this)">
+                                        {{ $item->Project_Code }}</td>
                                     <td class="border-b whitespace-nowrap text-left">{{ $item->Office_Code }}
                                     </td>
                                     <td class="border-b whitespace-nowrap text-left">
                                         {{ $item->Customer_Region }}</td>
 
-									
+
                                     <td class="border-b whitespace-nowrap text-right">
-                                        {{  $item->Estimated_Revenue }}
+                                        {{ $item->Estimated_Revenue }}
                                     </td>
 
                                     <td class="border-b whitespace-nowrap text-right">
-
-                                        {{$item->Estimated_Service_Cost}}
+                                        {{ $item->Estimated_Service_Cost }}
                                     </td>
 
                                     <td class="border-b whitespace-nowrap text-right">
-                                        {{$item->Estimated_Material_Cost}}
+                                        {{ $item->Estimated_Material_Cost }}
                                     </td>
 
                                     <td class="border-b whitespace-nowrap text-right">
-                                        {{$item->Estimated_Gross_Profit}}
+                                        {{ $item->Estimated_Transportation_Cost }}
+                                    </td>
+
+                                    <td class="border-b whitespace-nowrap text-right">
+                                        {{ $item->Estimated_Other_Cost }}
+                                    </td>
+
+
+                                    <td class="border-b whitespace-nowrap text-right">
+                                        {{ $item->Estimated_Gross_Profit }}
                                     </td>
 
                                     <td class="border-b whitespace-nowrap text-center">
                                         {{ number_format((float) $item->Estimated_Gross_ProfitMargin, 2) }}%
                                     </td>
 
-                                    <td class="border-b whitespace-nowrap text-center">{{ $item->Requester }}
-                                    </td>
+                                    <td class="border-b whitespace-nowrap text-center">{{ $item->Requester }} </td>
 
                                 </tr>
                             @endforeach
@@ -644,7 +740,39 @@
         </form>
     </div>
 
+    <!-- ฟังชันสำหรับขยายข้อมูลที่ยาวลอยทับ column -->
+    <script>
+        /* ปิด cell ที่ขยาย เมื่อกด ESC */
+        document.addEventListener("keydown", function(e) {
+            if (e.key !== "Escape") return;
 
+            document
+                .querySelectorAll(".truncate-cell.expanded")
+                .forEach(cell => cell.classList.remove("expanded"));
+        });
+
+        /* ปิด cell ที่ขยาย เมื่อคลิกนอก */
+        document.addEventListener("mousedown", function(e) {
+            const expandedCell = document.querySelector(".truncate-cell.expanded");
+            if (!expandedCell) return;
+
+            // ถ้าคลิกอยู่นอก cell ที่ขยาย → ปิด
+            if (!expandedCell.contains(e.target)) {
+                expandedCell.classList.remove("expanded");
+            }
+        });
+
+        function toggleExpand(cell) {
+
+            // ปิด cell อื่นก่อน
+            document.querySelectorAll('.truncate-cell.expanded')
+                .forEach(el => {
+                    if (el !== cell) el.classList.remove('expanded');
+                });
+
+            cell.classList.toggle('expanded');
+        }
+    </script>
 
 
 
@@ -883,29 +1011,30 @@
 
 
 
-        function applyAllFilters() {
-            visibleRows = allRows.filter(row => {
-                for (let colKey in filters) {
-                    const allowed = filters[colKey];
-                    const colIndex = Number(colKey);
-                    const value = row.children[colIndex]?.innerText.trim() ?? "";
+function applyAllFilters() {
+    visibleRows = allRows.filter(row => {
+        for (let colKey in filters) {
+            const allowed = filters[colKey];
+            const colIndex = Number(colKey);
+            const value = row.children[colIndex]?.innerText.trim() ?? "";
 
-                    if (!allowed.includes(value)) return false;
-                }
-                return true;
-            });
-
-            totalRows = visibleRows.length;
-
-            // 🔑 ถ้ามี sort อยู่ → sort ใหม่
-            if (sortState.col !== null && sortState.direction !== null) {
-                sortTable(sortState.col, sortState.direction);
-                return; // sortTable จะ renderPagination ให้แล้ว
-            }
-
-            currentPage = 1;
-            renderPagination();
+            if (!allowed.includes(value)) return false;
         }
+        return true;
+    });
+
+    totalRows = visibleRows.length;
+
+    setupRowsPerPageOptions();   // ⭐ เพิ่มบรรทัดนี้
+
+    if (sortState.col !== null && sortState.direction !== null) {
+        sortTable(sortState.col, sortState.direction);
+        return;
+    }
+
+    currentPage = 1;
+    renderPagination();
+}
 
 
         function closeColumnFilterModal() {
@@ -927,30 +1056,30 @@
         /* -----------------------------------------------------
            PAGINATION (ทำงานร่วมกับ Filter)
         ----------------------------------------------------- */
-        function setupRowsPerPageOptions() {
-            const select = document.getElementById("rowsPerPageList");
-            if (!select) return;
-            select.innerHTML = "";
+function setupRowsPerPageOptions() {
+    const select = document.getElementById("rowsPerPageList");
+    if (!select) return;
 
-            const presets = [10, 20, 50, 100];
+    select.innerHTML = "";
 
-            presets.forEach(n => {
-                if (n < allRows.length) {
-                    let opt = document.createElement("option");
-                    opt.value = n;
-                    opt.textContent = `${n} แถว`;
-                    select.appendChild(opt);
-                }
-            });
+    const presets = [10, 20, 50, 100];
 
-            let allOpt = document.createElement("option");
-            allOpt.value = allRows.length;
-            allOpt.textContent = `ทั้งหมด (${allRows.length} แถว)`;
-            select.appendChild(allOpt);
-
-            select.value = rowsPerPage;
+    presets.forEach(n => {
+        if (n < totalRows) {
+            let opt = document.createElement("option");
+            opt.value = n;
+            opt.textContent = `${n} แถว`;
+            select.appendChild(opt);
         }
+    });
 
+    let allOpt = document.createElement("option");
+    allOpt.value = totalRows;
+    allOpt.textContent = `ทั้งหมด (${totalRows} แถว)`;
+    select.appendChild(allOpt);
+
+    select.value = Math.min(rowsPerPage, totalRows);
+}
 
         function renderPagination() {
             // ป้องกัน totalPages = 0
@@ -1150,8 +1279,6 @@
 
 
 
-
-
     <script>
         const dropdown = document.getElementById('statusDropdown');
         const form = document.getElementById('statusForm');
@@ -1243,62 +1370,279 @@
     </script>
 
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
 
+            document.querySelectorAll('.excel-input').forEach(el => {
 
+                const save = () => {
+                    if (el.disabled) return;
 
+                    let value = el.value?.trim();
+                    if (value === '') value = null;
 
+                    // ถ้าเป็น money → เอา comma ออกก่อนส่ง
+                    if (el.classList.contains('money-input') && value !== null) {
+                        value = value.replace(/,/g, '');
+                    }
 
+                    fetch("{{ route('newjob.inlineUpdate_83') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                id: el.dataset.id,
+                                field: el.dataset.field,
+                                value: value
+                            })
+                        })
+                        .then(r => r.json())
+                        .then(res => {
+                            if (res.success) {
+                                el.classList.add('bg-green-100');
+                                setTimeout(() => el.classList.remove('bg-green-100'), 400);
+                            }
+                        })
+                        .catch(console.error);
+                };
 
+                /* ---------- BLUR / CHANGE ---------- */
+                el.addEventListener('blur', save);
+                el.addEventListener('change', save);
 
+                /* ---------- ENTER = FORMAT + SAVE ---------- */
+                el.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+
+                        // 🔹 trigger blur เพื่อให้ money format ก่อน
+                        el.blur();
+
+                        // 🔹 save (อยู่ช่องเดิม)
+                        save();
+                    }
+                });
+            });
+
+        });
+    </script>
 
 
     <!-- ฟังชันสำหรับ Export -->
     <script>
-        function exportPOToExcel() {
-            const table = document.querySelector("table");
-            const tbody = table.querySelector("tbody");
-            const visibleRows = Array.from(tbody.querySelectorAll("tr"))
-                .filter(row => row.style.display !== "none");
+        function exportToExcel() {
+            const table = document.getElementById("table");
+            const rows = table.querySelectorAll("tr");
 
-            if (visibleRows.length === 0) {
-                alert("ไม่มีข้อมูลในหน้านี้เพื่อทำการ Export");
-                return;
-            }
+            let data = [];
 
-            // เตรียม JSON data
-            const exportData = [];
+            rows.forEach(row => {
+                // ❌ ข้าม row ที่ถูกซ่อน
+                if (row.offsetParent === null) return;
 
-            visibleRows.forEach(row => {
-                const cells = row.querySelectorAll("td");
+                let rowData = [];
+                const cells = row.querySelectorAll("th, td");
 
-                exportData.push({
-                    "Refcode": cells[0].innerText.trim(),
-                    "Job Adding Status": cells[1].innerText.trim(),
-                    "Refcode on ERP": cells[2].innerText.trim(),
-                    "Site Code": cells[3].innerText.trim(),
-                    "Site Name": cells[4].innerText.trim(),
-                    "Job Description": cells[5].innerText.trim(),
-                    "Project Code": cells[6].innerText.trim(),
-                    "Office Code": cells[7].innerText.trim(),
-                    "Customer Region": cells[8].innerText.trim(),
-                    "Estimated Revenue": cells[9].innerText.trim(),
-                    "Estimated Service Cost": cells[10].innerText.trim(),
-                    "Estimated Material Cost": cells[11].innerText.trim(),
-                    "Estimated Gross Profit": cells[12].innerText.trim(),
-                    "Gross Profit Margin": cells[13].innerText.trim(),
-                    "Requester": cells[14].innerText.trim(),
+                cells.forEach(cell => {
+                    // ❌ ข้าม cell ที่ถูกซ่อน
+                    if (cell.offsetParent === null) return;
+
+                    let value = "";
+
+                    // input / select / textarea
+                    const input = cell.querySelector("input, select, textarea");
+                    if (input) {
+                        value = input.value;
+                    } else {
+                        value = cell.innerText.trim();
+                    }
+
+                    // ลบ comma
+                    const raw = value.replace(/,/g, "");
+
+                    // ถ้าเป็นตัวเลข → number
+                    if (raw !== "" && !isNaN(raw)) {
+                        rowData.push(Number(raw));
+                    } else {
+                        rowData.push(value);
+                    }
                 });
+
+                if (rowData.length > 0) {
+                    data.push(rowData);
+                }
             });
 
-            // สร้าง Workbook
-            const ws = XLSX.utils.json_to_sheet(exportData);
+            // ===== Excel =====
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Visible Data");
+            const ws = XLSX.utils.aoa_to_sheet(data);
 
-            // ดาวน์โหลดไฟล์
-            XLSX.writeFile(wb, "Visible_Table_Data.xlsx");
+            // บังคับ type number
+            Object.keys(ws).forEach(cell => {
+                if (cell[0] === "!") return;
+                if (typeof ws[cell].v === "number") {
+                    ws[cell].t = "n";
+                    ws[cell].z = "0.00";
+                }
+            });
+
+            XLSX.utils.book_append_sheet(wb, ws, "Visible Data");
+            XLSX.writeFile(wb, "sda.xlsx");
         }
     </script>
+
+
+
+
+
+     <!-- Tender Project -->
+    <!-- ================== DATA FROM LARAVEL ================== -->
+    <script>
+        const tenderData = @json($newjob);
+        const refcodeData = @json($refcode);
+
+        /* map refcode → ใช้เทียบ customer / contract */
+        const refcodeMap = {};
+        refcodeData.forEach(r => {
+            if (!r.ref_code) return;
+            const key = r.ref_code.substring(0, 8);
+            refcodeMap[key] = r;
+        });
+    </script>
+
+    <script>
+        function getUnitNo(refcode) {
+            if (!refcode) return 0;
+
+            // เอาเฉพาะตัวเลข
+            const clean = refcode.replace(/[^0-9]/g, "");
+
+            // ตัวแม่ → 0
+            if (clean.length <= 6) {
+                return 0;
+            }
+
+            const last4 = parseInt(clean.slice(-4), 10);
+            const prefix = refcode.substring(0, 8); // 90-26-04
+
+            /* 🔥 ดักกลุ่มพิเศษ */
+            if (prefix === "90-26-01") {
+                return last4 - 3; // หัก 3 หน่วยแรก
+            }
+
+            return last4;
+        }
+    </script>
+
+
+    <!-- ================== EXPORT FUNCTION ================== -->
+
+    <script>
+function exportTenderProject(debug = false) {
+
+    const greenRefcodes = @json($greenRefcodes ?? []);
+
+    const headers = [
+        "Tender No.",
+        "Tender Name",
+        "Date",
+        "Type",
+        "Amount Before Vat",
+        "Customer/Owner",
+        "Project Code",
+        "Project Contract No.",
+        "Unit type (Code)",
+        "Ref. Code",
+        "GroupType",
+        "Business Unit (SBU)",
+        "ProductType",
+        "Unit No. / ลำดับโครงการย่อย",
+        "DEED",
+        "Area",
+        "Unit Code",
+        "Corner Price",
+        "Park Price",
+        "Renovate Price",
+        "Other Price",
+        "JOB",
+        "Amount Before Vat", // ✅ ซ้ำได้เลย
+        "Item No.",
+        "Data Type",
+        "Sale Code",
+        "Unit RE",
+        "Currency"
+    ];
+
+    const aoa = [headers];
+
+    tenderData
+    .filter(item => {
+        const hasRefcode = item.Refcode && item.Refcode.trim() !== "";
+        const isNotReady = !greenRefcodes.includes(item.Refcode);
+        return hasRefcode && isNotReady;
+    })
+    .forEach(item => {
+
+        const key = item.Refcode.substring(0, 8);
+        const ref = refcodeMap[key];
+
+        const date = (() => {
+            if (!item.created_at) return "";
+            const d = new Date(item.created_at);
+            if (isNaN(d.getTime())) return "";
+            return d.toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            });
+        })();
+
+        aoa.push([
+            item.Refcode,
+            (item.Site_Code ?? "") + " - " + (item.Job_Description ?? ""),
+            date,
+            "2",
+            "0", // Amount Before Vat ตัวแรก
+            ref ? ref.customer_code : "",
+            "",
+            ref ? ref.project_contract : "",
+            "",
+            item.Refcode,
+            item.Office_Code ? item.Office_Code.slice(-3) : "",
+            "",
+            "",
+            getUnitNo(item.Refcode),
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "001",
+            "", // ✅ Amount Before Vat ตัวที่ 2 (เว้นว่าง)
+            "1",
+            "",
+            "",
+            "",
+            "BAHT"
+        ]);
+
+    });
+
+    if (aoa.length === 1) {
+        alert("ไม่มีข้อมูล 'Not Ready' ให้ Export ครับ");
+        return;
+    }
+
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Tender Project");
+    XLSX.writeFile(wb, "New Tender Project for request Ref.code.xlsx");
+}
+</script>
 
 
 @endsection

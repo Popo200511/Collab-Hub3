@@ -27,7 +27,9 @@ class UserAddJobcontroller extends Controller
     {
         $requester = Auth::user()->name;
 		
-		
+		$greenRefcodes = DB::table('r_import_refcode')
+            ->pluck('ref_code')
+            ->toArray();
 
         // ✔ แจ้งเตือนเฉพาะ Approved / Rejected ที่ยังไม่อ่าน
         $countNotifications = DB::table('collab_newjob')
@@ -45,7 +47,7 @@ class UserAddJobcontroller extends Controller
             ->get();
 
  $newjob = DB::table('collab_newjob')
-            ->where('Requester', $requester)
+         //   ->where('Requester', $requester)
             ->orderByRaw("
             CASE Job_Adding_Status
                 WHEN 'Approved' THEN 2
@@ -60,22 +62,22 @@ class UserAddJobcontroller extends Controller
 
 
         $countApproved = DB::table('collab_newjob')
-            ->where('Requester', $requester)
+        //    ->where('Requester', $requester)
             ->where('Job_Adding_Status', 'Approved')
             ->count();
 
         $countPending = DB::table('collab_newjob')
-            ->where('Requester', $requester)
+          //  ->where('Requester', $requester)
             ->where('Job_Adding_Status', 'Pending')
             ->count();
 
         $countRejected = DB::table('collab_newjob')
-            ->where('Requester', $requester)
+          //  ->where('Requester', $requester)
             ->where('Job_Adding_Status', 'Rejected')
             ->count();
 
         $countAll = DB::table('collab_newjob')
-            ->where('Requester', $requester)
+         //   ->where('Requester', $requester)
             ->count();
 
         $projectCodes = DB::table('collab_projectcode')->get();
@@ -90,7 +92,8 @@ class UserAddJobcontroller extends Controller
             'countRejected',
             'countAll',
             'notifications',
-            'countNotifications'
+            'countNotifications',
+			'greenRefcodes'
         ));
     }
 
@@ -108,6 +111,15 @@ class UserAddJobcontroller extends Controller
     ")
             ->orderByDesc('id') // เรียงใหม่สุดก่อน (ใช้ id หรือ created_at)
             ->get();
+		
+		$refcode = DB::table('r_import_refcode')
+            ->select('ref_code','customer_code','project_contract')
+            ->get(); 
+		
+		
+		$greenRefcodes = DB::table('r_import_refcode')
+            ->pluck('ref_code')
+            ->toArray();
 
         //dd($newjob);
         $requester = Auth::user()->name;
@@ -144,7 +156,9 @@ class UserAddJobcontroller extends Controller
             'countApproved',
             'countPending',
             'countRejected',
-            'countAll'
+            'countAll',
+			'refcode',
+			'greenRefcodes'
         ));
 
     }
@@ -290,6 +304,11 @@ class UserAddJobcontroller extends Controller
         $countAll = DB::table('collab_newjob')
             ->where('Requester', $requester)
             ->count();
+		
+		$greenRefcodes = DB::table('r_import_refcode')
+            ->pluck('ref_code')
+            ->toArray();
+
 
         $newjob       = DB::table('collab_newjob')->get();
         $projectCodes = DB::table('collab_projectcode')->get();
@@ -376,9 +395,7 @@ class UserAddJobcontroller extends Controller
 
                 // ❌ ต้องตรงทั้งชื่อและจำนวน
                 if ($actualHeaders !== $expectedHeaders) {
-                    return back()->withErrors([
-                        'xlsx_file_add' => 'หัว Column ไม่ตรงตาม Template (มีเกิน / ขาด / เรียงผิด)',
-                    ], 'importErrors');
+                    return back()->with('error', 'หัว Column ไม่ตรงตาม Template (มีเกิน / ขาด / เรียงผิด)');
                 }
                 /* ================= END CHECK HEADER ================= */
 
@@ -480,7 +497,8 @@ class UserAddJobcontroller extends Controller
             'countApproved',
             'countPending',
             'countRejected',
-            'countAll'));
+            'countAll',
+			'greenRefcodes'));
     }
 
     public function saveimportnewjob(Request $request)

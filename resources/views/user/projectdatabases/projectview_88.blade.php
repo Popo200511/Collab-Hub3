@@ -1,8 +1,6 @@
-
-
 @extends('layouts.user')
 
-@section('title', '83 True Tower Strengthening')
+@section('title', '88 True New site Project')
 
 
 @section('content')
@@ -23,10 +21,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
-
-<!-- ปฏิทิน -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <!-- แสดงข้อความ error -->
 @if (session('error'))
@@ -177,14 +171,14 @@
 
     .date-empty,
     .date-input:placeholder-shown {
-        color: #9ca3af;
+        color: #ffffff;
     }
     .fp-footer {
         display: flex;
         justify-content: space-between;
         gap: 8px;
         padding: 6px;
-        border-top: 1px solid #e5e7eb;
+        border-top: 1px solid rgb(255, 255, 255);
     }
 
     .fp-btn {
@@ -254,8 +248,11 @@
 </style>
 
 
-<script>
 
+<script>
+    /* ===============================
+                                 Utils
+                                ================================ */
         function parseMoney(val) {
             if (!val) return 0;
             return parseFloat(val.replace(/,/g, '')) || 0;
@@ -356,21 +353,21 @@
 
 
 
-<!-- collab 83 calculation-->
+<!-- collab 88 calculation-->
 <script>
     /* ===============================
-           Calculate col30 = col24 - col26 - col28
-           (Realtime / Safe cursor)
-        ================================ */
+                                                       Calculate col39 = col37 + col38
+                                                       (Realtime / Safe cursor)
+                                                    ================================ */
         $(document).on('input', '.money-input', function() {
             let row = $(this).closest('tr');
 
-            let col25Raw = row.find('[data-field="col25"]').val();
-            let col27Raw = row.find('[data-field="col27"]').val();
-            let col29Raw = row.find('[data-field="col29"]').val();
+            let col37Raw = row.find('[data-field="col37"]').val();
+            let col38Raw = row.find('[data-field="col38"]').val();
+
 
             /* 🔹 ถ้ายังพิมพ์ไม่จบ → STOP */
-            let incomplete = [col25Raw, col27Raw, col29Raw].some(v =>
+            let incomplete = [col37Raw, col38Raw].some(v =>
                 v === '.' || (v && v.endsWith('.'))
             );
 
@@ -379,13 +376,12 @@
             }
 
             /* 🔹 parse เมื่อค่าพร้อม */
-            let col25 = parseMoney(col25Raw);
-            let col27 = parseMoney(col27Raw);
-            let col29 = parseMoney(col29Raw);
+            let col37 = parseMoney(col37Raw);
+            let col38 = parseMoney(col38Raw);
 
-            let result = col25 - col27 - col29;
+            let result = col37 + col38;
 
-            let target = row.find('[data-field="col30"]');
+            let target = row.find('[data-field="col39"]');
             if (target.length) {
                 target.val(formatMoney(result));
             }
@@ -474,7 +470,6 @@
             </div>
         </div>
 
-
         <style>
             .sticky-col-1 {
                 position: sticky;
@@ -486,7 +481,7 @@
 
             .sticky-col-2 {
                 position: sticky;
-                left: 184px;
+                left: 208px;
                 width: 120px;
                 z-index: 50;
                 background: white;
@@ -494,8 +489,8 @@
 
             .sticky-col-3 {
                 position: sticky;
-                left: 322px;
-                width: 130px;
+                left: 365px;
+                width: 140px;
                 z-index: 50;
                 background: white;
             }
@@ -508,15 +503,16 @@
             }
         </style>
 
-        <!-- Modal Manage Permissions 83-->
-        <form action="{{ route('permissions.save_83', $projectCode) }}" method="POST">
+        <!-- Modal Manage Permissions 88-->
+        <form action="{{ route('permissions.save_88', $projectCode) }}" method="POST">
 
             @csrf
 
             <input type="hidden" name="project_code" value="{{ $projectCode }}">
 
+
             <div id="permissionModal"
-                class="fixed inset-0 z-[500] hidden bg-black bg-opacity-50 flex items-center justify-center">
+                class="fixed inset-0 z-[500] hidden bg-black bg-opacity-50 flex items-center justify-center ">
                 <div class="bg-white w-full max-w-[1200px] h-[80vh] rounded-xl shadow-lg overflow-hidden flex flex-col">
 
                     <!-- Header -->
@@ -530,10 +526,11 @@
 
                     <!-- Body -->
                     <div class="overflow-auto flex-1 bg-gray-50 rounded-md max-h-[500px]">
-                        <div style="width: 7500px;">
-                            <table id="permissionTable" 
+                        <div style="width: 17500px;">
+                            <table id="permissionTable"
                                 class="w-full border-separate border-spacing-0 text-center text-xs font-sarabun">
-                                <thead class="bg-blue-950 text-white sticky top-0 z-[200]">
+
+                                <thead class="bg-blue-950 text-white">
                                     <tr class="h-8 text-xs">
 
                                         <th class="sticky top-0 sticky-col-1 sticky-header border px-1 group">
@@ -643,6 +640,7 @@
                                             </div>
                                         </th>
 
+                                        <!-- Read / invisible   -->
                                         <th class="sticky top-0 border px-1 w-[120px]" style="background-color: blue">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Estimated<br>Gross Profit</span>
@@ -654,7 +652,6 @@
                                                 </span>
                                             </div>
                                         </th>
-
 
                                         <th class="sticky top-0 border px-1 w-[130px]" style="background-color: blue">
                                             <div class="flex items-center justify-center gap-2">
@@ -668,10 +665,12 @@
                                             </div>
                                         </th>
 
-                                        <!-- Swap Code-->
+                                        <!-- Col 1-35  -->
+
+                                        <!-- Owner Old Ste-->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Swap Code</span>
+                                                <span>Owner Old Ste</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -681,27 +680,14 @@
                                             </div>
                                         </th>
 
-                                        <!-- Tower Audit Date (Plan)-->
+                                        <!-- Site NAME_T-->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Tower Audit <br> Date (Plan)</span>
+                                                <span>Site NAME_T</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="12">
-                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
-                                                </span>
-                                            </div>
-                                        </th>
-
-                                        <!-- Tower Audit Date (Actual) -->
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
-                                            <div class="flex items-center justify-center gap-2">
-                                                <span>Tower Audit <br> Date (Actual)</span>
-
-                                                <span
-                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
-                                                    data-table="permission" data-col="13">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
@@ -714,16 +700,31 @@
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="13">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+
+
+                                        <!-- Scope of Work-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Scope of Work</span>
+
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="14">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Audit Cal Date-->
+                                        <!-- Tower Actual -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Audit Cal Date</span>
+                                                <span>Tower Actual</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -733,10 +734,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Cal Lot-->
+                                        <!-- SAQ Survey Plan -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Cal Lot</span>
+                                                <span>SAQ Survey Plan</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -746,10 +747,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Material Ordered Date -->
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
+                                        <!-- SAQ Survey Actual -->
+                                        <th class="sticky top-0 border px-1 w-[110px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Material<br>Ordered Date</span>
+                                                <span>SAQ Survey Actual</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -759,10 +760,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Material Ready Date -->
+                                        <!-- CR Plan -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Material<br>Ready Date</span>
+                                                <span>CR Plan</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -772,10 +773,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Material Withdrawn Date -->
-                                        <th class="sticky top-0 border px-1 w-[110px] bg-sky-500 text-white">
+                                        <!-- CR Actual -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Material<br>Withdrawn Date</span>
+                                                <span>CR Actual</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -785,10 +786,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Material Received Date -->
+                                        <!-- CR File -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Material Received Date</span>
+                                                <span>CR File</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -798,10 +799,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Material - Actual Price -->
+                                        <!-- TSSR Plan -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Material<br>Actual Price</span>
+                                                <span>TSSR Plan</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -811,10 +812,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Retrofit Date (Plan) -->
+                                        <!-- TSSR Actual -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Retrofit<br>Date (Plan)</span>
+                                                <span>TSSR Actual</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -824,10 +825,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Retrofit Date (Actual) -->
+                                        <!-- TSSR File -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Retrofit<br>Date (Actual)</span>
+                                                <span>TSSR File</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -837,10 +838,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Tower Group -->
+                                        <!-- FEA Approve -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Tower Group</span>
+                                                <span>FEA Approve</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -850,10 +851,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Tower Type -->
+                                        <!-- Building Permit Plan -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Tower Type</span>
+                                                <span>Building<br>Permit Plan</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -863,10 +864,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Project ID -->
+                                        <!-- Building Permit Actual -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Project ID</span>
+                                                <span>Building<br>Permit Actual</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -876,10 +877,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Current Step -->
+                                        <!-- Building Permit File -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Current Step</span>
+                                                <span>Building<br>Permit File</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -889,10 +890,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Current Step -->
+                                        <!-- Building Permit Cost -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Current Step</span>
+                                                <span>Building<br>Permit Cost</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -902,10 +903,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Ref No. -->
+                                        <!-- Building Propose -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Ref No.</span>
+                                                <span>Building<br>Propose</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -915,10 +916,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- WO No. PROMs -->
+                                        <!-- Civil Start Plan -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>WO No. PROMs</span>
+                                                <span>Civil Start Plan</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -928,10 +929,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- FBOQ Price -->
+                                        <!-- Civil Start Actual -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>FBOQ Price</span>
+                                                <span>Civil Start Actual</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -941,11 +942,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- PO No. PROMs -->
+                                        <!-- Tower Start Plan -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>PO No. PROMs</span>
-
+                                                <span>Tower Start Plan</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="32">
@@ -954,11 +954,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Upload BOQ -->
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
+                                        <!-- Tower Start Actual -->
+                                        <th class="sticky top-0 border px-1 w-[110px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Upload BOQ</span>
-
+                                                <span>Tower Start Actual</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="33">
@@ -967,11 +966,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Revenue -->
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-green-600 text-white">
+                                        <!-- AC Plan -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Revenue</span>
-
+                                                <span>AC Plan</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="34">
@@ -980,12 +978,10 @@
                                             </div>
                                         </th>
 
-
-                                        <!-- PO No. Actual -->
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-green-600 text-white">
+                                        <!-- AC Actual -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>PO No. Actual</span>
-
+                                                <span>AC Actual</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="35">
@@ -994,11 +990,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- PO Amount Actual -->
-                                        <th class="sticky top-0 border px-1 w-[120px] bg-green-600 text-white">
+                                        <!-- AC Temp Cost -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>PO Amount Actual</span>
-
+                                                <span>AC Temp Cost</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="36">
@@ -1007,12 +1002,10 @@
                                             </div>
                                         </th>
 
-
-                                        <!-- INV 1st No. -->
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-green-600 text-white">
+                                        <!-- Meter No. -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>INV 1st No.</span>
-
+                                                <span>Meter No.</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="37">
@@ -1021,11 +1014,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- INV 1st Price -->
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-green-600 text-white">
+                                        <!-- User No. -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>INV 1st Price</span>
-
+                                                <span>User No.</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="38">
@@ -1034,11 +1026,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- INV 2nd No. -->
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-green-600 text-white">
+                                        <!-- PAT Plan -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>INV 2nd No.</span>
-
+                                                <span>PAT Plan</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="39">
@@ -1047,11 +1038,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- INV 2nd Price	 -->
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-green-600 text-white">
+                                        <!-- PAT Actual -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>INV 2nd Price</span>
-
+                                                <span>PAT Actual</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="40">
@@ -1060,11 +1050,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- PO Remaining -->
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-green-600 text-white">
+                                        <!-- Clear Dif Plan -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>PO Remaining</span>
-
+                                                <span>Clear Dif Plan</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="41">
@@ -1073,13 +1062,10 @@
                                             </div>
                                         </th>
 
-
-
-                                        <!-- PR Proposed date (Email) -->
-                                        <th class="sticky top-0 border px-1 w-[110px] bg-blue-850 text-white">
+                                        <!-- Clear Dif actual -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>PR Proposed<br>date (Email)</span>
-
+                                                <span>Clear Dif Actual</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="42">
@@ -1088,11 +1074,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- PR Approved Date (Email) -->
-                                        <th class="sticky top-0 border px-1 w-[110px] bg-blue-850 text-white">
+                                        <!-- FAT Plan -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>PR Approved<br>Date (Email)</span>
-
+                                                <span>FAT Plan</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="43">
@@ -1101,11 +1086,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Billing1 Proposed date (Email) -->
-                                        <th class="sticky top-0 border px-1 w-[120px] bg-blue-850 text-white">
+                                        <!-- FAT Actual -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Billing1 Proposed<br>Date (Email)</span>
-
+                                                <span>FAT Actual</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="44">
@@ -1114,11 +1098,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Billing1 Approved Date (Email) -->
-                                        <th class="sticky top-0 border px-1 w-[120px] bg-blue-850 text-white">
+                                        <!-- Extra Work Detail -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Billing1 Approved<br>Date (Email)</span>
-
+                                                <span>Extra<br>Work Detail</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="45">
@@ -1127,11 +1110,13 @@
                                             </div>
                                         </th>
 
-                                        <!-- Billing2 Proposed date (Email) -->
-                                        <th class="sticky top-0 border px-1 w-[120px] bg-blue-850 text-white">
-                                            <div class="flex items-center justify-center gap-2">
-                                                <span>Billing2 Proposed<br>Date (Email)</span>
 
+                                        <!-- สีเขียวอ่อน 36-47 -->
+
+                                        <!-- Extra Work Propose -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Extra<br>Work Propose</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="46">
@@ -1140,11 +1125,10 @@
                                             </div>
                                         </th>
 
-                                        <!-- Billing2 Approved Date (Email) -->
-                                        <th class="sticky top-0 border px-1 w-[120px] bg-blue-850 text-white">
+                                        <!-- Extra Work Cost -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Billing2 Approved<br>Date (Email)</span>
-
+                                                <span>Extra<br>Work Cost</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="47">
@@ -1153,154 +1137,987 @@
                                             </div>
                                         </th>
 
-                                        <!------------------------------------- Col38-Col50 ---------------------------------------->
+                                        <!-- PBOQ Standard -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PBOQ<br>Standard</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="48">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- FBOQ (Standard + Extra) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>FBOQ<br>(Standard + Extra)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="49">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Quo. No. -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Quo. No.</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="50">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Quo. Propose -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Quo. Propose</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="51">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Quo. Approved -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Quo. Approved</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="52">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- PO No. -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PO No.</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="53">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- PO Amount -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PO Amount</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="54">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- PO Year -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PO Year</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="55">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- PO Amount (Design)	 -->
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PO Amount (Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="56">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- PO Amount (Civil)	 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PO Amount (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="57">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
 
 
-                                        <!-- Col38 -->
+                                        <!-- สีส้มอ่อน 48-54 -->
+
+                                        <!-- Project ID	 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Project ID</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="58">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Ref. No. (Design)	 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Ref. No. (Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="59">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Ref. No. (Civil) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Ref. No. (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="60">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Current Step (Design) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Current<br>Step (Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="61">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Current Step (Civil) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Current<br>Step (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="62">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Upload FBOQ (Design) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Upload<br>FBOQ (Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="63">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Upload FBOQ (Civil) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Upload<br>FBOQ (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="64">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- สีเขียวอ่อน 55-67 -->
+
+                                        <!-- INV 1st Date (Design) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 1st Date<br>(Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="65">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- INV 1st No. (Design) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 1st No.<br>(Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="66">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- INV 1st Price (Design) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 1st Price<br>(Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="67">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- INV 2nd Date (Design) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 2nd Date<br>(Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="68">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- INV 2nd No. (Design) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 2nd No.<br>(Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="69">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- INV 2nd Price (Design) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 2nd Price<br>(Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="70">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- INV 1st Date (Civil) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 1st Date<br>(Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="71">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- INV 1st No. (Civil) -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 1st No.<br>(Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="72">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- INV 1st Price (Civil)	 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 1st Price<br>(Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="73">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--INV 2nd Date (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 2nd Date<br>(Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="74">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--	INV 2nd No. (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 2nd No.<br>(Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="75">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--INV 2nd Price (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>INV 2nd Price<br>(Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="76">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--PO Remaining-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-lime-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PO Remaining</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="77">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+
+                                        <!-- สีเหลือง 68-95 -->
+
+                                        <!--PR Propose in Email (SAQ)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PR Propose<br>in Email (SAQ)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="78">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--PR Approved in Email (SAQ)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PR Approved<br>in Email (SAQ)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="79">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing1 Proposed in Email (SAQ)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing1 Proposed<br>in Email (SAQ)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="80">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing1 Approved in Email (SAQ)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing1 Approved<br>in Email (SAQ)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="81">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing2 Proposed in Email (SAQ)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing2 Proposed<br>in Email (SAQ)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="82">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing2 Approved in Email (SAQ)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing2 Approved<br>in Email (SAQ)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="83">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--PR Propose in Email (CR)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PR Propose<br>in Email (CR)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="84">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--PR Approved in Email (CR)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PR Approved<br>in Email (CR)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="85">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing1 Proposed in Email (CR)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing1 Proposed<br>in Email (CR)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="86">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing1 Approved in Email (CR)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing1 Approved<br>in Email (CR)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="87">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--PR Propose in Email (Design)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PR Propose<br>in Email (Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="88">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--PR Approved in Email (Design)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PR Approved<br>in Email (Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="89">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing1 Proposed in Email (Design)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing1 Proposed<br>in Email (Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="90">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing1 Approved in Email (Design)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing1 Approved<br>in Email (Design)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="91">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--PR Propose in Email (Pile)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PR Propose<br>in Email (Pile)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="92">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--PR Approved in Email (Pile)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PR Approved<br>in Email (Pile)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="93">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing1 Proposed in Email (Pile)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing1 Proposed<br>in Email (Pile)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="94">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing1 Approved in Email (Pile)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing1 Approved<br>in Email (Pile)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="95">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--PR Propose in Email (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PR Propose<br>in Email (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="96">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--PR Approved in Email (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>PR Approved<br>in Email (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="97">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing1 Proposed in Email (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing1 Proposed<br>in Email (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="98">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing1 Approved in Email (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing1 Approved<br>in Email (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="99">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing2 Proposed in Email (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing2 Proposed<br>in Email (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="100">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing2 Approved in Email (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing2 Approved<br>in Email (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="101">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing3 Proposed in Email (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing3 Proposed<br>in Email (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="102">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing3 Approved in Email (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing3 Approved<br>in Email (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="103">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing4 Proposed in Email (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing4 Proposed<br>in Email (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="104">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!--Billing4 Approved in Email (Civil)-->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-amber-500 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Billing4 Approved<br>in Email (Civil)</span>
+                                                <span
+                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                    data-table="permission" data-col="105">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+
+                                        <!------------------------------------- Col96-Col120 ---------------------------------------->
+
+                                        <!-- Col96 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col38</span>
-                                                <span class="filter-icon cursor-pointer" data-col="48"
+                                                <span>Col96</span>
+                                                <span class="filter-icon cursor-pointer" data-col="106"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Col39 -->
+                                        <!-- Col97 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col39</span>
-                                                <span class="filter-icon cursor-pointer" data-col="49"
+                                                <span>Col97</span>
+                                                <span class="filter-icon cursor-pointer" data-col="107"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Col40 -->
+                                        <!-- Col98 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col40</span>
-                                                <span class="filter-icon cursor-pointer" data-col="50"
+                                                <span>Col98</span>
+                                                <span class="filter-icon cursor-pointer" data-col="108"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Col41 -->
+                                        <!-- Col99 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col41</span>
-                                                <span class="filter-icon cursor-pointer" data-col="51"
+                                                <span>Col99</span>
+                                                <span class="filter-icon cursor-pointer" data-col="109"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Col42 -->
+                                        <!-- Col100 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col42</span>
-                                                <span class="filter-icon cursor-pointer" data-col="52"
+                                                <span>Col100</span>
+                                                <span class="filter-icon cursor-pointer" data-col="110"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Col43 -->
+                                        <!-- Col101 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col43</span>
-                                                <span class="filter-icon cursor-pointer" data-col="53"
+                                                <span>Col101</span>
+                                                <span class="filter-icon cursor-pointer" data-col="111"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Col44 -->
+                                        <!-- Col102 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col44</span>
-                                                <span class="filter-icon cursor-pointer" data-col="54"
+                                                <span>Col102</span>
+                                                <span class="filter-icon cursor-pointer" data-col="112"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Col45 -->
+                                        <!-- Col103 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col45</span>
-                                                <span class="filter-icon cursor-pointer" data-col="55"
+                                                <span>Col103</span>
+                                                <span class="filter-icon cursor-pointer" data-col="113"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Col46 -->
+                                        <!-- Col104 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col46</span>
-                                                <span class="filter-icon cursor-pointer" data-col="56"
+                                                <span>Col104</span>
+                                                <span class="filter-icon cursor-pointer" data-col="114"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Col47 -->
+                                        <!-- Col105 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col47</span>
-                                                <span class="filter-icon cursor-pointer" data-col="57"
+                                                <span>Col105</span>
+                                                <span class="filter-icon cursor-pointer" data-col="115"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                         <!-- Col48 -->
+                                        <!-- Col106 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col48</span>
-                                                <span class="filter-icon cursor-pointer" data-col="58"
+                                                <span>Col106</span>
+                                                <span class="filter-icon cursor-pointer" data-col="116"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                         <!-- Col49 -->
+                                        <!-- Col107 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col49</span>
-                                                <span class="filter-icon cursor-pointer" data-col="59"
+                                                <span>Col107</span>
+                                                <span class="filter-icon cursor-pointer" data-col="117"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                        <!-- Col50 -->
+                                        <!-- Col108 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Col50</span>
-                                                <span class="filter-icon cursor-pointer" data-col="60"
+                                                <span>Col108</span>
+                                                <span class="filter-icon cursor-pointer" data-col="118"
                                                     data-table="permission">
                                                     <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                                 </span>
                                             </div>
                                         </th>
 
-                                    
+                                        <!-- Col109 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col109</span>
+                                                <span class="filter-icon cursor-pointer" data-col="119"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
 
+                                        <!-- Col110 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col110</span>
+                                                <span class="filter-icon cursor-pointer" data-col="120"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Col111 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col111</span>
+                                                <span class="filter-icon cursor-pointer" data-col="121"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Col112 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col112</span>
+                                                <span class="filter-icon cursor-pointer" data-col="122"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Col113 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col113</span>
+                                                <span class="filter-icon cursor-pointer" data-col="123"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Col114 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col114</span>
+                                                <span class="filter-icon cursor-pointer" data-col="124"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Col115 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col115</span>
+                                                <span class="filter-icon cursor-pointer" data-col="125"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Col116 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col116</span>
+                                                <span class="filter-icon cursor-pointer" data-col="126"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Col117 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col117</span>
+                                                <span class="filter-icon cursor-pointer" data-col="127"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Col118 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col118</span>
+                                                <span class="filter-icon cursor-pointer" data-col="128"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Col119 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col119</span>
+                                                <span class="filter-icon cursor-pointer" data-col="129"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <!-- Col120 -->
+                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <span>Col120</span>
+                                                <span class="filter-icon cursor-pointer" data-col="130"
+                                                    data-table="permission">
+                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                </span>
+                                            </div>
+                                        </th>
                                     </tr>
                                 </thead>
 
@@ -1405,7 +2222,7 @@
                                         ];
                                         @endphp
 
-                                         @foreach ($projectFields as $index => $field)
+                                        @foreach ($projectFields as $index => $field)
                                         <td data-col="{{ 3 + $index }}" class="px-2">
                                             <select name="{{ $field }}_permission[{{ $user->id }}]"
                                                 class="text-xs p-1 border rounded w-full bg-white project-permission"
@@ -1438,29 +2255,26 @@
                                         @endforeach
 
 
+
                                         <!-- Dynamic Columns -->
-                                        @for ($i = 1; $i <= 50; $i++) 
-                                            @php
-                                                // Go/NoGo เริ่มที่ col 11
-                                                $colIndex = 10 + $i; // 11 → 60
-                                            @endphp
-                                            <td data-col="{{ $colIndex }}" class="px-2">
-                                                <select name="col{{ $i }}_permission[{{ $user->id }}]"
-                                                    class="text-xs p-1 border rounded w-full bg-white hover:bg-gray-50 dynamic-col"
-                                                    data-col="{{ $i }}" data-user-id="{{ $user->id }}">
-                                                    <option value="invisible" {{ isset($permissions[$user->id]) &&
-                                                        $permissions[$user->id]->{"col$i"} === 'invisible' ? 'selected' : ''
-                                                        }}>
-                                                        Invisible</option>
-                                                    <option value="read" {{ isset($permissions[$user->id]) &&
-                                                        $permissions[$user->id]->{"col$i"} === 'read' ? 'selected' : '' }}>
-                                                        Read</option>
-                                                    <option value="write" {{ isset($permissions[$user->id]) &&
-                                                        $permissions[$user->id]->{"col$i"} === 'write' ? 'selected' : '' }}>
-                                                        Write</option>
-                                                </select>
+                                        @for ($i = 1; $i <= 120; $i++) @php $colIndex=10 + $i; @endphp <td
+                                            data-col="{{ $colIndex }}" class="px-2">
+                                            <select name="col{{ $i }}_permission[{{ $user->id }}]"
+                                                class="text-xs p-1 border rounded w-full bg-white hover:bg-gray-50 dynamic-col"
+                                                data-col="{{ $i }}" data-user-id="{{ $user->id }}">
+                                                <option value="invisible" {{ isset($permissions[$user->id]) &&
+                                                    $permissions[$user->id]->{"col$i"} === 'invisible' ? 'selected' : ''
+                                                    }}>
+                                                    Invisible</option>
+                                                <option value="read" {{ isset($permissions[$user->id]) &&
+                                                    $permissions[$user->id]->{"col$i"} === 'read' ? 'selected' : '' }}>
+                                                    Read</option>
+                                                <option value="write" {{ isset($permissions[$user->id]) &&
+                                                    $permissions[$user->id]->{"col$i"} === 'write' ? 'selected' : '' }}>
+                                                    Write</option>
+                                            </select>
                                             </td>
-                                        @endfor
+                                            @endfor
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -1591,7 +2405,7 @@
 
             @endphp
 
-            <div class="table-container relative overflow-x-auto mt-2 h-[395px] font-sarabun">
+            <div class="table-container relative overflow-x-auto h-[395px] font-sarabun">
 
                 <table class="table min-w-max table-fixed border-separate border-spacing-0 font-sarabun
                             [--col-1:115px]
@@ -1617,7 +2431,7 @@
                                 <th class="sticky left-[var(--col-1)] z-[210] py-1 border-b shadow-sm"
                                     style="background-color: white; width: var(--col-2); min-width: var(--col-2);">
                                 </th>
-
+								
                                 <th style="background-color: white;"></th>
                                 <th style="background-color: white;"></th>
 
@@ -1647,49 +2461,116 @@
                                     <span data-summary-field="Estimated_Gross_Profit_Margin_PJ" data-type="avg"></span>
                                 </th>
 
-                                {{-- ===== col 1–50 (tbody) ===== --}}
-                            @php
+                                 @php
                             $columnConfig = [
-                                1 => ['type' => 'text'],
-                                2 => ['type' => 'date'],
-                                3 => ['type' => 'date'],
-                                4 => ['type' => 'text'],
-                                5 => ['type' => 'date'],
-                                6 => ['type' => 'text'],
-                                7 => ['type' => 'date'],
-                                8 => ['type' => 'date'],
-                                9 => ['type' => 'date'],
-                                10 => ['type' => 'date'],
-                                11 => ['type' => 'money'],
-                                12 => ['type' => 'date'],
-                                13 => ['type' => 'date'],
-                                14 => ['type' => 'text'],
-                                15 => ['type' => 'text'],
-                                16 => ['type' => 'text'],
-                                17 => ['type' => 'text'],
-                                18 => ['type' => 'text'],
-                                19 => ['type' => 'text'],
-                                20 => ['type' => 'money'],
-                                21 => ['type' => 'text'],
-                                22 => ['type' => 'date'],
-                                23 => ['type' => 'money'],
-                                24 => ['type' => 'text'],
-                                25 => ['type' => 'money'],
-                                26 => ['type' => 'text'],
-                                27 => ['type' => 'money'],
-                                28 => ['type' => 'text'],
-                                29 => ['type' => 'money'],
-                                30 => ['type' => 'money', 'calculated' => true],
-                                31 => ['type' => 'date'],
-                                32 => ['type' => 'date'],
-                                33 => ['type' => 'date'],
-                                34 => ['type' => 'date'],
-                                35 => ['type' => 'date'],
-                                36 => ['type' => 'date'],
+                            //1 => ['type' => 'select', 'options' => ['Go', 'NoGo']],
+                            1 => ['type' => 'text'],
+                            2 => ['type' => 'text'],
+                            3 => ['type' => 'text'],
+                            4 => ['type' => 'text'],
+                            5 => ['type' => 'text'],
+
+                            6 => ['type' => 'date'],
+                            7 => ['type' => 'date'],
+                            8 => ['type' => 'date'],
+                            9 => ['type' => 'date'],
+                            10 => ['type' => 'date'],
+                            11 => ['type' => 'date'],
+                            12 => ['type' => 'date'],
+                            13 => ['type' => 'date'],
+                            14 => ['type' => 'date'],
+                            15 => ['type' => 'date'],
+                            16 => ['type' => 'date'],
+                            17 => ['type' => 'date'],
+
+                            18 => ['type' => 'money'],
+                            19 => ['type' => 'date'],
+                            20 => ['type' => 'date'],
+                            21 => ['type' => 'date'],
+                            22 => ['type' => 'date'],
+                            23 => ['type' => 'date'],
+                            24 => ['type' => 'date'],
+                            25 => ['type' => 'date'],
+
+                            26 => ['type' => 'money'],
+                            27 => ['type' => 'text'],
+                            28 => ['type' => 'text'],
+                            29 => ['type' => 'date'],
+                            30 => ['type' => 'date'],
+                            31 => ['type' => 'date'],
+                            32 => ['type' => 'date'],
+                            33 => ['type' => 'date'],
+                            34 => ['type' => 'date'],
+                            35 => ['type' => 'text'],
+
+                            36 => ['type' => 'date'],
+                            37 => ['type' => 'money'],
+                            38 => ['type' => 'money'],
+                            39 => ['type' => 'money', 'calculated' => true], // 39 = 37 + 38
+                            40 => ['type' => 'text'],
+                            41 => ['type' => 'date'],
+                            42 => ['type' => 'date'],
+                            43 => ['type' => 'text'],
+                            44 => ['type' => 'money'],
+                            45 => ['type' => 'text'],
+                            46 => ['type' => 'money'],
+                            47 => ['type' => 'money'],
+
+                            48 => ['type' => 'text'],
+                            49 => ['type' => 'text'],
+                            50 => ['type' => 'text'],
+                            51 => ['type' => 'text'],
+                            52 => ['type' => 'text'],
+                            53 => ['type' => 'date'],
+                            54 => ['type' => 'date'],
+
+                            55 => ['type' => 'date'],
+                            56 => ['type' => 'text'],
+                            57 => ['type' => 'money'],
+                            58 => ['type' => 'date'],
+                            59 => ['type' => 'text'],
+                            60 => ['type' => 'money'],
+                            61 => ['type' => 'date'],
+                            62 => ['type' => 'text'],
+                            63 => ['type' => 'money'],
+                            64 => ['type' => 'date'],
+                            65 => ['type' => 'text'],
+                            66 => ['type' => 'money'],
+                            67 => ['type' => 'money'],
+
+                            68 => ['type' => 'date'],
+                            69 => ['type' => 'date'],
+                            70 => ['type' => 'date'],
+                            71 => ['type' => 'date'],
+                            72 => ['type' => 'date'],
+                            73 => ['type' => 'date'],
+                            74 => ['type' => 'date'],
+                            75 => ['type' => 'date'],
+                            76 => ['type' => 'date'],
+                            77 => ['type' => 'date'],
+                            78 => ['type' => 'date'],
+                            79 => ['type' => 'date'],
+                            80 => ['type' => 'date'],
+                            81 => ['type' => 'date'],
+                            82 => ['type' => 'date'],
+                            83 => ['type' => 'date'],
+                            84 => ['type' => 'date'],
+                            85 => ['type' => 'date'],
+                            86 => ['type' => 'date'],
+                            87 => ['type' => 'date'],
+                            88 => ['type' => 'date'],
+                            89 => ['type' => 'date'],
+                            90 => ['type' => 'date'],
+                            91 => ['type' => 'date'],
+                            92 => ['type' => 'date'],
+                            93 => ['type' => 'date'],
+                            94 => ['type' => 'date'],
+                            95 => ['type' => 'date'],
                             ];
                             @endphp
 
-                            @for ($i = 1; $i <= 50; $i++)
+
+							@for ($i = 1; $i <= 120; $i++)
                                     @php
                                         $col = "col$i";
                                         $config = $columnConfig[$i] ?? ['type' => 'text'];
@@ -1714,9 +2595,9 @@
                                         @endif
                                     </th>
                                 @endfor
-                                
 
                             </tr>
+
 
 
                         <tr class="text-xs text-center">
@@ -1830,7 +2711,8 @@
                                     </span>
 
                                     <span class="filter-icon cursor-pointer inline-flex items-center opacity-60
-                   group-hover:opacity-100 transition-opacity" data-table="main" data-col="Estimated_Gross_Profit_PJ" data-type="money">
+                   group-hover:opacity-100 transition-opacity" data-table="main" data-col="Estimated_Gross_Profit_PJ"
+                                        data-type="money">
                                         @php $colIndex++; @endphp
                                         <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                     </span>
@@ -1846,7 +2728,8 @@
                                     </span>
 
                                     <span class="filter-icon cursor-pointer inline-flex items-center opacity-60
-                   group-hover:opacity-100 transition-opacity" data-table="main" data-col="Estimated_Gross_Profit_Margin_PJ" data-type="money">
+                   group-hover:opacity-100 transition-opacity" data-table="main" data-col="Estimated_Gross_Profit_Margin_PJ" 
+                                        data-type="money">
                                         @php $colIndex++; @endphp
                                         <i class="fi fi-br-bars-filter text-xs text-white"></i>
                                     </span>
@@ -1862,54 +2745,117 @@
                             // Column labels
                             // ===============================
                             $columnLabels = [
-                            // Survey (เทา)
-                            1 => 'Swap Code',
-                            2 => 'Tower Audit Date (Plan)',
-                            3 => 'Tower Audit Date (Actual) ',
-                            4 => 'Go / Nogo',
-                            5 => 'Audit Cal Date',
-                            6 => 'Cal Lot',
-                            7 => 'Material Ordered Date',
-                            8 => 'Material Ready Date',
-                            9 => 'Material Withdrawn Date',
-                            10 => 'Material Received Date',
-                            11 => 'Material - Actual Price',
-                            12 => 'Retrofit Date (Plan)',
-                            13 => 'Retrofit Date (Actual)',
-                            14 => 'Tower Group',
-                            15 => 'Tower Type',
-                            16 => 'Project ID',
-                            17 => 'Current Step',
-                            18 => 'Ref No.',
-                            19 => 'WO No. PROMs',
-                            20 => 'FBOQ Price',
-                            21 => 'PO No. PROMs',
-                            22 => 'Upload BOQ',
+                            // สีฟ้า
+                            1 => 'Owner Old Ste',
+                            2 => 'Site NAME_T',
+                            3 => 'Go / Nogo',
+                            4 => 'Scope of Work',
+                            5 => 'Tower Actual',
+                            6 => 'SAQ Survey Plan',
+                            7 => 'SAQ Survey Actual',
+                            8 => 'CR Plan',
+                            9 => 'CR Actual',
+                            10 => 'CR File',
+                            11 => 'TSSR Plan',
+                            12 => 'TSSR Actual',
+                            13 => 'TSSR File',
+                            14 => 'FEA Approve',
+                            15 => 'Building Permit Plan',
+                            16 => 'Building Permit Actual',
+                            17 => 'Building Permit File',
+                            18 => 'Building Permit Cost',
+                            19 => 'Building Propose',
+                            20 => 'Civil Start Plan',
+                            21 => 'Civil Start Actual',
+                            22 => 'Tower Start Plan',
+                            23 => 'Tower Start Actual',
+                            24 => 'AC Plan',
+                            25 => 'AC Actual',
+                            26 => 'AC Temp Cost',
+                            27 => 'Meter No.',
+                            28 => 'User No.',
+                            29 => 'PAT Plan',
+                            30 => 'PAT Actual',
+                            31 => 'Clear Dif Plan',
+                            32 => 'Clear Dif actual',
+                            33 => 'FAT Plan',
+                            34 => 'FAT Actual',
+                            35 => 'Extra Work Detail',
 
-                            // สีเขียว
-                            23 => 'Revenue',
-                            24 => 'PO No. Actual',
-                            25 => 'PO Amount Actual',
-                            26 => 'INV 1st No.',
-                            27 => 'INV 1st Price',
-                            28 => 'INV 2nd No.',
-                            29 => 'INV 2nd Price',
-                            30 => 'PO Remaining',
+                            // สีเขียวอ่อน
+                            36 => 'Extra Work Propose',
+                            37 => 'Extra Work Cost',
+                            38 => 'PBOQ Standard',
+                            39 => 'FBOQ <span style="color:red">(Standrad + Extra)</span>',
+                            40 => 'Quo. No.',
+                            41 => 'Quo. Propose',
+                            42 => 'Quo. Approved',
+                            43 => 'PO No.',
+                            44 => 'PO Amount',
+                            45 => 'PO Year',
+                            46 => 'PO Amount (Design)',
+                            47 => 'PO Amount (Civil)',
 
-                            // สีขาว
-                            31 => 'PR Proposed Date (Email)',
-                            32 => 'PR Approved Date (Email)',
-                            33 => 'Billing1 Proposed Date (Email)',
-                            34 => 'Billing1 Approved Date (Email)',
-                            35 => 'Billing2 Proposed Date (Email)',
-                            36 => 'Billing2 Approved Date (Email)',
+                            //สีส้มอ่อน
+                            48 => 'Project ID',
+                            49 => 'Ref. No. (Design)',
+                            50 => 'Ref. No. (Civil)',
+                            51 => 'Current Step (Design)',
+                            52 => 'Current Step (Civil)',
+                            53 => 'Upload FBOQ (Design)',
+                            54 => 'Upload FBOQ (Civil)',
+
+                            //สีเขียว
+                            55 => 'INV 1st Date (Design)',
+                            56 => 'INV 1st No. (Design)',
+                            57 => 'INV 1st Price (Design)',
+                            58 => 'INV 2nd Date (Design)',
+                            59 => 'INV 2nd No. (Design)',
+                            60 => 'INV 2nd Price (Design)',
+                            61 => 'INV 1st Date (Civil)',
+                            62 => 'INV 1st No. (Civil)',
+                            63 => 'INV 1st Price (Civil)',
+                            64 => 'INV 2nd Date (Civil)',
+                            65 => 'INV 2nd No. (Civil)',
+                            66 => 'INV 2nd Price (Civil)',
+                            67 => 'PO Remaining',
+
+                            //สีเหลือง
+                            68 => 'PR Propose in Email (SAQ)',
+                            69 => 'PR Approved in Email (SAQ)',
+                            70 => 'Billing1 Proposed in Email (SAQ)',
+                            71 => 'Billing1 Approved in Email (SAQ)',
+                            72 => 'Billing2 Proposed in Email (SAQ)',
+                            73 => 'Billing2 Approved in Email (SAQ)',
+                            74 => 'PR Propose in Email (CR)',
+                            75 => 'PR Approved in Email (CR)',
+                            76 => 'Billing1 Proposed in Email (CR)',
+                            77 => 'Billing1 Approved in Email (CR)',
+                            78 => 'PR Propose in Email (Design)',
+                            79 => 'PR Approved in Email (Design)',
+                            80 => 'Billing1 Proposed in Email (Design)',
+                            81 => 'Billing1 Approved in Email (Design)',
+                            82 => 'PR Propose in Email (Pile)',
+                            83 => 'PR Approved in Email (Pile)',
+                            84 => 'Billing1 Proposed in Email (Pile)',
+                            85 => 'Billing1 Approved in Email (Pile)',
+                            86 => 'PR Propose in Email (Civil)',
+                            87 => 'PR Approved in Email (Civil)',
+                            88 => 'Billing1 Proposed in Email (Civil)',
+                            89 => 'Billing1 Approved in Email (Civil)',
+                            90 => 'Billing2 Proposed in Email (Civil)',
+                            91 => 'Billing2 Approved in Email (Civil)',
+                            92 => 'Billing3 Proposed in Email (Civil)',
+                            93 => 'Billing3 Approved in Email (Civil)',
+                            94 => 'Billing4 Proposed in Email (Civil)',
+                            95 => 'Billing4 Approved in Email (Civil)',
                             ];
 
                             // ===============================
                             // Background colors (INLINE)
                             // ===============================
                             $columnBgColors = [
-                            // ฟ้า
+                            // ฟ้า 1-35
                             1 => '#0ea5e9',
                             2 => '#0ea5e9',
                             3 => '#0ea5e9',
@@ -1932,24 +2878,87 @@
                             20 => '#0ea5e9',
                             21 => '#0ea5e9',
                             22 => '#0ea5e9',
+                            23 => '#0ea5e9',
+                            24 => '#0ea5e9',
+                            25 => '#0ea5e9',
+                            26 => '#0ea5e9',
+                            27 => '#0ea5e9',
+                            28 => '#0ea5e9',
+                            29 => '#0ea5e9',
+                            30 => '#0ea5e9',
+                            31 => '#0ea5e9',
+                            32 => '#0ea5e9',
+                            33 => '#0ea5e9',
+                            34 => '#0ea5e9',
+                            35 => '#0ea5e9',
 
-                            // เขียว
-                            23 => '#16a34a',
-                            24 => '#16a34a',
-                            25 => '#16a34a',
-                            26 => '#16a34a',
-                            27 => '#16a34a',
-                            28 => '#16a34a',
-                            29 => '#16a34a',
-                            30 => '#16a34a',
+                            // เขียวอ่อน 36-47
+                            36 => '#92D050',
+                            37 => '#92D050',
+                            38 => '#92D050',
+                            39 => '#92D050',
+                            40 => '#92D050',
+                            41 => '#92D050',
+                            42 => '#92D050',
+                            43 => '#92D050',
+                            44 => '#92D050',
+                            45 => '#92D050',
+                            46 => '#92D050',
+                            47 => '#92D050',
 
-                            //กรม
-                            31 => '#162456',
-                            32 => '#162456',
-                            33 => '#162456',
-                            34 => '#162456',
-                            35 => '#162456',
-                            36 => '#162456',
+                            // ส้มอ่อน 48-54
+                            48 => '#FFC000',
+                            49 => '#FFC000',
+                            50 => '#FFC000',
+                            51 => '#FFC000',
+                            52 => '#FFC000',
+                            53 => '#FFC000',
+                            54 => '#FFC000',
+
+                            //เขียวอ่อ่น 55-67
+                            55 => '#92D050',
+                            56 => '#92D050',
+                            57 => '#92D050',
+                            58 => '#92D050',
+                            59 => '#92D050',
+                            60 => '#92D050',
+                            61 => '#92D050',
+                            62 => '#92D050',
+                            63 => '#92D050',
+                            64 => '#92D050',
+                            65 => '#92D050',
+                            66 => '#92D050',
+                            67 => '#92D050',
+
+                            // สีเหลืองอ่อน 68-95
+                            68 => '#FFC000',
+                            69 => '#FFC000',
+                            70 => '#FFC000',
+                            71 => '#FFC000',
+                            72 => '#FFC000',
+                            73 => '#FFC000',
+                            74 => '#FFC000',
+                            75 => '#FFC000',
+                            76 => '#FFC000',
+                            77 => '#FFC000',
+                            78 => '#FFC000',
+                            79 => '#FFC000',
+                            80 => '#FFC000',
+                            81 => '#FFC000',
+                            82 => '#FFC000',
+                            83 => '#FFC000',
+                            84 => '#FFC000',
+                            85 => '#FFC000',
+                            86 => '#FFC000',
+                            87 => '#FFC000',
+                            88 => '#FFC000',
+                            89 => '#FFC000',
+                            90 => '#FFC000',
+                            91 => '#FFC000',
+                            92 => '#FFC000',
+                            93 => '#FFC000',
+                            94 => '#FFC000',
+                            95 => '#FFC000',
                             ];
 
                             $colIndex = 12;
@@ -1957,9 +2966,11 @@
 
 
 
+
+
                             {{-- ===== THEAD ===== --}}
-                            @for ($i = 1; $i <= 50; $i++) @php $col="col$i" ; $visibility=$permissions[Auth::id()]->$col
-                                ?? 'invisible';
+                            @for ($i = 1; $i <= 120; $i++) @php $col="col$i" ; $visibility=$permissions[Auth::id()]->
+                                $col ?? 'invisible';
 
                                 $label = $columnLabels[$i] ?? "Col $i";
                                 $bgColor = $columnBgColors[$i] ?? '#FF0000'; // default เทา
@@ -1973,7 +2984,7 @@
 
                                     <div class="flex items-center justify-center gap-2">
                                         <span class="tracking-wide font-sarabun text-xs">
-                                            {{ $label }}
+                                            {!! $label !!}
                                         </span>
 
                                         <span class="filter-icon cursor-pointer inline-flex items-center
@@ -2024,7 +3035,7 @@
                             $originalValue = $item->$field ?? '';
                             @endphp
 
-                            <td data-col="{{ $field }}" class="project-col {{ $field }}" 
+                            <td data-col="{{ $field }}" class="project-col {{ $field }}"
                                 style="{{ $isInvisible ? 'display:none;' : '' }}">
 
                                 <input type="text"
@@ -2062,7 +3073,7 @@
                             $grossMargin = $revenue != 0 ? ($grossProfit / $revenue) * 100 : 0;
                             @endphp
 
-                            <td data-col="Estimated_Gross_Profit_PJ" 
+                            <td data-col="Estimated_Gross_Profit_PJ"
                                 style="{{ $gpVisibility === 'invisible' ? 'display:none;' : '' }}">
                                 <input type="text" class="excel-input gross-profit text-end readonly-cell"
                                     style="text-align: right;" value="{{ number_format($grossProfit, 2) }}" readonly
@@ -2072,67 +3083,132 @@
 
 
                             <td data-col="Estimated_Gross_Profit_Margin_PJ"
-                            style="{{ $gmVisibility === 'invisible' ? 'display:none;' : '' }}">
+                                style="{{ $gmVisibility === 'invisible' ? 'display:none;' : '' }}">
                                 <input type="text" class="excel-input gross-margin text-end readonly-cell"
                                     value="{{ number_format($grossMargin, 2) }}%" readonly disabled tabindex="-1">
                             </td>
 
 
-                            {{-- ===== col 1–50 (tbody) ===== --}}
+                            {{-- ===== col 1–120 (tbody) ===== --}}
                             @php
                             $columnConfig = [
-                                1 => ['type' => 'text'],
-                                2 => ['type' => 'date'],
-                                3 => ['type' => 'date'],
-                                4 => ['type' => 'select', 'options' => ['Go', 'NoGo']],
-                                5 => ['type' => 'date'],
-                                6 => ['type' => 'text'],
-                                7 => ['type' => 'date'],
-                                8 => ['type' => 'date'],
-                                9 => ['type' => 'date'],
-                                10 => ['type' => 'date'],
-                                11 => ['type' => 'money'],
-                                12 => ['type' => 'date'],
-                                13 => ['type' => 'date'],
-                                14 => ['type' => 'text'],
-                                15 => ['type' => 'text'],
-                                16 => ['type' => 'text'],
-                                17 => ['type' => 'text'],
-                                18 => ['type' => 'text'],
-                                19 => ['type' => 'text'],
-                                20 => ['type' => 'money'],
-                                21 => ['type' => 'text'],
-                                22 => ['type' => 'date'],
-                                23 => ['type' => 'money'],
-                                24 => ['type' => 'text'],
-                                25 => ['type' => 'money'],
-                                26 => ['type' => 'text'],
-                                27 => ['type' => 'money'],
-                                28 => ['type' => 'text'],
-                                29 => ['type' => 'money'],
-                                30 => ['type' => 'money', 'calculated' => true],
-                                31 => ['type' => 'date'],
-                                32 => ['type' => 'date'],
-                                33 => ['type' => 'date'],
-                                34 => ['type' => 'date'],
-                                35 => ['type' => 'date'],
-                                36 => ['type' => 'date'],
+                            //1 => ['type' => 'select', 'options' => ['Go', 'NoGo']],
+                            1 => ['type' => 'text'],
+                            2 => ['type' => 'text'],
+                            3 => ['type' => 'select', 'options' => ['Go', 'NoGo']],
+                            4 => ['type' => 'text'],
+                            5 => ['type' => 'text'],
+
+                            6 => ['type' => 'date'],
+                            7 => ['type' => 'date'],
+                            8 => ['type' => 'date'],
+                            9 => ['type' => 'date'],
+                            10 => ['type' => 'date'],
+                            11 => ['type' => 'date'],
+                            12 => ['type' => 'date'],
+                            13 => ['type' => 'date'],
+                            14 => ['type' => 'date'],
+                            15 => ['type' => 'date'],
+                            16 => ['type' => 'date'],
+                            17 => ['type' => 'date'],
+
+                            18 => ['type' => 'money'],
+                            19 => ['type' => 'date'],
+                            20 => ['type' => 'date'],
+                            21 => ['type' => 'date'],
+                            22 => ['type' => 'date'],
+                            23 => ['type' => 'date'],
+                            24 => ['type' => 'date'],
+                            25 => ['type' => 'date'],
+
+                            26 => ['type' => 'money'],
+                            27 => ['type' => 'text'],
+                            28 => ['type' => 'text'],
+                            29 => ['type' => 'date'],
+                            30 => ['type' => 'date'],
+                            31 => ['type' => 'date'],
+                            32 => ['type' => 'date'],
+                            33 => ['type' => 'date'],
+                            34 => ['type' => 'date'],
+                            35 => ['type' => 'text'],
+
+                            36 => ['type' => 'date'],
+                            37 => ['type' => 'money'],
+                            38 => ['type' => 'money'],
+                            39 => ['type' => 'money', 'calculated' => true], // 39 = 37 + 38
+                            40 => ['type' => 'text'],
+                            41 => ['type' => 'date'],
+                            42 => ['type' => 'date'],
+                            43 => ['type' => 'text'],
+                            44 => ['type' => 'money'],
+                            45 => ['type' => 'text'],
+                            46 => ['type' => 'money'],
+                            47 => ['type' => 'money'],
+
+                            48 => ['type' => 'text'],
+                            49 => ['type' => 'text'],
+                            50 => ['type' => 'text'],
+                            51 => ['type' => 'text'],
+                            52 => ['type' => 'text'],
+                            53 => ['type' => 'date'],
+                            54 => ['type' => 'date'],
+
+                            55 => ['type' => 'date'],
+                            56 => ['type' => 'text'],
+                            57 => ['type' => 'money'],
+                            58 => ['type' => 'date'],
+                            59 => ['type' => 'text'],
+                            60 => ['type' => 'money'],
+                            61 => ['type' => 'date'],
+                            62 => ['type' => 'text'],
+                            63 => ['type' => 'money'],
+                            64 => ['type' => 'date'],
+                            65 => ['type' => 'text'],
+                            66 => ['type' => 'money'],
+                            67 => ['type' => 'money'],
+
+                            68 => ['type' => 'date'],
+                            69 => ['type' => 'date'],
+                            70 => ['type' => 'date'],
+                            71 => ['type' => 'date'],
+                            72 => ['type' => 'date'],
+                            73 => ['type' => 'date'],
+                            74 => ['type' => 'date'],
+                            75 => ['type' => 'date'],
+                            76 => ['type' => 'date'],
+                            77 => ['type' => 'date'],
+                            78 => ['type' => 'date'],
+                            79 => ['type' => 'date'],
+                            80 => ['type' => 'date'],
+                            81 => ['type' => 'date'],
+                            82 => ['type' => 'date'],
+                            83 => ['type' => 'date'],
+                            84 => ['type' => 'date'],
+                            85 => ['type' => 'date'],
+                            86 => ['type' => 'date'],
+                            87 => ['type' => 'date'],
+                            88 => ['type' => 'date'],
+                            89 => ['type' => 'date'],
+                            90 => ['type' => 'date'],
+                            91 => ['type' => 'date'],
+                            92 => ['type' => 'date'],
+                            93 => ['type' => 'date'],
+                            94 => ['type' => 'date'],
+                            95 => ['type' => 'date'],
                             ];
                             @endphp
 
-                            @for ($i = 1; $i <= 50; $i++)
-                            @php
-                                $col = "col$i";
-                                $config = $columnConfig[$i] ?? ['type' => 'text'];
+                            @for ($i = 1; $i <= 120; $i++) @php $col="col$i" ; $config=$columnConfig[$i] ?? ['type'=>
+                                'text'];
 
                                 $visibility = $permissions[Auth::id()]->$col ?? 'invisible';
                                 $isRead = $visibility === 'read';
                                 $isInvisible = $visibility === 'invisible';
 
                                 $value = $item->$col;
-                            @endphp
+                                @endphp
 
-                            <td data-col="col{{ $i }}" class="col-{{ $i }}"
+                                <td data-col="col{{ $i }}" class="col-{{ $i }}"
                                 style="{{ $isInvisible ? 'display:none;' : '' }}"
                                 title="{{ $value }}">
 
@@ -2198,107 +3274,117 @@
         </div>
 
         <div id="listViewPagination"
-            class="mt-4 p-4 sm:p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
+                class="mt-4 p-4 sm:p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
 
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
-                {{-- Left: Rows per page --}}
-                    <div class="flex items-center gap-2">
-                        <!-- Label with Icon -->
-                        <label class="flex items-center gap-1.5 text-xs font-sarabun font-medium text-gray-600 whitespace-nowrap">
-                            <i class="fa-solid fa-list-ul text-indigo-400"></i>
-                            แสดงรายการ:
-                        </label>
+                    {{-- Left: Rows per page --}}
+                        <div class="flex items-center gap-2">
+                            <!-- Label with Icon -->
+                            <label class="flex items-center gap-1.5 text-xs font-sarabun font-medium text-gray-600 whitespace-nowrap">
+                                <i class="fa-solid fa-list-ul text-indigo-400"></i>
+                                แสดงรายการ:
+                            </label>
 
-
-                        @php
-                            $total = $projectData->total();
-                            $baseOptions = [10, 20, 50, 100];
-                            $options = array_filter($baseOptions, fn($v) => $v < $total);
-                            $options[] = $total;
-                        @endphp
-
-                        <!-- Custom Select Container -->
-                        <div class="relative group">
                             @php
-                                $query = request()->except(['per_page','page']);
+                                $total = $projectData->count();
+                                $baseOptions = [10, 20, 50, 100];
+                                $options = array_filter($baseOptions, fn($v) => $v < $total);
+                                $options[] = $total;
                             @endphp
 
-                            <select
-                                id="rowsPerPageList"
-                                onchange="changeRowsPerPage(this.value)"
+                            <!-- Custom Select Container -->
+                            <div class="relative group">
+                                @php
+                                    $query = request()->except(['per_page','page']);
+                                @endphp
+
+                                <select 
+                                onchange="window.location='{{ request()->url() }}?{{ http_build_query($query) }}&per_page='+this.value+'&page=1'"
                                 class="appearance-none py-2 pl-3 pr-8 border border-gray-200 rounded-xl text-xs font-sarabun font-medium
-                                bg-white text-gray-700 cursor-pointer min-w-[80px] text-center">
+                                bg-white text-gray-700 cursor-pointer min-w-[80px] text-center
+                                hover:border-indigo-300 hover:bg-indigo-50/50
+                                focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500
+                                transition-all duration-300 shadow-sm hover:shadow-md">
+                                    
+                                    @foreach($options as $size)
+                                        <option value="{{ $size }}"
+                                            {{ $projectData->perPage() == $size ? 'selected' : '' }}>
+                                            {{ $size == $total ? 'ทั้งหมด ('.$total.')' : $size }}
+                                        </option>
+                                    @endforeach
+                                </select>
                                 
-                                @foreach($options as $size)
-                                    <option value="{{ $size }}"
-                                        {{ $projectData->perPage() == $size ? 'selected' : '' }}>
-                                        {{ $size == $total ? 'ทั้งหมด ('.$total.')' : $size }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            
-                            <!-- Custom Dropdown Arrow -->
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-                                <i class="fa-solid fa-chevron-down text-[9px] text-gray-400 
-                                        group-hover:text-indigo-500 transition-colors"></i>
+                                <!-- Custom Dropdown Arrow -->
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                                    <i class="fa-solid fa-chevron-down text-[9px] text-gray-400 
+                                            group-hover:text-indigo-500 transition-colors"></i>
+                                </div>
                             </div>
                         </div>
+
+                    {{-- Center: Pagination --}}
+                    <nav class="flex items-center gap-1.5">
+
+                        {{-- Previous --}}
+                        @if ($projectData->onFirstPage())
+                            <button disabled
+                                class="w-9 h-9 rounded-xl border opacity-30">
+                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                            </button>
+                        @else
+                            <a href="{{ $projectData->previousPageUrl() }}"
+                                class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
+                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                            </a>
+                        @endif
+
+
+                        {{-- Page Numbers --}}
+                        @for ($i = 1; $i <= $projectData->lastPage(); $i++)
+                            <a href="{{ $projectData->url($i) }}"
+                                class="w-9 h-9 flex items-center justify-center rounded-xl text-xs
+                                {{ $projectData->currentPage() == $i
+                                    ? 'bg-indigo-600 text-white'
+                                    : 'bg-white text-gray-600 border hover:bg-indigo-50' }}">
+                                {{ $i }}
+                            </a>
+                        @endfor
+
+
+                        {{-- Next --}}
+                        @if ($projectData->hasMorePages())
+                            <a href="{{ $projectData->nextPageUrl() }}"
+                                class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </a>
+                        @else
+                            <button disabled
+                                class="w-9 h-9 rounded-xl border opacity-30">
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                        @endif
+
+                    </nav>
+
+                    {{-- Right: Summary --}}
+                    <div>
+                        <span class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full">
+                            แสดง
+                            <span class="text-indigo-600 font-semibold">
+                                {{ $projectData->firstItem() }}-{{ $projectData->lastItem() }}
+                            </span>
+                            จากทั้งหมด
+                            <span class="font-semibold">
+                                {{ $projectData->total() }}
+                            </span>
+                            รายการ
+                        </span>
                     </div>
-
-                {{-- Center: Pagination --}}
-                <nav class="flex items-center gap-1.5">
-
-                    {{-- Previous --}}
-                    @if ($projectData->onFirstPage())
-                        <button disabled
-                            class="w-9 h-9 rounded-xl border opacity-30">
-                            <i class="fa-solid fa-chevron-left text-xs"></i>
-                        </button>
-                    @else
-                        <a href="{{ $projectData->previousPageUrl() }}"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
-                            <i class="fa-solid fa-chevron-left text-xs"></i>
-                        </a>
-                    @endif
-
-
-                    {{-- Page Numbers --}}
-                    @for ($i = 1; $i <= $projectData->lastPage(); $i++)
-                        <a href="{{ $projectData->url($i) }}"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl text-xs
-                            {{ $projectData->currentPage() == $i
-                                ? 'bg-indigo-600 text-white'
-                                : 'bg-white text-gray-600 border hover:bg-indigo-50' }}">
-                            {{ $i }}
-                        </a>
-                    @endfor
-
-
-                    {{-- Next --}}
-                    @if ($projectData->hasMorePages())
-                        <a href="{{ $projectData->nextPageUrl() }}"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </a>
-                    @else
-                        <button disabled
-                            class="w-9 h-9 rounded-xl border opacity-30">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </button>
-                    @endif
-
-                </nav>
-
-                {{-- Right: Summary --}}
-                <div>
-                    <span id="paginationSummaryList"
-                        class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full">
-                    </span>
-                </div>
 
             </div>
         </div>
+    </div>
 
 </main>
 
@@ -2384,7 +3470,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -2499,10 +3584,7 @@ function toggleDateValueStyle(input) {
         input.classList.remove('has-value');
     }
 }
-
 </script>
-
-
 
 <script>
     function storeOriginal(input) {
@@ -2561,7 +3643,7 @@ function toggleDateValueStyle(input) {
                 "Project Manager": {
                     cols: {
                         write: Array.from({
-                            length: 37
+                            length: 95
                         }, (_, i) => i + 1)
                         // col 1–35 = read
                         // col 35–50 = invisible
@@ -2575,7 +3657,7 @@ function toggleDateValueStyle(input) {
                 "Project Admin": {
                     cols: {
                         read: Array.from({
-                            length: 37
+                            length: 95
                         }, (_, i) => i + 1)
                         // col 1–36 = read
                         // col 35–50 = invisible
@@ -2589,7 +3671,7 @@ function toggleDateValueStyle(input) {
                 "Site Supervisor": {
                     cols: {
                         read: Array.from({
-                            length: 37
+                            length: 95
                         }, (_, i) => i + 1)
                         // col 1–36 = read
                         // col 35–50 = invisible
@@ -2603,9 +3685,9 @@ function toggleDateValueStyle(input) {
                 "Project Director": {
                     cols: {
                         read: Array.from({
-                            length: 37
+                            length: 95
                         }, (_, i) => i + 1)
-                        // col 1–37 = read
+                        // col 1–36 = read
                         // col 35–50 = invisible
                     },
                     project: {
@@ -2746,7 +3828,7 @@ function toggleDateValueStyle(input) {
                         value = value.replace(/,/g, '');
                     }
 
-                    fetch("{{ route('newjob.inlineUpdate_83') }}", {
+                    fetch("{{ route('newjob.inlineUpdate_88') }}", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -2788,8 +3870,6 @@ function toggleDateValueStyle(input) {
 
         });
 </script>
-
-
 
 
 
@@ -2852,26 +3932,12 @@ function exportToExcel() {
     });
 
     XLSX.utils.book_append_sheet(wb, ws, "Visible Data");
-    XLSX.writeFile(wb, "83_True_Tower_Strengthening.xlsx");
+    XLSX.writeFile(wb, "88_True_New_Site_Project.xlsx");
 }
 </script>
 
 
 <!-- ฟังชั่น Filter -->
-
-<script>
-const allData = @json($projectDataAll);
-
-const allDataMap = {};
-allData.forEach(r=>{
-    for(let k in r){
-        if(!allDataMap[k]) allDataMap[k]=new Set();
-        allDataMap[k].add(r[k] ?? "");
-    }
-});
-
-</script>
-
 <script>
 const tables = {
     main: {
@@ -3157,40 +4223,46 @@ function closeColumnFilterModal() {
    LOAD FILTER VALUES
 ===================================================== */
 
-function loadFilterValues(tableKey, colKey) {
-
+function loadFilterValues(tableKey, colIndex) {
     const t = tables[tableKey];
     const list = document.getElementById("column-filter-checkbox-list");
-
     list.innerHTML = "";
+
+    const selected = t.filters[colIndex] ?? [];
     originalFilterOrder = [];
 
-    const selected = t.filters[colKey] ?? [];
-
     const values = new Set();
+    let hasRealValue = false;
 
-    // ⭐ ใช้ข้อมูลทั้งหมดจาก database
-    allData.forEach(row => {
+    // ⭐ สำคัญมาก
+    const activeFilters = Object.keys(t.filters).filter(c => c != colIndex);
 
-        let v = row[colKey];
+    const sourceRows =
+        activeFilters.length > 0
+            ? t.allRows.filter(row => {
+                return activeFilters.every(c => {
+                    const v = getCellValue(row, c, false) ?? "";
+                    return t.filters[c].includes(v);
+                });
+            })
+            : t.allRows;
 
-        if (v === null || v === undefined) v = "";
+    sourceRows.forEach(row => {
+        const v = getCellValue(row, colIndex, false);
 
-        values.add(String(v));
-
+        if (v !== null) {
+            values.add(v);
+            if (v !== "") hasRealValue = true;
+        }
     });
 
-    const sorted = [...values].sort((a,b)=>
-        a.localeCompare(b,'th',{numeric:true,sensitivity:'base'})
-    );
+    if (!hasRealValue) values.add("");
 
-    sorted.forEach(v => {
-
+    values.forEach(v => {
         const label = document.createElement("label");
         label.className = "flex gap-2 text-xs py-1";
 
-        const displayText = v === "" ? "(Blank)" : v;
-
+        const displayText = v === "" ? "DD/MMM/YYYY" : v;
         label.innerHTML = `
             <input type="checkbox"
                 class="filter-checkbox"
@@ -3201,9 +4273,7 @@ function loadFilterValues(tableKey, colKey) {
 
         list.appendChild(label);
         originalFilterOrder.push(label);
-
     });
-
 }
 
 
@@ -3664,8 +4734,6 @@ function changeRowsPerPage(value) {
 
 
 </script>
-
-
 
 
 

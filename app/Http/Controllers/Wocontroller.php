@@ -15,8 +15,13 @@ class Wocontroller extends Controller
 
     public function index(Request $request)
     {
-        $wo = DB::table('r_import_wo')->get();
+        $wo = DB::table('r_import_wo')
+             ->orderBy('id', 'desc') // แนะนำให้เรียงลำดับด้วยครับ จะได้ดูง่าย
+            ->paginate(100);
 
-        return view('ERP.wo.home', compact('wo'));
+
+        $count = DB::table('r_import_wo')->count();
+
+        return view('user.erp.wo.home', compact('wo', 'count'));
     }
 }

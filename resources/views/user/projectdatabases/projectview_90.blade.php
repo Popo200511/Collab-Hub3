@@ -137,7 +137,115 @@
     .font-sarabun {
         font-family: 'Sarabun', sans-serif !important;
     }
+
+        .date-wrapper {
+        position: relative;
+    }
+
+    .date-wrapper .date-input {
+        padding-right: 2.4rem;
+    }
+
+    .date-icon {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6b7280;
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+
+    .date-icon:hover {
+        color: #2563eb;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .date-icon.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .date-empty,
+    .date-input:placeholder-shown {
+        color: #9ca3af;
+    }
+    .fp-footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 6px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .fp-btn {
+        flex: 1;
+        font-size: 12px;
+        padding: 4px 0;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 1px solid #d1d5db;
+        background: #f9fafb;
+    }
+
+    .fp-btn:hover {
+        background: #e5e7eb;
+    }
+
+    .fp-today {
+        color: #2563eb;
+        font-weight: 600;
+    }
+
+    .fp-clear {
+        color: #dc2626;
+    }
+    /* container ของวันที่ (ตัวการหลัก) */
+    .flatpickr-days .dayContainer {
+        min-width: 238px;
+        max-width: 238px;
+    }
+
+    /* ===== Flatpickr PERFECT ALIGN ===== */
+    .flatpickr-calendar {
+        font-size: 11px;
+        width: 238px !important;
+    }
+
+    /* แถวชื่อวัน */
+    .flatpickr-weekdays {
+        display: flex;
+    }
+
+    .flatpickr-weekday {
+        flex: 0 0 34px;
+        max-width: 34px;
+        text-align: center;
+        font-size: 10px;
+    }
+
+    /* container วันที่ */
+    .flatpickr-days {
+        display: flex;
+    }
+
+    .flatpickr-days .dayContainer {
+        min-width: 238px;
+        max-width: 238px;
+    }
+
+    /* ช่องวันที่ */
+    .flatpickr-day {
+        flex: 0 0 34px;
+        max-width: 34px;
+        height: 26px;
+        line-height: 26px;
+        font-size: 11px;
+    }
 </style>
+
 
 
 
@@ -284,7 +392,7 @@
     <div class="bg-white p-4 rounded-xl shadow-md">
 
         <!-- Container ปุ่ม -->
-        <div class="container mx-auto mb-2">
+        <div class="container mx-auto ">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
 
                 {{-- 1. ปุ่ม Export (ขวาใน Desktop) --}}
@@ -323,7 +431,6 @@
         </div>
 
 
-
         <style>
             .sticky-col-1 {
                 position: sticky;
@@ -335,7 +442,7 @@
 
             .sticky-col-2 {
                 position: sticky;
-                left: 183px;
+                left: 173.5px;
                 width: 120px;
                 z-index: 50;
                 background: white;
@@ -343,7 +450,7 @@
 
             .sticky-col-3 {
                 position: sticky;
-                left: 321px;
+                left: 303.9px;
                 width: 130px;
                 z-index: 50;
                 background: white;
@@ -423,9 +530,9 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[140px]" style="background-color: green">
+                                        <th class="sticky top-0 border px-1 w-[120px]" style="background-color: green">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Customer <br> Region</span>
+                                                <span>Customer<br>Region</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -435,9 +542,9 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[140px]" style="background-color: green">
+                                        <th class="sticky top-0 border px-1 w-[120px]" style="background-color: green">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Estimated <br> Revenue</span>
+                                                <span>Estimated<br>Revenue</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -447,9 +554,9 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[140px]" style="background-color: green">
+                                        <th class="sticky top-0 border px-1 w-[120px]" style="background-color: green">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Estimated <br> Service Cost</span>
+                                                <span>Estimated<br>Service Cost</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -459,9 +566,9 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[140px]" style="background-color: green">
+                                        <th class="sticky top-0 border px-1 w-[120px]" style="background-color: green">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Estimated <br> Material Cost</span>
+                                                <span>Estimated<br>Material Cost</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -471,9 +578,9 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[140px]" style="background-color: green">
+                                        <th class="sticky top-0 border px-1 w-[130px]" style="background-color: green">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Estimated <br> Transportation Cost</span>
+                                                <span>Estimated<br>Transportation Cost</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -483,9 +590,9 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[140px]" style="background-color: green">
+                                        <th class="sticky top-0 border px-1 w-[120px]" style="background-color: green">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Estimated <br> Other Cost</span>
+                                                <span>Estimated<br>Other Cost</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -495,9 +602,9 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[140px]" style="background-color: blue">
+                                        <th class="sticky top-0 border px-1 w-[120px]" style="background-color: blue">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Estimated <br> Gross Profit</span>
+                                                <span>Estimated<br>Gross Profit</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -508,9 +615,9 @@
                                         </th>
 
 
-                                        <th class="sticky top-0 border px-1 w-[150px]" style="background-color: blue">
+                                        <th class="sticky top-0 border px-1 w-[130px]" style="background-color: blue">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Estimated <br> Gross Profit Margin</span>
+                                                <span>Estimated<br>Gross Profit Margin</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -520,7 +627,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Go/NoGo</span>
 
@@ -532,7 +639,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Servey Date</span>
 
@@ -544,9 +651,9 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                        <th class="sticky top-0 border px-1 w-[140px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Proposal <br> Submitted by Subcon</span>
+                                                <span>Proposal<br>Submitted by Subcon</span>
 
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
@@ -556,7 +663,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Started Date</span>
 
@@ -569,7 +676,7 @@
                                         </th>
 
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Finished Date</span>
                                                 <span
@@ -582,7 +689,7 @@
 
                                         <th class="sticky top-0 border px-1 w-[140px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>FAT Doc <br>Submitted by Subcon</span>
+                                                <span>FAT Doc<br>Submitted by Subcon</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="16">
@@ -591,7 +698,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Remark</span>
                                                 <span
@@ -602,9 +709,9 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[140px] bg-yellow-500 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-yellow-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Proposal Submitted Date</span>
+                                                <span>Proposal<br>Submitted Date</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="18">
@@ -613,9 +720,9 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[180px] bg-yellow-500 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-yellow-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
-                                                <span>Quotation Submitted Date</span>
+                                                <span>Quotation<br>Submitted Date</span>
                                                 <span
                                                     class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
                                                     data-table="permission" data-col="19">
@@ -624,7 +731,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-yellow-500 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-yellow-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Total PO</span>
                                                 <span
@@ -635,7 +742,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-yellow-500 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-yellow-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Total Invoice</span>
                                                 <span
@@ -646,7 +753,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-yellow-500 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-yellow-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>%Invoice</span>
                                                 <span
@@ -657,7 +764,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-yellow-500 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-yellow-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Balanced PO</span>
                                                 <span
@@ -668,7 +775,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-yellow-500 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-yellow-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Pending PO</span>
                                                 <span
@@ -679,7 +786,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-300 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-sky-300 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Total PR</span>
                                                 <span
@@ -690,7 +797,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-300 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-sky-300 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Pending PR</span>
                                                 <span
@@ -701,7 +808,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-300 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-sky-300 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Total WO</span>
                                                 <span
@@ -712,7 +819,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-300 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-sky-300 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Pending WO</span>
                                                 <span
@@ -723,7 +830,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-300 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-sky-300 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Total Billing</span>
                                                 <span
@@ -734,7 +841,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-300 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-sky-300 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Pending Billing</span>
                                                 <span
@@ -745,7 +852,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-300 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-sky-300 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Total Invoice</span>
                                                 <span
@@ -756,7 +863,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-sky-300 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-sky-300 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Pending Invoice</span>
                                                 <span
@@ -767,7 +874,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-green-400 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-green-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Other cost</span>
                                                 <span
@@ -778,7 +885,7 @@
                                             </div>
                                         </th>
 
-                                        <th class="sticky top-0 border px-1 w-[100px] bg-green-400 text-white">
+                                        <th class="sticky top-0 border px-1 w-[120px] bg-green-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Advance</span>
                                                 <span
@@ -793,7 +900,7 @@
                                         <!-- Col25 -->
 
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col25</span>
                                                 <span class="filter-icon cursor-pointer" data-col="35"
                                                     data-table="permission">
@@ -804,7 +911,7 @@
 
                                         <!-- Col26 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col26</span>
                                                 <span class="filter-icon cursor-pointer" data-col="36"
                                                     data-table="permission">
@@ -815,7 +922,7 @@
 
                                         <!-- Col27 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col27</span>
                                                 <span class="filter-icon cursor-pointer" data-col="37"
                                                     data-table="permission">
@@ -826,7 +933,7 @@
 
                                         <!-- Col28 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col28</span>
                                                 <span class="filter-icon cursor-pointer" data-col="38"
                                                     data-table="permission">
@@ -837,7 +944,7 @@
 
                                         <!-- Col29 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col29</span>
                                                 <span class="filter-icon cursor-pointer" data-col="39"
                                                     data-table="permission">
@@ -848,7 +955,7 @@
 
                                         <!-- Col30 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col30</span>
                                                 <span class="filter-icon cursor-pointer" data-col="40"
                                                     data-table="permission">
@@ -859,7 +966,7 @@
 
                                         <!-- Col31 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col31</span>
                                                 <span class="filter-icon cursor-pointer" data-col="41"
                                                     data-table="permission">
@@ -870,7 +977,7 @@
 
                                         <!-- Col32 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col32</span>
                                                 <span class="filter-icon cursor-pointer" data-col="42"
                                                     data-table="permission">
@@ -881,7 +988,7 @@
 
                                         <!-- Col33 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col33</span>
                                                 <span class="filter-icon cursor-pointer" data-col="43"
                                                     data-table="permission">
@@ -892,7 +999,7 @@
 
                                         <!-- Col34 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col34</span>
                                                 <span class="filter-icon cursor-pointer" data-col="44"
                                                     data-table="permission">
@@ -903,7 +1010,7 @@
 
                                         <!-- Col35 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col35</span>
                                                 <span class="filter-icon cursor-pointer" data-col="45"
                                                     data-table="permission">
@@ -914,7 +1021,7 @@
 
                                         <!-- Col36 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col36</span>
                                                 <span class="filter-icon cursor-pointer" data-col="46"
                                                     data-table="permission">
@@ -925,7 +1032,7 @@
 
                                         <!-- Col37 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col37</span>
                                                 <span class="filter-icon cursor-pointer" data-col="47"
                                                     data-table="permission">
@@ -936,7 +1043,7 @@
 
                                         <!-- Col38 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col38</span>
                                                 <span class="filter-icon cursor-pointer" data-col="48"
                                                     data-table="permission">
@@ -947,7 +1054,7 @@
 
                                         <!-- Col39 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col39</span>
                                                 <span class="filter-icon cursor-pointer" data-col="49"
                                                     data-table="permission">
@@ -958,7 +1065,7 @@
 
                                         <!-- Col40 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col40</span>
                                                 <span class="filter-icon cursor-pointer" data-col="50"
                                                     data-table="permission">
@@ -969,7 +1076,7 @@
 
                                         <!-- Col41 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col41</span>
                                                 <span class="filter-icon cursor-pointer" data-col="51"
                                                     data-table="permission">
@@ -980,7 +1087,7 @@
 
                                         <!-- Col42 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col42</span>
                                                 <span class="filter-icon cursor-pointer" data-col="52"
                                                     data-table="permission">
@@ -991,7 +1098,7 @@
 
                                         <!-- Col43 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col43</span>
                                                 <span class="filter-icon cursor-pointer" data-col="53"
                                                     data-table="permission">
@@ -1002,7 +1109,7 @@
 
                                         <!-- Col44 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col44</span>
                                                 <span class="filter-icon cursor-pointer" data-col="54"
                                                     data-table="permission">
@@ -1013,7 +1120,7 @@
 
                                         <!-- Col45 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col45</span>
                                                 <span class="filter-icon cursor-pointer" data-col="55"
                                                     data-table="permission">
@@ -1024,7 +1131,7 @@
 
                                         <!-- Col46 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col46</span>
                                                 <span class="filter-icon cursor-pointer" data-col="56"
                                                     data-table="permission">
@@ -1035,7 +1142,7 @@
 
                                         <!-- Col47 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col47</span>
                                                 <span class="filter-icon cursor-pointer" data-col="57"
                                                     data-table="permission">
@@ -1046,7 +1153,7 @@
 
                                         <!-- Col48 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col48</span>
                                                 <span class="filter-icon cursor-pointer" data-col="58"
                                                     data-table="permission">
@@ -1057,7 +1164,7 @@
 
                                         <!-- Col49 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col49</span>
                                                 <span class="filter-icon cursor-pointer" data-col="59"
                                                     data-table="permission">
@@ -1068,7 +1175,7 @@
 
                                         <!-- Col50 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-center gap-2">
                                                 <span>Col50</span>
                                                 <span class="filter-icon cursor-pointer" data-col="60"
                                                     data-table="permission">
@@ -1214,33 +1321,29 @@
                                         @endforeach
 
 
-                                        @php $colIndex = 11; @endphp
-
-                                        @for ($i = 1; $i <= 50; $i++) <td data-col="{{ $colIndex }}" class="px-2">
+                                        <!-- Dynamic Columns -->
+                                        @for ($i = 1; $i <= 50; $i++) 
+                                        @php
+                                            // Go/NoGo เริ่มที่ col 11
+                                            $colIndex = 10 + $i; // 11 → 60
+                                        @endphp
+                                        <td data-col="{{ $colIndex }}" class="px-2">
                                             <select name="col{{ $i }}_permission[{{ $user->id }}]"
                                                 class="text-xs p-1 border rounded w-full bg-white hover:bg-gray-50 dynamic-col"
-                                                data-col="{{ $colIndex }}" data-user-id="{{ $user->id }}">
+                                                data-col="{{ $i }}" data-user-id="{{ $user->id }}">
                                                 <option value="invisible" {{ isset($permissions[$user->id]) &&
                                                     $permissions[$user->id]->{"col$i"} === 'invisible' ? 'selected' : ''
                                                     }}>
-                                                    Invisible
-                                                </option>
-
+                                                    Invisible</option>
                                                 <option value="read" {{ isset($permissions[$user->id]) &&
                                                     $permissions[$user->id]->{"col$i"} === 'read' ? 'selected' : '' }}>
-                                                    Read
-                                                </option>
-
+                                                    Read</option>
                                                 <option value="write" {{ isset($permissions[$user->id]) &&
                                                     $permissions[$user->id]->{"col$i"} === 'write' ? 'selected' : '' }}>
-                                                    Write
-                                                </option>
+                                                    Write</option>
                                             </select>
                                             </td>
-
-                                            @php $colIndex++; @endphp
                                             @endfor
-
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -1314,7 +1417,7 @@
 
             .table-container td {
                 border: 1px solid #ddd;
-                padding: 8px;
+                padding: 6px;
                 text-align: center;
                 white-space: nowrap;
             }
@@ -1345,6 +1448,34 @@
                 box-shadow: none !important;
                 border: none !important;
             }
+			/* cell ปกติ */
+            .truncate-cell {
+                max-width: 100px; /* กำหนดความกว้างคอลัมน์ */
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                cursor: pointer;
+                position: relative;
+            }
+
+            /* ตอนขยาย */
+            .truncate-cell.expanded {
+                white-space: normal;
+                overflow: visible;
+                background: #fff;
+                z-index: 50;
+                box-shadow: 0 8px 24px rgba(0,0,0,.15);
+                padding: 8px;
+                border-radius: 8px;
+                min-width: 300px;
+            }
+            .truncate-cell.expanded {
+                position: absolute;
+                white-space: normal;
+                width: 400px;
+                background: #fff;
+                z-index: 100;
+            }
         </style>
 
 
@@ -1371,13 +1502,126 @@
 
             @endphp
 
-            <div class="table-container relative overflow-x-auto mt-2 h-[395px] font-sarabun">
+            <div class="table-container relative overflow-x-auto h-[395px] mt-2 font-sarabun">
 
                 <table class="table min-w-max table-fixed border-separate border-spacing-0 font-sarabun
                             [--col-1:115px]
                             [--col-2:130px]" id="table">
 
                     <thead class="bg-blue-950 text-white font-sarabun text-base sticky top-0 z-[200]">
+
+                         {{-- 1. ย้ายบล็อกเช็คสิทธิ์มาไว้ตรงนี้ก่อน --}}
+                            @php
+                                $gpVisibility = $permissions[Auth::id()]->Estimated_Gross_Profit_PJ ?? 'invisible';
+                                $gmVisibility =
+                                    $permissions[Auth::id()]->Estimated_Gross_Profit_Margin_PJ ?? 'invisible';
+                            @endphp
+
+                            <tr class="exclude-summary text-xs text-center sticky top-0 z-[210]">
+                                {{-- ช่องแรก (Refcode) --}}
+                                <th class="sticky left-0 z-[220] py-1 border-b shadow-sm"
+                                    style="background-color: white; color: red; width: var(--col-1); min-width: var(--col-1);">
+                                    <span data-summary-field="Refcode_PJ" data-type="text"></span>
+                                </th>
+
+                                <th class="sticky left-[var(--col-1)] z-[210] py-1 border-b shadow-sm"
+                                    style="background-color: white; width: var(--col-2); min-width: var(--col-2);">
+                                </th>
+
+
+                                <th style="background-color: white;"></th>
+                                <th style="background-color: white;"></th>
+
+                                {{-- วนลูปเฉพาะ Project Columns --}}
+                                @foreach ($projectCols as $field => $label)
+                                    @php
+                                        $visibility = $permissions[Auth::id()]->$field ?? 'invisible';
+                                        $isMoney = in_array($field, $moneyFields);
+                                    @endphp
+                                    <th class="border-b"
+                                        style="background: white; color: red; {{ $visibility === 'invisible' ? 'display:none;' : '' }}">
+
+                                        {{-- ตรวจสอบ: ถ้าอยู่ใน moneyFields ถึงจะสร้างตัวเลขสรุป (ข้าม Customer_Region_PJ อัตโนมัติ) --}}
+                                        @if ($isMoney)
+                                            <span data-summary-field="{{ $field }}" data-type="money"></span>
+                                        @endif
+                                    </th>
+                                @endforeach
+
+                                {{-- Gross Profit & Margin --}}
+                                <th class="border-b"
+                                    style="background: white; color: red; {{ $gpVisibility === 'invisible' ? 'display:none;' : '' }}">
+                                    <span data-summary-field="Estimated_Gross_Profit_PJ" data-type="money"></span>
+                                </th>
+                                <th class="border-b"
+                                    style="background: white; color: red; {{ $gmVisibility === 'invisible' ? 'display:none;' : '' }}">
+                                    <span data-summary-field="Estimated_Gross_Profit_Margin_PJ" data-type="avg"></span>
+                                </th>
+
+
+                                {{-- ===== col 1–50 (SUMMARY HEADER) ===== --}}
+                               @php
+                            $columnConfig = [
+                            1 => ['type' => 'text'],
+                            2 => ['type' => 'date'],
+                            3 => ['type' => 'date'],
+                            4 => ['type' => 'date'],
+                            5 => ['type' => 'date'],
+                            6 => ['type' => 'text'],
+                            7 => ['type' => 'text'],
+
+                            // Revenue Detail
+                            8 => ['type' => 'date'],
+                            9 => ['type' => 'date'],
+                            10 => ['type' => 'money'],
+                            11 => ['type' => 'money'],
+                            12 => ['type' => 'money'],
+                            13 => ['type' => 'money'],
+                            14 => ['type' => 'money'],
+
+                            // Service Cost Detail
+                            15 => ['type' => 'money'],
+                            16 => ['type' => 'money'],
+                            17 => ['type' => 'money'],
+                            18 => ['type' => 'money'],
+                            19 => ['type' => 'money'],
+                            20 => ['type' => 'money'],
+                            21 => ['type' => 'money'],
+                            22 => ['type' => 'text'],
+
+                            // Other cost Detail
+                            23 => ['type' => 'money'],
+                            24 => ['type' => 'money'],
+                            ];
+                            @endphp
+
+                                @for ($i = 1; $i <= 50; $i++)
+                                    @php
+                                        $col = "col$i";
+                                        $config = $columnConfig[$i] ?? ['type' => 'text'];
+
+                                        $visibility = $permissions[Auth::id()]->$col ?? 'invisible';
+                                        $type = $config['type'];
+
+                                        // map type → summary type
+                                        $summaryType = match ($type) {
+                                            'money' => 'money', // sum
+                                            'text', 'date' => 'text', // count
+                                            default => null, // date / select ไม่สรุป
+                                        };
+                                    @endphp
+
+                                    <th class="border-b"
+    style="background: white; color: red; {{ $visibility === 'invisible' ? 'display:none;' : '' }}">
+
+                                        @if ($summaryType)
+                                            <span data-summary-field="{{ $col }}"
+                                                data-type="{{ $summaryType }}"></span>
+                                        @endif
+                                    </th>
+                                @endfor
+
+                            </tr>
 
                         <tr class="text-xs text-center">
 
@@ -1655,7 +1899,7 @@
                                 {{ $item->Site_Code_PJ }}
                             </td>
 
-                            <td data-col="Job_Description_PJ">{{ $item->Job_Description_PJ }}</td>
+                            <td class="truncate-cell" onclick="toggleExpand(this)" data-col="Job_Description_PJ">{{ $item->Job_Description_PJ }}</td>
                             <td data-col="Office_Code_PJ">{{ $item->Office_Code_PJ }}</td>
 
 
@@ -1759,49 +2003,96 @@
                             ];
                             @endphp
 
-                            @for ($i = 1; $i <= 50; $i++) @php $col="col$i" ; $config=$columnConfig[$i] ?? ['type'=>
-                                'text'];
+                            @for ($i = 1; $i <= 50; $i++)
+                            @php
+                                $col = "col$i";
+                                $config = $columnConfig[$i] ?? ['type' => 'text'];
 
                                 $visibility = $permissions[Auth::id()]->$col ?? 'invisible';
                                 $isRead = $visibility === 'read';
                                 $isInvisible = $visibility === 'invisible';
+							
+							   // กำหนดค่า $value ตามเงื่อนไขของคอลัมน์ 15 และ 17
+                                            if ($i === 15) {
+                                                $value = $item->Amount;
+                                            } elseif ($i === 17) {
+                                                $value = $item->wo_amount;
+                                            } else {
+                                                $value = $item->$col;
+                                            }
+							
+                            @endphp
 
-                                $value = $item->$col;
-                                @endphp
+                            <td data-col="col{{ $i }}" class="col-{{ $i }}"
+                                style="{{ $isInvisible ? 'display:none;' : '' }}"
+                                title="{{ $value }}">
 
-                                <td data-col="col{{ $i }}" class="col-{{ $i }}"
-                                    style="{{ $isInvisible ? 'display:none;' : '' }}">
-
-                                    @if (in_array($config['type'], ['text', 'date']))
-                                    {{-- TEXT / DATE --}}
-                                    <input type="{{ $config['type'] }}"
-                                        class="excel-input {{ $isRead ? 'readonly-cell' : '' }}" value="{{ $value }}"
-                                        data-id="{{ $item->Refcode_PJ }}" data-field="{{ $col }}" {{ $isRead
-                                        ? 'readonly tabindex=-1' : '' }}>
-                                    @elseif ($config['type'] === 'money')
-                                    {{-- 💰 MONEY --}}
+                                {{-- TEXT --}}
+                                @if ($config['type'] === 'text')
                                     <input type="text"
-                                        class="excel-input money-input text-end {{ $isRead ? 'readonly-cell' : '' }}"
-                                        style="text-align: right;"
-                                        value="{{ is_numeric($value) ? number_format($value, 2) : $value }}"
-                                        data-id="{{ $item->Refcode_PJ }}" data-field="{{ $col }}" {{ $isRead
-                                        ? 'readonly tabindex=-1' : '' }}>
-                                    @elseif ($config['type'] === 'select')
-                                    {{-- SELECT --}}
+                                        class="excel-input {{ $isRead ? 'readonly-cell' : '' }}"
+                                        value="{{ $value }}"
+                                        data-id="{{ $item->Refcode_PJ }}"
+                                        data-field="{{ $col }}"
+                                        {{ $isRead ? 'readonly tabindex=-1' : '' }}>
+
+                                {{-- DATE --}}
+                               @elseif ($config['type'] === 'date')
+                                <div class="date-wrapper">
+                                    <input type="text"
+                                        class="excel-input date-input {{ empty($value) ? 'date-empty' : '' }} {{ $isRead ? 'readonly-cell' : '' }}"
+                                        value="{{ $value ? \Carbon\Carbon::parse($value)->format('d-m-Y') : '' }}"
+                                        placeholder="DD-MMM-YYYY"
+                                        inputmode="numeric"
+                                        pattern="\d{2}-\d{2}-\d{4}"
+                                        data-id="{{ $item->Refcode_PJ }}"
+                                        data-field="{{ $col }}"
+                                        {{ $isRead ? 'readonly tabindex=-1' : '' }}>
+
+                                    <span class="date-icon {{ $isRead ? 'disabled' : '' }}">
+                                        <i class="fa-regular fa-calendar-days"></i>
+                                    </span>
+                                </div>
+
+                                    {{-- MONEY --}}
+                                            @elseif ($config['type'] === 'money')
+                                                <div class="relative flex items-center group w-full">
+
+                                                    @if ($i === 15 || $i === 17)
+                                                        <a href="{{ url('/ERP/payment/home') }}?search={{ $item->Refcode_PJ }}"
+                                                            target="_blank"
+                                                            class="w-full text-end text-blue-600 underline cursor-pointer pr-2 block"
+                                                            title="คลิกเพื่อดู Timeline ของ {{ $item->Refcode_PJ }}">
+                                                            {{ is_numeric($value) ? number_format($value, 2) : $value }}
+                                                        </a>
+                                                    @else
+                                                        <input type="text"
+                                                            class="excel-input money-input text-end
+            {{ $isRead || ($config['calculated'] ?? false) ? 'readonly-cell' : '' }}"
+                                                            value="{{ is_numeric($value) ? number_format($value, 2) : $value }}"
+                                                            data-id="{{ $item->Refcode_PJ }}"
+                                                            data-field="{{ $col }}"
+                                                            {{ $isRead || ($config['calculated'] ?? false) ? 'readonly' : '' }}>
+                                                    @endif
+
+                                                </div>
+
+                                {{-- SELECT --}}
+                                @elseif ($config['type'] === 'select')
                                     <select class="excel-input {{ $isRead ? 'readonly-cell' : '' }}"
-                                        data-id="{{ $item->Refcode_PJ }}" data-field="{{ $col }}"
+                                        data-id="{{ $item->Refcode_PJ }}"
+                                        data-field="{{ $col }}"
                                         style="{{ $isRead ? 'pointer-events:none;background:#f3f4f6;' : '' }}">
                                         @foreach ($config['options'] as $option)
-                                        <option value="{{ $option }}" {{ $value==$option ? 'selected' : '' }}>
-                                            {{ $option }}
-                                        </option>
+                                            <option value="{{ $option }}" {{ $value == $option ? 'selected' : '' }}>
+                                                {{ $option }}
+                                            </option>
                                         @endforeach
                                     </select>
-                                    @endif
+                                @endif
 
-
-                                </td>
-                                @endfor
+                            </td>
+                            @endfor
 
                         </tr>
                         @endforeach
@@ -1811,53 +2102,114 @@
         </div>
 
         <div id="listViewPagination"
-            class="mt-4 flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0 p-5 bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-300">
+            class="mt-4 p-4 sm:p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
 
-            <div class="flex items-center space-x-3 order-2 lg:order-1">
-                <label for="rowsPerPageList"
-                    class="font-sarabun text-xs font-medium tracking-wide text-gray-600">แสดงรายการ:</label>
-                <div class="relative">
-                    <select id="rowsPerPageList" onchange="changeRowsPerPage(this.value)"
-                        class="block py-2 pl-4 pr-10 border border-gray-200 rounded-xl text-xs font-sarabun bg-gray-50 cursor-pointer appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
-                    </select>
-                    {{-- Custom Arrow Icon --}}
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
-                        <i class="fa-solid fa-chevron-down text-[10px]"></i>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                {{-- Left: Rows per page --}}
+                    <div class="flex items-center gap-2">
+                        <!-- Label with Icon -->
+                        <label class="flex items-center gap-1.5 text-xs font-sarabun font-medium text-gray-600 whitespace-nowrap">
+                            <i class="fa-solid fa-list-ul text-indigo-400"></i>
+                            แสดงรายการ:
+                        </label>
+
+                        @php
+                            $total = $projectData->total();
+                            $baseOptions = [10, 20, 50, 100];
+                            $options = array_filter($baseOptions, fn($v) => $v < $total);
+                            $options[] = $total;
+                        @endphp
+
+                        <!-- Custom Select Container -->
+                        <div class="relative group">
+                            @php
+                                $query = request()->except(['per_page','page']);
+                            @endphp
+
+                            <select 
+                            onchange="window.location='{{ request()->url() }}?{{ http_build_query($query) }}&per_page='+this.value+'&page=1'"
+                            class="appearance-none py-2 pl-3 pr-8 border border-gray-200 rounded-xl text-xs font-sarabun font-medium
+                            bg-white text-gray-700 cursor-pointer min-w-[80px] text-center
+                            hover:border-indigo-300 hover:bg-indigo-50/50
+                            focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500
+                            transition-all duration-300 shadow-sm hover:shadow-md">
+                                
+                                @foreach($options as $size)
+                                    <option value="{{ $size }}"
+                                        {{ $projectData->perPage() == $size ? 'selected' : '' }}>
+                                        {{ $size == $total ? 'ทั้งหมด ('.$total.')' : $size }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            
+                            <!-- Custom Dropdown Arrow -->
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                                <i class="fa-solid fa-chevron-down text-[9px] text-gray-400 
+                                        group-hover:text-indigo-500 transition-colors"></i>
+                            </div>
+                        </div>
                     </div>
+
+                {{-- Center: Pagination --}}
+                <nav class="flex items-center gap-1.5">
+
+                    {{-- Previous --}}
+                    @if ($projectData->onFirstPage())
+                        <button disabled
+                            class="w-9 h-9 rounded-xl border opacity-30">
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                        </button>
+                    @else
+                        <a href="{{ $projectData->previousPageUrl() }}"
+                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                        </a>
+                    @endif
+
+
+                    {{-- Page Numbers --}}
+                    @for ($i = 1; $i <= $projectData->lastPage(); $i++)
+                        <a href="{{ $projectData->url($i) }}"
+                            class="w-9 h-9 flex items-center justify-center rounded-xl text-xs
+                            {{ $projectData->currentPage() == $i
+                                ? 'bg-indigo-600 text-white'
+                                : 'bg-white text-gray-600 border hover:bg-indigo-50' }}">
+                            {{ $i }}
+                        </a>
+                    @endfor
+
+
+                    {{-- Next --}}
+                    @if ($projectData->hasMorePages())
+                        <a href="{{ $projectData->nextPageUrl() }}"
+                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </a>
+                    @else
+                        <button disabled
+                            class="w-9 h-9 rounded-xl border opacity-30">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    @endif
+
+                </nav>
+
+                {{-- Right: Summary --}}
+                <div>
+                    <span class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full">
+                        แสดง
+                        <span class="text-indigo-600 font-semibold">
+                            {{ $projectData->firstItem() }}-{{ $projectData->lastItem() }}
+                        </span>
+                        จากทั้งหมด
+                        <span class="font-semibold">
+                            {{ $projectData->total() }}
+                        </span>
+                        รายการ
+                    </span>
                 </div>
-            </div>
 
-            <nav class="flex items-center space-x-2 order-1 lg:order-2" aria-label="Pagination">
-                {{-- Previous Button --}}
-                <button id="prevPageBtnList" onclick="goToPage(tables.main.currentPage - 1)"
-                    class="pagination-btn group flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none shadow-sm">
-                    <i class="fa-solid fa-chevron-left text-xs transition-transform group-hover:-translate-x-0.5"></i>
-                </button>
-
-                {{-- Page Numbers Container --}}
-                <div id="pageNumbersList" class="flex items-center space-x-1">
-                    {{-- ตัวอย่างปุ่ม Active --}}
-                    <button
-                        class="w-10 h-10 rounded-xl bg-indigo-600 text-white font-sarabun text-sm shadow-md shadow-indigo-200">1</button>
-                    <button
-                        class="w-10 h-10 rounded-xl bg-white text-gray-600 font-sarabun text-sm hover:bg-indigo-50 transition-all">2</button>
-                    <button
-                        class="w-10 h-10 rounded-xl bg-white text-gray-600 font-sarabun text-sm hover:bg-indigo-50 transition-all">3</button>
-                </div>
-
-                {{-- Next Button --}}
-                <button id="nextPageBtnList" onclick="goToPage(tables.main.currentPage + 1)"
-                    class="pagination-btn group flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none shadow-sm">
-                    <i class="fa-solid fa-chevron-right text-xs transition-transform group-hover:translate-x-0.5"></i>
-                </button>
-            </nav>
-
-            <div class="order-3 text-right">
-                <span id="paginationSummaryList"
-                    class="text-xs font-sarabun text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
-                    แสดง <span class="text-indigo-600 font-sarabun">1-10</span> จากทั้งหมด <span
-                        class="text-gray-900 font-sarabun">15</span> รายการ
-                </span>
             </div>
         </div>
     </div>
@@ -1946,6 +2298,158 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.date-wrapper').forEach(wrapper => {
+        const input = wrapper.querySelector('.date-input');
+        const icon  = wrapper.querySelector('.date-icon');
+
+        toggleDateValueStyle(input);
+
+        if (input.hasAttribute('readonly')) return;
+
+        const fp = flatpickr(input, {
+            dateFormat: 'd-m-Y',
+            allowInput: true,
+            clickOpens: false,
+            disableMobile: true,
+            locale: { firstDayOfWeek: 1 },
+
+            onChange: function(selectedDates, dateStr) {
+                if (dateStr) {
+                    input.classList.remove('date-empty');
+                    input.classList.add('has-value');
+                } else {
+                    input.classList.add('date-empty');
+                    input.classList.remove('has-value');
+                }
+            },
+            onReady: function(_, __, instance) {
+                const footer = document.createElement('div');
+                footer.className = 'fp-footer';
+
+                const btnToday = document.createElement('button');
+                btnToday.type = 'button';
+                btnToday.innerHTML = '<i class="fa-solid fa-calendar-check"></i> Today';
+                btnToday.className = 'fp-btn fp-today';
+
+                const btnClear = document.createElement('button');
+                btnClear.type = 'button';
+                btnClear.innerHTML = '<i class="fa-solid fa-trash-can"></i> Clear';
+                btnClear.className = 'fp-btn fp-clear';
+
+                footer.appendChild(btnToday);
+                footer.appendChild(btnClear);
+                instance.calendarContainer.appendChild(footer);
+
+                btnToday.addEventListener('click', () => {
+                    instance.setDate(new Date(), true);
+                    input.classList.remove('date-empty');
+                    toggleDateValueStyle(input);
+                    instance.close();
+                });
+
+                btnClear.addEventListener('click', () => {
+                    instance.clear();
+                    input.value = '';
+                    input.classList.add('date-empty');
+                    toggleDateValueStyle(input);
+                    instance.close();
+                });
+            },
+
+            onOpen: function(_, __, instance) {
+                input.classList.add('active-input');
+
+                instance._keyHandler = (e) => {
+                    // Enter = Today
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        instance.setDate(new Date(), true);
+                        input.classList.remove('date-empty');
+                        toggleDateValueStyle(input);
+                        instance.close();
+                    }
+
+                    // Esc = Close
+                    if (e.key === 'Escape') {
+                        e.preventDefault();
+                        instance.close();
+                    }
+                };
+
+                document.addEventListener('keydown', instance._keyHandler);
+            },
+
+            onClose: function(_, __, instance) {
+                input.classList.remove('active-input');
+
+                if (instance._keyHandler) {
+                    document.removeEventListener('keydown', instance._keyHandler);
+                    instance._keyHandler = null;
+                }
+            }
+        });
+
+        icon.addEventListener('click', () => fp.open());
+        
+        // ปรับปรุงการพิมพ์ให้รองรับ d-m-Y อัตโนมัติ (Optional)
+        input.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '').slice(0, 8);
+            if (v.length >= 2 && v.length < 4) v = v.slice(0,2) + '-' + v.slice(2);
+            if (v.length >= 4) v = v.slice(0,2) + '-' + v.slice(2,4) + '-' + v.slice(4);
+            e.target.value = v;
+
+            toggleDateValueStyle(input);
+        });
+    });
+});
+function toggleDateValueStyle(input) {
+    if (input.value && input.value.trim() !== '') {
+        input.classList.add('has-value');
+    } else {
+        input.classList.remove('has-value');
+    }
+}
+
+</script>
+
+<!-- ฟังชันสำหรับขยายข้อมูลที่ยาวลอยทับ column -->
+<script>
+
+    /* ปิด cell ที่ขยาย เมื่อกด ESC */
+document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+
+    document
+        .querySelectorAll(".truncate-cell.expanded")
+        .forEach(cell => cell.classList.remove("expanded"));
+});
+
+    /* ปิด cell ที่ขยาย เมื่อคลิกนอก */
+document.addEventListener("mousedown", function (e) {
+    const expandedCell = document.querySelector(".truncate-cell.expanded");
+    if (!expandedCell) return;
+
+    // ถ้าคลิกอยู่นอก cell ที่ขยาย → ปิด
+    if (!expandedCell.contains(e.target)) {
+        expandedCell.classList.remove("expanded");
+    }
+});
+
+function toggleExpand(cell) {
+
+    // ปิด cell อื่นก่อน
+    document.querySelectorAll('.truncate-cell.expanded')
+        .forEach(el => {
+            if (el !== cell) el.classList.remove('expanded');
+        });
+
+    cell.classList.toggle('expanded');
+}
+
+</script>
 
 <script>
     function storeOriginal(input) {
@@ -2233,53 +2737,64 @@
 
 <!-- Export -->
 <script>
-    function exportToExcel() {
-            const table = document.getElementById("table");
-            const rows = table.querySelectorAll("tr");
+function exportToExcel() {
+    const table = document.getElementById("table");
+    const rows = table.querySelectorAll("tr");
 
-            let data = [];
+    let data = [];
 
-            rows.forEach(row => {
-                let rowData = [];
+    rows.forEach(row => {
+        let rowData = [];
+        const cells = row.querySelectorAll("th, td");
 
-                const cells = row.querySelectorAll("th, td");
+        cells.forEach(cell => {
+            if (cell.offsetParent === null) return;
 
-                cells.forEach(cell => {
-                    // ข้าม cell ที่ถูกซ่อน
-                    if (cell.offsetParent === null) return;
+            let value = "";
 
-                    let value = "";
+            const input = cell.querySelector("input");
+            if (input) {
+                value = input.value;
+            } else {
+                value = cell.innerText.trim();
+            }
 
-                    // ถ้ามี input ให้ดึง value
-                    const input = cell.querySelector("input");
-                    if (input) {
-                        value = input.value;
-                    } else {
-                        value = cell.innerText.trim();
-                    }
+            // ✅ ลบ comma
+            const raw = value.replace(/,/g, "");
 
-                    rowData.push(value);
-                });
+            // ✅ ถ้าเป็นตัวเลข → แปลงเป็น Number
+            if (raw !== "" && !isNaN(raw)) {
+                rowData.push(Number(raw));
+            } else {
+                rowData.push(value);
+            }
+        });
 
-                if (rowData.length > 0) {
-                    data.push(rowData);
-                }
-            });
-
-            // สร้าง workbook
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet(data);
-
-            XLSX.utils.book_append_sheet(wb, ws, "Visible Data");
-
-            // export
-            XLSX.writeFile(wb, "project_visible_data.xlsx");
+        if (rowData.length > 0) {
+            data.push(rowData);
         }
+    });
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(data);
+
+    // ✅ บังคับ cell ที่เป็น number ให้เป็น Number format
+    Object.keys(ws).forEach(cell => {
+        if (cell[0] === "!") return;
+        if (typeof ws[cell].v === "number") {
+            ws[cell].t = "n";     // number
+            ws[cell].z = "0.00";  // ไม่มี comma
+        }
+    });
+
+    XLSX.utils.book_append_sheet(wb, ws, "Visible Data");
+    XLSX.writeFile(wb, "90 True Maintenance_data.xlsx");
+}
 </script>
 
 <!-- ฟังชั่น Filter -->
 <script>
-    const tables = {
+const tables = {
     main: {
         tbody: "#tableBody",
         allRows: [],
@@ -2289,6 +2804,7 @@
         rowsPerPage: 10,
         currentPage: 1
     },
+
     permission: {
         tbody: "#permissionTableBody",
         allRows: [],
@@ -2297,6 +2813,13 @@
         sort: { col: null, dir: null }
     }
 };
+
+const urlParams = new URLSearchParams(window.location.search);
+const perPage = parseInt(urlParams.get("per_page"));
+
+if (perPage) {
+    tables.main.rowsPerPage = perPage;
+}
 
 let openFilter = { table: null, col: null };
 let openFilterColumn = null;
@@ -2445,10 +2968,13 @@ function openPermissionModal() {
     document.getElementById("permissionModal").classList.remove("hidden");
 
     if (!permissionTableInited) {
-        initTable("permission");
-        permissionTableInited = true;
+        setTimeout(() => {
+            initTable("permission");
+            permissionTableInited = true;
+        }, 0);
     }
 }
+
 
 
 function initTable(tableKey) {
@@ -2460,6 +2986,11 @@ function initTable(tableKey) {
     t.filters = {};
     t.sort = { col: null, dir: null };
     t.currentPage = 1;
+
+    // ✅ แสดง 10 แถวแรกทันทีก่อน render เต็ม
+    t.allRows.forEach((r, i) => {
+        r.style.display = i < t.rowsPerPage ? "" : "none";
+    });
 
     renderTable(tableKey);
 }
@@ -2502,35 +3033,40 @@ function showFilterModal(icon) {
 
     const margin = 8;
 
+    // ✅ header sticky height (ปรับตามของจริง)
+    const STICKY_HEADER_HEIGHT = 48;
+
+    // ✅ left = ตรงคอลัมน์ที่กด
     let left = rect.left;
-    let top = rect.bottom + margin;
+
+    // ✅ top = ใต้ header เสมอ (ถ้า icon อยู่ใน sticky)
+    let top =
+        rect.top <= STICKY_HEADER_HEIGHT
+            ? STICKY_HEADER_HEIGHT + margin
+            : rect.bottom + margin;
 
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    // ถ้าล้นขวา
+    // กันล้นขวา
     if (left + boxRect.width > viewportWidth) {
         left = viewportWidth - boxRect.width - margin;
     }
 
-    // ถ้าล้นซ้าย
+    // กันล้นซ้าย
     if (left < margin) {
         left = margin;
     }
 
-    // ถ้าล้นล่าง
+    // กันล้นล่าง
     if (top + boxRect.height > viewportHeight) {
-        top = rect.top - boxRect.height - margin;
-    }
-
-    // ถ้าล้นบน
-    if (top < margin) {
-        top = margin;
+        top = viewportHeight - boxRect.height - margin;
     }
 
     box.style.left = `${left}px`;
     box.style.top = `${top}px`;
 }
+
 
 
 function closeColumnFilterModal() {
@@ -2547,31 +3083,53 @@ function loadFilterValues(tableKey, colIndex) {
     const list = document.getElementById("column-filter-checkbox-list");
     list.innerHTML = "";
 
-    const source = t.allRows;
-
-    const values = [...new Set(
-        source.map(r => {
-            const v = getCellValue(r, colIndex);
-            return v === "" || v === null ? "" : v.toLowerCase();
-        })
-    )];
-
     const selected = t.filters[colIndex] ?? [];
     originalFilterOrder = [];
+
+    const values = new Set();
+    let hasRealValue = false;
+
+    // ⭐ สำคัญมาก
+    const activeFilters = Object.keys(t.filters).filter(c => c != colIndex);
+
+    const sourceRows =
+        activeFilters.length > 0
+            ? t.allRows.filter(row => {
+                return activeFilters.every(c => {
+                    const v = getCellValue(row, c, false) ?? "";
+                    return t.filters[c].includes(v);
+                });
+            })
+            : t.allRows;
+
+    sourceRows.forEach(row => {
+        const v = getCellValue(row, colIndex, false);
+
+        if (v !== null) {
+            values.add(v);
+            if (v !== "") hasRealValue = true;
+        }
+    });
+
+    if (!hasRealValue) values.add("");
 
     values.forEach(v => {
         const label = document.createElement("label");
         label.className = "flex gap-2 text-xs py-1";
+
+        const displayText = v === "" ? "DD/MMM/YYYY" : v;
         label.innerHTML = `
-            <input type="checkbox" class="filter-checkbox"
-                value="${v}" ${selected.includes(v) ? "checked" : ""}>
-            <span>${v}</span>
+            <input type="checkbox"
+                class="filter-checkbox"
+                value="${v}"
+                ${selected.includes(v) ? "checked" : ""}>
+            <span>${displayText}</span>
         `;
+
         list.appendChild(label);
         originalFilterOrder.push(label);
     });
 }
-
 
 
 
@@ -2585,7 +3143,7 @@ function applyColumnFilter() {
 
     const checked = [...document.querySelectorAll(".filter-checkbox")]
         .filter(cb => cb.checked)
-        .map(cb => cb.value.toString().trim().toLowerCase());
+        .map(cb => cb.value); // ❌ ไม่ lower
 
     if (checked.length === 0) delete t.filters[col];
     else t.filters[col] = checked;
@@ -2596,19 +3154,20 @@ function applyColumnFilter() {
 
 
 
+
 function applyAll(tableKey) {
     const t = tables[tableKey];
 
     t.visibleRows = t.allRows.filter(row => {
         for (let col in t.filters) {
-            let cellVal = getCellValue(row, col);
-            const selected = t.filters[col];
+            let cellVal = getCellValue(row, col, false);
 
-            cellVal = cellVal === "" || cellVal === null
-                ? ""
-                : cellVal;
+            // ✅ สำคัญมาก
+            if (cellVal === null) {
+                cellVal = "";
+            }
 
-            if (!selected.includes(cellVal)) return false;
+            if (!t.filters[col].includes(cellVal)) return false;
         }
         return true;
     });
@@ -2660,37 +3219,105 @@ function sortTable(tableKey, col, dir) {
     renderTable(tableKey);
 }
 
+function parseDMY(value) {
+    if (!value) return null;
+
+    // รองรับเฉพาะ DD/MMM/YYYY เท่านั้น
+    const parts = value.split("/");
+    if (parts.length !== 3) return null;
+
+    const day   = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const year  = parseInt(parts[2], 10);
+
+    if (
+        isNaN(day)   || day < 1 || day > 31 ||
+        isNaN(month) || month < 1 || month > 12 ||
+        isNaN(year)
+    ) {
+        return null;
+    }
+
+    return { day, month, year };
+}
+
+function parseDMYToTime(value) {
+    if (!value) return null;
+
+
+    if (value === "DD-MMM-YYYY") return null;
+
+    const parts = value.split("-");
+    if (parts.length !== 3) return null;
+
+    const day   = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year  = parseInt(parts[2], 10);
+
+    if (
+        isNaN(day) || isNaN(month) || isNaN(year)
+    ) return null;
+
+    return new Date(year, month, day).getTime();
+}
 
 
 function applySort(tableKey) {
     const t = tables[tableKey];
-    if (t.sort.col === null || t.sort.col === undefined || !t.sort.dir) return;
+    if (!t.sort.col || !t.sort.dir) return;
 
     const colKey = String(t.sort.col);
 
     t.visibleRows.sort((a, b) => {
-        let v1 = getCellValue(a, colKey) ?? "";
-        let v2 = getCellValue(b, colKey) ?? "";
+        const v1 = getCellValue(a, colKey, false);
+        const v2 = getCellValue(b, colKey, false);
 
+        // =============================
+        // ⭐ DATE SORT (DD-MMM-YYYY)
+        // =============================
+        const d1 = parseDMYToTime(v1);
+        const d2 = parseDMYToTime(v2);
+
+        // ✅ ถ้าไม่มีวันที่จริง → ดันลงล่างเสมอ
+        if (d1 === null && d2 !== null) return 1;
+        if (d1 !== null && d2 === null) return -1;
+        if (d1 !== null && d2 !== null) {
+            return t.sort.dir === "asc" ? d1 - d2 : d2 - d1;
+        }
+
+        // =============================
+        // SORT NUMBER
+        // =============================
         const n1 = parseFloat(v1.replace(/,/g, "").replace('%',''));
         const n2 = parseFloat(v2.replace(/,/g, "").replace('%',''));
 
-        const isNum1 = !isNaN(n1);
-        const isNum2 = !isNaN(n2);
-
-        if (isNum1 && !isNum2) return 1;
-        if (!isNum1 && isNum2) return -1;
-
-        if (isNum1 && isNum2) {
+        if (!isNaN(n1) && !isNaN(n2)) {
             return t.sort.dir === "asc" ? n1 - n2 : n2 - n1;
         }
 
+        // =============================
+        // SORT TEXT (fallback สุดท้าย)
+        // =============================
         return t.sort.dir === "asc"
             ? v1.localeCompare(v2, 'th', { sensitivity: "base" })
             : v2.localeCompare(v1, 'th', { sensitivity: "base" });
     });
 
     reorderDOM(tableKey);
+}
+
+function sortByDatePart(part) {
+    const { table, col } = openFilter;
+    if (!table || col == null) return;
+
+    tables[table].sort = {
+        col: String(col),
+        dir: part // day | month | year
+    };
+
+    applySort(table);
+    renderTable(table);
+    closeColumnFilterModal();
 }
 
 
@@ -2816,7 +3443,7 @@ function updateRowsPerPageDropdown() {
     // ✅ กรณีไม่มีข้อมูล
     if (total === 0) {
         select.innerHTML = `<option value="10">ทั้งหมด (0 แถว)</option>`;
-        t.rowsPerPage = 10;      // ⭐ อย่าให้เป็น 0
+        t.rowsPerPage = 10;      
         t.currentPage = 1;
         return;
     }
@@ -2876,22 +3503,831 @@ function updateIcons(tableKey) {
 /* =====================================================
    HELPERS
 ===================================================== */
-function getCellValue(row, colKey) {
+function getCellValue(row, colKey, toLower = true) {
     const cell = row.querySelector(`td[data-col="${colKey}"]`);
-    if (!cell) return null;
+    if (!cell) return "";
+
+    let value = "";
 
     const select = cell.querySelector("select");
+    const input  = cell.querySelector("input");
+
     if (select) {
         const opt = select.options[select.selectedIndex];
-        return opt ? opt.text.trim().toLowerCase() : "";
+
+        // ⭐ ใช้ text ที่แสดงจริง
+        if (opt && opt.textContent) {
+            value = opt.textContent.trim();
+        } else {
+            value = cell.textContent.trim();
+        }
+
+    } else if (input && input.type !== "hidden") {
+        // ⭐ input ที่ user เห็นจริง
+        value = input.value.trim();
+
+    } else {
+        // ⭐ fallback สุดท้าย
+        value = cell.textContent.trim();
     }
 
-    const input = cell.querySelector("input");
-    if (input) {
-        return (input.value || "").trim().toLowerCase();
+    return toLower ? value.toLowerCase() : value;
+}
+
+
+
+
+/* =====================================================
+   FILTER ICON CLICK
+===================================================== */
+document.addEventListener("click", e => {
+    const icon = e.target.closest(".filter-icon");
+    if (!icon) return;
+
+    e.stopPropagation();
+    openColumnFilter(icon.dataset.table, icon.dataset.col, icon);
+
+});
+
+/* =====================================================
+   CLOSE MODAL ON OUTSIDE
+===================================================== */
+document.addEventListener("mousedown", e => {
+    const modal = document.getElementById("column-filter-modal");
+    if (!modal || modal.classList.contains("hidden")) return;
+
+    if (!document.getElementById("column-filter-content").contains(e.target))
+        closeColumnFilterModal();
+});
+
+document.addEventListener("keydown", e => {
+    const modal = document.getElementById("column-filter-modal");
+    if (!modal || modal.classList.contains("hidden")) return;
+    if (document.activeElement.id !== "column-filter-search") return;
+
+    if (e.key === "Enter") {
+        e.preventDefault();
+        applyColumnFilter();
     }
 
-    return cell.textContent.trim().toLowerCase();
+    if (e.key === "Escape") {
+        e.preventDefault();
+        closeColumnFilterModal();
+    }
+});
+
+
+
+function changeRowsPerPage(value) {
+    const v = parseInt(value);
+    if (!v) return;
+
+    tables.main.rowsPerPage = v;
+    tables.main.currentPage = 1;
+    renderTable("main");
+}
+
+
+</script><!-- ฟังชั่น Filter -->
+<script>
+const tables = {
+    main: {
+        tbody: "#tableBody",
+        allRows: [],
+        visibleRows: [],
+        filters: {},
+        sort: { col: null, dir: null },
+        rowsPerPage: 10,
+        currentPage: 1
+    },
+
+    permission: {
+        tbody: "#permissionTableBody",
+        allRows: [],
+        visibleRows: [],
+        filters: {},
+        sort: { col: null, dir: null }
+    }
+};
+
+const urlParams = new URLSearchParams(window.location.search);
+const perPage = parseInt(urlParams.get("per_page"));
+
+if (perPage) {
+    tables.main.rowsPerPage = perPage;
+}
+
+let openFilter = { table: null, col: null };
+let openFilterColumn = null;
+let originalFilterOrder = [];
+
+/* =====================================================
+   ICONS
+===================================================== */
+const ICONS = {
+    normal: `<i class="fi fi-br-bars-filter text-xs text-gray-300"></i>`,
+    filter: `<i class="fi fi-br-bars-filter text-xs text-blue-500"></i>`,
+    sortAsc: `<i class="fa-solid fa-arrow-down-a-z text-xs text-indigo-500"></i>`,
+    sortDesc: `<i class="fa-solid fa-arrow-down-z-a text-xs text-indigo-500"></i>`
+};
+
+/* =====================================================
+   INIT
+===================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+    initTable("main");
+});
+
+function clearColumnFilterExcel() {
+    const { table, col } = openFilter;
+    if (!table || col === null) return;
+
+    const t = tables[table];
+
+    delete t.filters[col];
+
+    if (t.sort.col === col) {
+        t.sort = { col: null, dir: null };
+    }
+
+    t.currentPage = 1;
+
+    if (table === "main") {
+        t.rowsPerPage = 10;
+        const select = document.getElementById("rowsPerPageList");
+        if (select) select.value = "10";
+    }
+
+    applyAll(table);
+
+    document.getElementById("column-filter-search").value = "";
+    closeColumnFilterModal();
+}
+
+
+
+function clearAllTableFilters() {
+    const { table } = openFilter;
+    if (!table) return;
+
+    const t = tables[table];
+
+    t.filters = {};
+    t.sort = { col: null, dir: null };
+    t.currentPage = 1;
+
+    // ✅ RESET rowsPerPage กลับค่าเริ่มต้น
+    if (table === "main") {
+        t.rowsPerPage = 10;
+        const select = document.getElementById("rowsPerPageList");
+        if (select) select.value = "10";
+    }
+
+    applyAll(table);
+
+    document.getElementById("column-filter-search").value = "";
+    closeColumnFilterModal();
+}
+
+
+function selectAll() {
+    document
+        .querySelectorAll("#column-filter-checkbox-list .filter-checkbox")
+        .forEach(cb => {
+            cb.checked = true;                 // ⭐ เพิ่ม
+            cb.closest("label").style.display = "";
+        });
+}
+
+
+function deselectAll() {
+    document
+        .querySelectorAll("#column-filter-checkbox-list .filter-checkbox")
+        .forEach(cb => {
+            cb.checked = false;
+            cb.closest("label").style.display = ""; // เผื่อถูก search ซ่อน
+        });
+}
+
+function handleSearch(text) {
+    const keyword = text.toLowerCase().trim();
+    const list = document.getElementById("column-filter-checkbox-list");
+
+    // reset order
+    originalFilterOrder.forEach(label => list.appendChild(label));
+
+    const { table, col } = openFilter;
+    const selected = tables[table].filters[col] ?? [];
+
+    // ✅ ลบ search → แค่แสดงทั้งหมด (ไม่ยุ่ง checkbox)
+    if (keyword === "") {
+        originalFilterOrder.forEach(label => {
+            const cb = label.querySelector("input");
+            label.style.display = "";
+            cb.checked = selected.includes(cb.value);
+        });
+        return;
+    }
+
+    const startsWith = [];
+    const includes = [];
+
+    originalFilterOrder.forEach(label => {
+        const text = label.querySelector("span").innerText.toLowerCase();
+        const cb = label.querySelector("input");
+
+        if (text.startsWith(keyword)) {
+            label.style.display = "";
+            cb.checked = true;
+            startsWith.push(label);
+        }
+        else if (text.includes(keyword)) {
+            label.style.display = "";
+            cb.checked = true;
+            includes.push(label);
+        }
+        else {
+            label.style.display = "none";
+            cb.checked = false;
+        }
+    });
+
+    [...startsWith, ...includes].forEach(label => list.appendChild(label));
+}
+
+
+
+
+let permissionTableInited = false;
+
+function openPermissionModal() {
+    document.getElementById("permissionModal").classList.remove("hidden");
+
+    if (!permissionTableInited) {
+        setTimeout(() => {
+            initTable("permission");
+            permissionTableInited = true;
+        }, 0);
+    }
+}
+
+
+
+function initTable(tableKey) {
+    const t = tables[tableKey];
+    const rows = document.querySelectorAll(`${t.tbody} tr`);
+
+    t.allRows = [...rows];
+    t.visibleRows = [...rows];
+    t.filters = {};
+    t.sort = { col: null, dir: null };
+    t.currentPage = 1;
+
+    // ✅ แสดง 10 แถวแรกทันทีก่อน render เต็ม
+    t.allRows.forEach((r, i) => {
+        r.style.display = i < t.rowsPerPage ? "" : "none";
+    });
+
+    renderTable(tableKey);
+}
+
+/* =====================================================
+   OPEN FILTER
+===================================================== */
+function openColumnFilter(tableKey, colKey, icon) {
+    if (!tables[tableKey] || tables[tableKey].allRows.length === 0) {
+        console.warn("Table not ready:", tableKey);
+        return;
+    }
+
+    openFilter = { table: tableKey, col: String(colKey) };
+    openFilterColumn = colKey;
+
+    const search = document.getElementById("column-filter-search");
+    search.value = "";
+
+    loadFilterValues(tableKey, colKey);
+    showFilterModal(icon);
+
+    setTimeout(() => search.focus(), 0);
+}
+
+
+
+
+/* =====================================================
+   FILTER MODAL
+===================================================== */
+function showFilterModal(icon) {
+    const modal = document.getElementById("column-filter-modal");
+    const box = document.getElementById("column-filter-content");
+
+    modal.classList.remove("hidden");
+
+    const rect = icon.getBoundingClientRect();
+    const boxRect = box.getBoundingClientRect();
+
+    const margin = 8;
+
+    // ✅ header sticky height (ปรับตามของจริง)
+    const STICKY_HEADER_HEIGHT = 48;
+
+    // ✅ left = ตรงคอลัมน์ที่กด
+    let left = rect.left;
+
+    // ✅ top = ใต้ header เสมอ (ถ้า icon อยู่ใน sticky)
+    let top =
+        rect.top <= STICKY_HEADER_HEIGHT
+            ? STICKY_HEADER_HEIGHT + margin
+            : rect.bottom + margin;
+
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // กันล้นขวา
+    if (left + boxRect.width > viewportWidth) {
+        left = viewportWidth - boxRect.width - margin;
+    }
+
+    // กันล้นซ้าย
+    if (left < margin) {
+        left = margin;
+    }
+
+    // กันล้นล่าง
+    if (top + boxRect.height > viewportHeight) {
+        top = viewportHeight - boxRect.height - margin;
+    }
+
+    box.style.left = `${left}px`;
+    box.style.top = `${top}px`;
+}
+
+
+
+function closeColumnFilterModal() {
+    document.getElementById("column-filter-modal").classList.add("hidden");
+    openFilterColumn = null;
+}
+
+/* =====================================================
+   LOAD FILTER VALUES
+===================================================== */
+
+function loadFilterValues(tableKey, colIndex) {
+    const t = tables[tableKey];
+    const list = document.getElementById("column-filter-checkbox-list");
+    list.innerHTML = "";
+
+    const selected = t.filters[colIndex] ?? [];
+    originalFilterOrder = [];
+
+    const values = new Set();
+    let hasRealValue = false;
+
+    // ⭐ สำคัญมาก
+    const activeFilters = Object.keys(t.filters).filter(c => c != colIndex);
+
+    const sourceRows =
+        activeFilters.length > 0
+            ? t.allRows.filter(row => {
+                return activeFilters.every(c => {
+                    const v = getCellValue(row, c, false) ?? "";
+                    return t.filters[c].includes(v);
+                });
+            })
+            : t.allRows;
+
+    sourceRows.forEach(row => {
+        const v = getCellValue(row, colIndex, false);
+
+        if (v !== null) {
+            values.add(v);
+            if (v !== "") hasRealValue = true;
+        }
+    });
+
+    if (!hasRealValue) values.add("");
+
+    values.forEach(v => {
+        const label = document.createElement("label");
+        label.className = "flex gap-2 text-xs py-1";
+
+        const displayText = v === "" ? "DD/MMM/YYYY" : v;
+        label.innerHTML = `
+            <input type="checkbox"
+                class="filter-checkbox"
+                value="${v}"
+                ${selected.includes(v) ? "checked" : ""}>
+            <span>${displayText}</span>
+        `;
+
+        list.appendChild(label);
+        originalFilterOrder.push(label);
+    });
+}
+
+
+
+
+/* =====================================================
+   APPLY FILTER
+===================================================== */
+function applyColumnFilter() {
+    const { table, col } = openFilter;
+    const t = tables[table];
+
+    const checked = [...document.querySelectorAll(".filter-checkbox")]
+        .filter(cb => cb.checked)
+        .map(cb => cb.value); // ❌ ไม่ lower
+
+    if (checked.length === 0) delete t.filters[col];
+    else t.filters[col] = checked;
+
+    applyAll(table);
+    closeColumnFilterModal();
+}
+
+
+
+
+function applyAll(tableKey) {
+    const t = tables[tableKey];
+
+    t.visibleRows = t.allRows.filter(row => {
+        for (let col in t.filters) {
+            let cellVal = getCellValue(row, col, false);
+
+            // ✅ สำคัญมาก
+            if (cellVal === null) {
+                cellVal = "";
+            }
+
+            if (!t.filters[col].includes(cellVal)) return false;
+        }
+        return true;
+    });
+
+    t.currentPage = 1;
+    applySort(tableKey);
+    renderTable(tableKey);
+}
+
+
+
+
+
+function reorderDOM(tableKey) {
+    const t = tables[tableKey];
+    const tbody = document.querySelector(t.tbody);
+
+    t.visibleRows.forEach(row => {
+        tbody.appendChild(row); // ⭐ ย้าย DOM จริง
+    });
+}
+
+
+
+
+// ฟังชั่น sortAZ / sortZA
+function sortAZ() {
+    sortTable(openFilter.table, openFilter.col, "asc");
+    closeColumnFilterModal();
+}
+
+function sortZA() {
+    sortTable(openFilter.table, openFilter.col, "desc");
+    closeColumnFilterModal();
+}
+
+
+
+function sortTable(tableKey, col, dir) {
+    if (!tableKey || col === null || col === undefined) {
+        console.warn("Sort ignored: no active column");
+        return;
+    }
+
+    const t = tables[tableKey];
+    t.sort = { col: String(col), dir };
+
+    applySort(tableKey);
+    renderTable(tableKey);
+}
+
+function parseDMY(value) {
+    if (!value) return null;
+
+    // รองรับเฉพาะ DD/MMM/YYYY เท่านั้น
+    const parts = value.split("/");
+    if (parts.length !== 3) return null;
+
+    const day   = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const year  = parseInt(parts[2], 10);
+
+    if (
+        isNaN(day)   || day < 1 || day > 31 ||
+        isNaN(month) || month < 1 || month > 12 ||
+        isNaN(year)
+    ) {
+        return null;
+    }
+
+    return { day, month, year };
+}
+
+function parseDMYToTime(value) {
+    if (!value) return null;
+
+
+    if (value === "DD-MMM-YYYY") return null;
+
+    const parts = value.split("-");
+    if (parts.length !== 3) return null;
+
+    const day   = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year  = parseInt(parts[2], 10);
+
+    if (
+        isNaN(day) || isNaN(month) || isNaN(year)
+    ) return null;
+
+    return new Date(year, month, day).getTime();
+}
+
+
+function applySort(tableKey) {
+    const t = tables[tableKey];
+    if (!t.sort.col || !t.sort.dir) return;
+
+    const colKey = String(t.sort.col);
+
+    t.visibleRows.sort((a, b) => {
+        const v1 = getCellValue(a, colKey, false);
+        const v2 = getCellValue(b, colKey, false);
+
+        // =============================
+        // ⭐ DATE SORT (DD-MMM-YYYY)
+        // =============================
+        const d1 = parseDMYToTime(v1);
+        const d2 = parseDMYToTime(v2);
+
+        // ✅ ถ้าไม่มีวันที่จริง → ดันลงล่างเสมอ
+        if (d1 === null && d2 !== null) return 1;
+        if (d1 !== null && d2 === null) return -1;
+        if (d1 !== null && d2 !== null) {
+            return t.sort.dir === "asc" ? d1 - d2 : d2 - d1;
+        }
+
+        // =============================
+        // SORT NUMBER
+        // =============================
+        const n1 = parseFloat(v1.replace(/,/g, "").replace('%',''));
+        const n2 = parseFloat(v2.replace(/,/g, "").replace('%',''));
+
+        if (!isNaN(n1) && !isNaN(n2)) {
+            return t.sort.dir === "asc" ? n1 - n2 : n2 - n1;
+        }
+
+        // =============================
+        // SORT TEXT (fallback สุดท้าย)
+        // =============================
+        return t.sort.dir === "asc"
+            ? v1.localeCompare(v2, 'th', { sensitivity: "base" })
+            : v2.localeCompare(v1, 'th', { sensitivity: "base" });
+    });
+
+    reorderDOM(tableKey);
+}
+
+function sortByDatePart(part) {
+    const { table, col } = openFilter;
+    if (!table || col == null) return;
+
+    tables[table].sort = {
+        col: String(col),
+        dir: part // day | month | year
+    };
+
+    applySort(table);
+    renderTable(table);
+    closeColumnFilterModal();
+}
+
+
+
+
+/* =====================================================
+   RENDER TABLE
+===================================================== */
+function renderTable(tableKey) {
+    const t = tables[tableKey];
+    const rows = t.visibleRows;
+
+    t.allRows.forEach(r => r.style.display = "none");
+
+    if (tableKey === "main") {
+        updateRowsPerPageDropdown(); // ⭐⭐⭐
+
+        const start = (t.currentPage - 1) * t.rowsPerPage;
+        const end = start + t.rowsPerPage;
+
+        rows.slice(start, end).forEach(r => r.style.display = "");
+        renderPagination();
+    } else {
+        rows.forEach(r => r.style.display = "");
+    }
+
+    updateIcons(tableKey);
+}
+
+
+
+
+/* =====================================================
+   PAGINATION (MAIN ONLY)
+===================================================== */
+function renderPagination() {
+    const t = tables.main;
+    const totalRows = t.visibleRows.length;
+    const totalPages = Math.max(1, Math.ceil(totalRows / t.rowsPerPage));
+
+    // ป้องกัน currentPage เกิน
+    if (t.currentPage > totalPages) t.currentPage = totalPages;
+
+    const summaryEl = document.getElementById("paginationSummaryList");
+
+    // ✅ กรณีไม่มีข้อมูลเลย
+    if (totalRows === 0) {
+        summaryEl.innerHTML =
+            `แสดง <span class="text-indigo-600 font-semibold">0</span>
+             จากทั้งหมด <span class="font-semibold">0</span> รายการ`;
+
+        document.getElementById("prevPageBtnList").disabled = true;
+        document.getElementById("nextPageBtnList").disabled = true;
+        document.getElementById("pageNumbersList").innerHTML = "";
+        return;
+    }
+
+    // ✅ คำนวณจากแถวจริงในตาราง
+    const start = (t.currentPage - 1) * t.rowsPerPage + 1;
+    const end = Math.min(start + t.rowsPerPage - 1, totalRows);
+
+    summaryEl.innerHTML =
+        `แสดง <span class="text-indigo-600 font-semibold">${start}-${end}</span>
+         จากทั้งหมด <span class="font-semibold">${totalRows}</span> รายการ`;
+
+    // prev / next
+    document.getElementById("prevPageBtnList").disabled = t.currentPage === 1;
+    document.getElementById("nextPageBtnList").disabled = t.currentPage === totalPages;
+
+    // page numbers
+    const container = document.getElementById("pageNumbersList");
+    container.innerHTML = "";
+
+    for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.innerText = i;
+        btn.className =
+            "w-10 h-10 rounded-xl font-sarabun text-sm transition-all " +
+            (i === t.currentPage
+                ? "bg-indigo-600 text-white shadow-md"
+                : "bg-white text-gray-600 hover:bg-indigo-50");
+
+        btn.onclick = () => goToPage(i);
+        container.appendChild(btn);
+    }
+}
+
+function updateRowsPerPageOptions() {
+    const t = tables.main;
+    const totalRows = t.visibleRows.length;
+    const select = document.getElementById("rowsPerPageList");
+
+    if (!select) return;
+
+    [...select.options].forEach(opt => {
+        const val = parseInt(opt.value);
+
+        if (val > totalRows && totalRows !== 0) {
+            opt.disabled = true;
+        } else {
+            opt.disabled = false;
+        }
+    });
+
+    // ถ้า rowsPerPage มากกว่าข้อมูลจริง → ปรับอัตโนมัติ
+    if (t.rowsPerPage > totalRows && totalRows > 0) {
+        t.rowsPerPage = totalRows;
+        select.value = totalRows;
+        t.currentPage = 1;
+    }
+}
+
+function updateRowsPerPageDropdown() {
+    const t = tables.main;
+    const select = document.getElementById("rowsPerPageList");
+    if (!select) return;
+
+    const total = t.visibleRows.length;
+    const current = t.rowsPerPage;
+
+    select.innerHTML = "";
+
+    // ✅ กรณีไม่มีข้อมูล
+    if (total === 0) {
+        select.innerHTML = `<option value="10">ทั้งหมด (0 แถว)</option>`;
+        t.rowsPerPage = 10;      
+        t.currentPage = 1;
+        return;
+    }
+
+    const options = [10, 20];
+
+    options.forEach(v => {
+        if (v < total) {
+            select.innerHTML += `
+                <option value="${v}" ${current === v ? "selected" : ""}>
+                    ${v} รายการ
+                </option>
+            `;
+        }
+    });
+
+    select.innerHTML += `
+        <option value="${total}" ${current === total ? "selected" : ""}>
+            ทั้งหมด (${total} แถว)
+        </option>
+    `;
+
+    // ✅ FIX เพิ่มความปลอดภัย
+    if (t.rowsPerPage <= 0) {
+        t.rowsPerPage = Math.min(10, total);
+        t.currentPage = 1;
+    }
+}
+
+
+function goToPage(p) {
+    tables.main.currentPage = p;
+    renderTable("main");
+}
+
+/* =====================================================
+   ICON UPDATE
+===================================================== */
+function updateIcons(tableKey) {
+    const t = tables[tableKey];
+
+    document.querySelectorAll(`.filter-icon[data-table="${tableKey}"]`)
+        .forEach(icon => {
+            const col = icon.dataset.col;
+
+
+            if (t.sort.col === col) {
+                icon.innerHTML = t.sort.dir === "asc" ? ICONS.sortAsc : ICONS.sortDesc;
+            } else if (t.filters[col]) {
+                icon.innerHTML = ICONS.filter;
+            } else {
+                icon.innerHTML = ICONS.normal;
+            }
+        });
+}
+
+/* =====================================================
+   HELPERS
+===================================================== */
+function getCellValue(row, colKey, toLower = true) {
+    const cell = row.querySelector(`td[data-col="${colKey}"]`);
+    if (!cell) return "";
+
+    let value = "";
+
+    const select = cell.querySelector("select");
+    const input  = cell.querySelector("input");
+
+    if (select) {
+        const opt = select.options[select.selectedIndex];
+
+        // ⭐ ใช้ text ที่แสดงจริง
+        if (opt && opt.textContent) {
+            value = opt.textContent.trim();
+        } else {
+            value = cell.textContent.trim();
+        }
+
+    } else if (input && input.type !== "hidden") {
+        // ⭐ input ที่ user เห็นจริง
+        value = input.value.trim();
+
+    } else {
+        // ⭐ fallback สุดท้าย
+        value = cell.textContent.trim();
+    }
+
+    return toLower ? value.toLowerCase() : value;
 }
 
 
@@ -2949,6 +4385,112 @@ function changeRowsPerPage(value) {
 
 
 </script>
+
+
+
+
+
+
+
+<script>
+        /**
+         * 1. ฟังก์ชันดึงแถวที่แสดงอยู่จริง
+         * เช็คทั้ง display: none และ offsetHeight เพื่อความแม่นยำหลังจาก Filter
+         */
+        function getVisibleRows() {
+            return Array.from(document.querySelectorAll('#tableBody tr')).filter(row => {
+                const style = window.getComputedStyle(row);
+                return style.display !== 'none' && style.visibility !== 'hidden' && row.offsetHeight > 0;
+            });
+        }
+
+        /**
+         * 2. ฟังก์ชันคำนวณและอัปเดตยอดสรุป
+         */
+        function updateAllColumnSummaries() {
+            const visibleRows = getVisibleRows();
+
+            document.querySelectorAll('[data-summary-field]').forEach(el => {
+                const fieldName = el.dataset.summaryField;
+                const type = el.dataset.type;
+
+                let sum = 0;
+                let count = 0;
+
+                visibleRows.forEach(row => {
+                    // ค้นหา td ที่มี data-col ตรงกับ field ที่ต้องการสรุป
+                    const cell = row.querySelector(`td[data-col="${fieldName}"]`);
+                    if (cell) {
+                        const input = cell.querySelector('input');
+                        const rawValue = input ? input.value : cell.innerText;
+
+                        // ล้างค่าคอมม่าและ % ออกก่อนคำนวณ
+                        const cleanValue = parseFloat(String(rawValue).replace(/,/g, '').replace('%',
+                            '')) || 0;
+
+                        sum += cleanValue;
+                        if (String(rawValue).trim() !== '') {
+                            count++;
+                        }
+                    }
+                });
+
+                // แสดงผลลัพธ์ตามประเภท
+                if (type === 'money') {
+                    el.innerText = sum.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                } else if (type === 'text') {
+                    el.innerText = count.toLocaleString();
+                } else if (type === 'avg') {
+                    const avg = count > 0 ? sum / count : 0;
+                    el.innerText = avg.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' %';
+                }
+            });
+        }
+
+        /**
+         * 3. ระบบตรวจจับการเปลี่ยนแปลงของตาราง (หัวใจสำคัญ)
+         * เมื่อมีการกด OK ใน Filter และแถวถูกซ่อน/แสดง ฟังก์ชันนี้จะทำงานทันที
+         */
+        const summaryObserver = new MutationObserver((mutations) => {
+            // ใช้ debounce เล็กน้อยเพื่อไม่ให้รันซ้ำซ้อนเกินไปในเสี้ยววินาที
+            clearTimeout(window.summaryTimeout);
+            window.summaryTimeout = setTimeout(() => {
+                updateAllColumnSummaries();
+            }, 50);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableTarget = document.getElementById('tableBody');
+            if (tableTarget) {
+                // ตรวจสอบการเปลี่ยน Attributes (เช่น style="display:none") และการเพิ่ม/ลบแถว
+                summaryObserver.observe(tableTarget, {
+                    attributes: true,
+                    childList: true,
+                    subtree: true,
+                    attributeFilter: ['style', 'class']
+                });
+
+                // ดักจับกรณีมีการพิมพ์ตัวเลขสดๆ ในตาราง
+                tableTarget.addEventListener('input', updateAllColumnSummaries);
+            }
+
+            // รันครั้งแรกตอนโหลดหน้า
+            updateAllColumnSummaries();
+        });
+    </script>
+
+
+
+
+
+
+
 
 
 

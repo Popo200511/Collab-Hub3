@@ -297,7 +297,58 @@ class ImportItemController extends Controller
     }
 
     //SAVE IMPORT Refcode 
-    
+    public function saveAdd(Request $request)
+    {
+        $dataToSave = json_decode($request->data_add, true);
+
+        // ดึงข้อมูล refcode จากฐานข้อมูล
+        $refcode = DB::table('w_refcode_data')->get();
+
+
+        // เริ่มต้น transaction
+        DB::beginTransaction();
+
+        // ตรวจสอบว่า $dataToSave เป็น array และมีข้อมูล
+        if (!is_array($dataToSave)) {
+            return redirect('addrefcode')->withErrors(['error' => 'ข้อมูลไม่ถูกต้องหรือไม่มีข้อมูลที่จะบันทึก']);
+        }
+
+        // Loop ผ่านแต่ละแถวใน $dataToSave
+        $newData = []; // สำหรับเก็บข้อมูลที่ไม่ซ้ำกัน
+        foreach ($dataToSave as $row) {
+            // เช็คว่า refcode ซ้ำหรือไม่
+            $matched = false;
+            foreach ($refcode as $item) {
+                if ($item->refcode === $row['refcode']) {
+                    $matched = true;
+                    break;
+                }
+            }
+
+            // ถ้า refcode ไม่ซ้ำกัน ก็เพิ่มข้อมูลใหม่
+            if (!$matched) {
+                $newData[] = [
+                    'refCode' => $row['refcode'],
+                    'description' => $row['description'],
+                    // เพิ่มคอลัมน์อื่นๆ ตามที่ต้องการ
+                ];
+            }
+        }
+
+        // ถ้ามีข้อมูลที่ไม่ซ้ำกันให้ทำการบันทึก
+        if (count($newData) > 0) {
+            // Insert ข้อมูลที่ไม่ซ้ำ
+            DB::table('w_refcode_data')->insert($newData);
+            // Commit การทำธุรกรรม
+            DB::commit();
+            return redirect('addrefcode')->with('success', 'บันทึกข้อมูลสำเร็จ');
+        } else {
+            // ถ้าไม่มีข้อมูลใหม่ให้บันทึก
+            DB::rollBack(); // ยกเลิกการทำธุรกรรม
+            return redirect('addrefcode')->withErrors(['error' => 'ข้อมูล Refcode ซ้ำกัน']);
+        }
+    }
+
     //Add Refcode
     public function addrefcodemanual(Request $request)
     {
@@ -491,9 +542,7 @@ class ImportItemController extends Controller
         return redirect()->back()->with('success', 'เพิ่ม Material สำเร็จ');
         // 
     }
-
-
-    //หน้า Droppoint    
+   
 
     //Droppoint
     public function droppoint(Request $request)

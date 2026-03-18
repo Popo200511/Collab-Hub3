@@ -3,6 +3,7 @@
 @section('title', 'Purchase Order')
 
 @section('content')
+
 <!-- Export To Excel -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
@@ -20,6 +21,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<!-- Hover สำหรับ Filter -->
+<style>
+    .filter-active i {
+        color: #60a5fa !important;
+    }
+
+    thead th:hover .filter-icon:not(.filter-active) i {
+        color: #93c5fd;
+    }
+
+    .font-sarabun {
+        font-family: 'Sarabun', sans-serif !important;
+    }
+</style>
 
 
 
@@ -139,14 +157,19 @@
 
 
                     <!-- ปุ่มประวัติการขอ PO -->
-                    <a href="{{ route('purchase-order.show', 1) }}" class="flex items-center h-10 px-4 py-2 text-xs font-bold transition-all duration-300 ease-in-out 
-           bg-indigo-600 text-white rounded-lg shadow-lg shadow-indigo-400/50 hover:bg-indigo-700 
-           transform hover:scale-[1.03] hover:shadow-xl focus:ring-4 focus:ring-indigo-300">
+                    <a href="{{ route('purchase-order.show', 1) }}" class="inline-flex items-center justify-center gap-3
+                        h-10 px-6
+                        text-sm font-semibold
+                        text-white bg-indigo-600
+                        rounded-xl
+                        shadow-lg shadow-indigo-500/40
+                        transition-colors duration-300
+                        hover:bg-indigo-700
+                        whitespace-nowrap leading-none">
 
-                        <i class="fas fa-history mr-2 text-lg"></i>
-                        <span>ประวัติการขอ PO</span>
+                        <i class="fas fa-history text-lg leading-none"></i>
+                        <span class="leading-none">ประวัติการขอ PO</span>
                     </a>
-
                 </div>
             </div>
 
@@ -161,17 +184,95 @@
                 <input type="hidden" id="hidden_total_amount" name="total_amount">
 
                 <!-- Main Display Table Container -->
-                <div class="w-full overflow-hidden shadow-lg rounded-t-lg ring-1 ring-gray-300">
-                    <div class="overflow-x-auto max-h-[400px]">
-                        <table id="customer-table-display" class="min-w-full text-sm divide-y divide-gray-200">
-                            <thead class="sticky top-0 z-10 bg-green-600 text-white shadow text-center ">
+                <div class="w-full h-[350px] flex flex-col shadow-lg rounded-t-lg ring-1 ring-gray-300">
+                    <div class="overflow-x-auto flex-1">
+                        <table id="customer-table-display" class="min-w-full text-sm divide-y divide-gray-200 h-full">
+                            <thead class="sticky top-0 z-10 bg-blue-950 text-white shadow text-center">
                                 <tr class="text-center">
-                                    <th class="py-3 px-4 font-medium">Item Code</th>
-                                    <th class="py-3 px-4 font-medium ">Item Description</th>
-                                    <th class="py-3 px-4 font-medium">Unit Price</th>
-                                    <th class="py-3 px-4 font-medium">Unit</th>
-                                    <th class="py-3 px-4 font-medium">Quantity</th>
-                                    <th class="py-3 px-4 font-medium">Amount</th>
+
+                                    <!-- 1. Item Code Filter -->
+                                    <th class="whitespace-nowrap text-center border-b border-blue-900">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <span class="tracking-wide font-sarabun text-xs text-white/90">Item
+                                                Code</span>
+
+                                            <span
+                                                class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                                onclick="toggleFilterDropdown('item_code', this)" data-col="item_code">
+                                                <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+
+                                    <!-- 2. Item Description Filter -->
+                                    <th class="whitespace-nowrap text-center border-b border-blue-900">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <span class="tracking-wide font-sarabun text-xs text-white/90">Item
+                                                Description</span>
+
+                                            <span
+                                                class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                                onclick="toggleFilterDropdown('item_description', this)"
+                                                data-col="item_description">
+                                                <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+
+                                    <!-- 3. Unit Price Filter -->
+                                    <th class="whitespace-nowrap text-center border-b border-blue-900">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <span class="tracking-wide font-sarabun text-xs text-white/90">Unit
+                                                Price</span>
+
+                                            <span
+                                                class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                                onclick="toggleFilterDropdown('unit_price', this)" data-col="unit_price">
+                                                <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+
+                                    <!-- 4. Unit -->
+                                    <th class="whitespace-nowrap text-center border-b border-blue-900">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <span class="tracking-wide font-sarabun text-xs text-white/90">Unit</span>
+
+                                            <span
+                                                class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                                onclick="toggleFilterDropdown('unit', this)" data-col="unit">
+                                                <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+
+                                    <!-- 5. Quantity -->
+                                    <th class="whitespace-nowrap text-center border-b border-blue-900">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <span
+                                                class="tracking-wide font-sarabun text-xs text-white/90">Quantity</span>
+
+                                            <span
+                                                class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                                onclick="toggleFilterDropdown('quantity', this)" data-col="quantity">
+                                                <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+
+                                    <!-- 6. Amount -->
+                                    <th class="whitespace-nowrap text-center border-b border-blue-900">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <span class="tracking-wide font-sarabun text-xs text-white/90">Amount</span>
+
+                                            <span
+                                                class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                                onclick="toggleFilterDropdown('amount', this)" data-col="amount">
+                                                <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+
                                     <th class="py-3 px-4 font-medium">Remove</th>
                                 </tr>
                             </thead>
@@ -197,15 +298,18 @@
                 </div>
 
                 <!-- Save/Cancel Buttons -->
-                <div id="save-cancel-buttons-container" class="flex justify-center space-x-6 mt-10 hidden">
-                    <button type="submit" id="submit-po-button"
-                        class="transition duration-150 ease-in-out bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-blue-700 shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5">
-                        <i class="fas fa-save mr-2"></i> บันทึก (Save)
+                <div id="save-cancel-buttons-container" class="flex justify-center gap-4 mt-8 hidden">
+
+                    <button type="submit" id="submit-po-button" class="bg-blue-600 text-white px-4 py-2 text-xs rounded-lg font-sarabun
+                        hover:bg-blue-700 transition shadow-md">
+                        OK
                     </button>
-                    <button type="button" id="cancel-button"
-                        class="transition duration-150 ease-in-out bg-gray-300 text-gray-700 px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-400 shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5">
-                        <i class="fas fa-undo mr-2"></i> ยกเลิก (Cancel)
+
+                    <button type="button" id="cancel-button" class="bg-red-500 text-white px-4 py-2 text-xs rounded-lg font-sarabun
+                        hover:bg-red-600 transition shadow-md">
+                        Cancel
                     </button>
+
                 </div>
             </form>
         </div>
@@ -277,52 +381,68 @@
         <!-- Item Selection Table -->
         <div class="overflow-y-auto px-6 pb-6 flex-grow">
             <table id="modal-items-table" class="min-w-full border border-gray-300 text-sm rounded-lg shadow-inner">
-                <thead class="sticky top-0 z-20 bg-green-300 text-gray-800 shadow">
+                <thead class="bg-blue-950 text-white sticky top-0 z-20">
                     <tr class="text-center">
-                        <th class="py-3 px-4 w-12">
+
+                        <!-- checkbox -->
+                        <th class="py-3 px-3 w-9 whitespace-nowrap text-center border-b border-blue-900">
                             <input type="checkbox" id="selectAllCheckbox" title="Select All"
                                 class="w-4 h-4 text-green-600 border-gray-300 rounded cursor-pointer focus:ring-green-500">
                         </th>
 
-                        <th class="py-3 px-4 relative filterable" data-column="item_code" data-table-id="modal-xxl">
-                            <div class="flex items-center justify-center cursor-pointer">
-                                <span>Item No.</span>
-                                <button type="button" class="ml-1 table-filter-trigger text-base"
-                                    data-column-name="Item Code" data-table-id="modal-xxl" data-column-key="item_code">
-                                    <i class="fas fa-sort text-gray-500 filter-icon text-xs"></i>
-                                </button>
+
+                        <!-- 1. Item No. Filter -->
+                        <th class="whitespace-nowrap text-center border-b border-blue-900">
+                            <div class="flex items-center justify-center gap-2">
+                                <span class="tracking-wide font-sarabun text-xs text-white/90">Item No.</span>
+
+                                <span
+                                    class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                    onclick="toggleFilterDropdown('item_no', this)" data-col="item_no">
+                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                </span>
                             </div>
                         </th>
 
-                        <th class="py-3 px-4 relative filterable" data-column="description" data-table-id="modal-xxl">
-                            <div class="flex items-center justify-center cursor-pointer">
-                                <span>Item Description</span>
-                                <button type="button" class="ml-1 table-filter-trigger text-base"
-                                    data-column-name="Item Description" data-table-id="modal-xxl"
-                                    data-column-key="description">
-                                    <i class="fas fa-sort text-gray-500 filter-icon text-xs"></i>
-                                </button>
+                        <!-- 2. Item Description Filter -->
+                        <th class="whitespace-nowrap text-center border-b border-blue-900">
+                            <div class="flex items-center justify-center gap-2">
+                                <span class="tracking-wide font-sarabun text-xs text-white/90">Item Description</span>
+
+                                <span
+                                    class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                    onclick="toggleFilterDropdown('item_description', this)" data-col="item_description">
+                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                </span>
                             </div>
                         </th>
-                        <th class="py-3 px-4 relative filterable" data-column="unit_price" data-table-id="modal-xxl">
-                            <div class="flex items-center justify-center cursor-pointer">
-                                <span>Unit Price</span>
-                                <button type="button" class="ml-1 table-filter-trigger text-base"
-                                    data-column-name="Unit Price" data-table-id="modal-xxl"
-                                    data-column-key="unit_price">
-                                    <i class="fas fa-sort text-gray-500 filter-icon text-xs"></i>
-                                </button>
+
+                        <!-- 3. Unit Price Filter -->
+                        <th class="whitespace-nowrap text-center border-b border-blue-900">
+                            <div class="flex items-center justify-center gap-2">
+                                <span class="tracking-wide font-sarabun text-xs text-white/90">Unit Price</span>
+
+                                <span
+                                    class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                    onclick="toggleFilterDropdown('unit_price', this)" data-col="unit_price">
+                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                </span>
                             </div>
                         </th>
-                        <th class="py-3 px-4 relative filterable" data-column="unit" data-table-id="modal-xxl">
-                            <div class="flex items-center justify-center cursor-pointer">
-                                <span>Unit</span>
-                                <button type="button" class="ml-1 table-filter-trigger text-base"
-                                    data-column-name="Unit" data-table-id="modal-xxl" data-column-key="unit">
-                                    <i class="fas fa-sort text-gray-500 filter-icon text-xs"></i>
-                                </button>
+
+                        <!-- 4. Unit Filter -->
+                        <th class="whitespace-nowrap text-center border-b border-blue-900">
+                            <div class="flex items-center justify-center gap-2">
+                                <span class="tracking-wide font-sarabun text-xs text-white/90">Unit</span>
+
+                                <span
+                                    class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                    onclick="toggleFilterDropdown('unit', this)" data-col="unit">
+                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                </span>
                             </div>
                         </th>
+
                     </tr>
                 </thead>
                 <tbody id="modal-items-table-body" class="divide-y divide-gray-100">
@@ -345,40 +465,115 @@
         </div>
     </div>
 
+    <!-- Modal ตรวจสอบข้อมูล -->
     <div id="csvCheckModal"
-        class="fixed inset-0 z-60 hidden items-center justify-center bg-black bg-opacity-70 transition-opacity duration-300">
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black bg-opacity-70 transition-opacity duration-300">
         <div class="bg-white w-full max-w-5xl rounded-2xl shadow-2xl flex flex-col relative transform modal-fade-enter">
 
             <!-- Header (Blue/Modern) -->
-            <div class="flex justify-between items-center border-b p-6 bg-blue-600 text-white rounded-t-2xl">
-                <h2 class="text-xl md:text-2xl font-extrabold flex items-center">
-                    <i class="fas fa-clipboard-check mr-3"></i> ตรวจสอบข้อมูล CSV
+            <div class="relative flex items-center justify-between px-6 py-3 
+            bg-gradient-to-r from-blue-700 to-indigo-600 
+            rounded-t-2xl shadow-md">
+
+                <!-- Title -->
+                <h2 class="text-lg md:text-xl font-semibold 
+               flex items-center gap-2 text-white tracking-wide">
+                    <span class="flex items-center justify-center w-8 h-8 
+                     bg-white/20 rounded-lg">
+                        <i class="fas fa-clipboard-check text-sm text-white"></i>
+                    </span>
+                    ตรวจสอบข้อมูล
                 </h2>
-                <button onclick="closeCSVCheckModal()"
-                    class="text-white hover:text-gray-200 text-2xl transition duration-150">
-                    <i class="fas fa-times"></i>
+
+                <!-- Close Button -->
+                <button onclick="closeCSVCheckModal()" class="flex items-center justify-center w-8 h-8 
+               rounded-full bg-white/10 
+               hover:bg-white/20 
+               transition-all duration-200 hover:rotate-90">
+                    <i class="fas fa-times text-sm text-white"></i>
                 </button>
+
             </div>
 
             <!-- Content -->
-            <div class="p-6 flex-grow overflow-y-auto max-h-[70vh]">
-                <p class="text-sm text-gray-600 mb-4 font-semibold">
-                    รูปแบบ CSV ที่รองรับ: `Item Code, Quantity`
-                </p>
-                <div class="overflow-x-auto rounded-xl ring-1 ring-gray-200 shadow-lg">
-                    <table id="csvCheckTable" class="min-w-full text-sm divide-y divide-gray-200">
-                        <thead class="bg-gray-50 sticky top-0">
-                            <tr class="text-gray-700 uppercase tracking-wider text-left">
-                                <th class="py-3 px-4 font-bold">Item Code</th>
-                                <th class="py-3 px-4 font-bold">Item Description</th>
-                                <th class="py-3 px-4 font-bold text-right">Unit Price</th>
-                                <th class="py-3 px-4 font-bold text-center">Unit</th>
-                                <th class="py-3 px-4 font-bold text-center">Status</th>
+            <div class="p-6 flex-grow">
+                <div class="overflow-auto max-h-[70vh] rounded-xl ring-1 ring-gray-200 shadow-lg">
+                    <table id="csvCheckTable" class="min-w-full text-sm divide-y divide-gray-200 relative">
+                        <thead class="bg-blue-950 text-white sticky top-0 z-20">
+                            <tr class="text-center">
+
+                                <!-- 1. Item Code. Filter -->
+                                <th class="w-[180px] px-4 py-3 whitespace-nowrap text-center border-b border-blue-900">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="tracking-wide font-sarabun text-xs text-white/90">Item Code.</span>
+
+                                        <span
+                                            class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                            onclick="toggleFilterDropdown('item_code', this)" data-col="item_code">
+                                            <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <!-- 2. Item Description Filter -->
+                                <th class="w-[180px] px-4 py-3 whitespace-nowrap text-center border-b border-blue-900">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="tracking-wide font-sarabun text-xs text-white/90">Item
+                                            Description</span>
+
+                                        <span
+                                            class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                            onclick="toggleFilterDropdown('item_description', this)"
+                                            data-col="item_description">
+                                            <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <!-- 3. Unit Price -->
+                                <th class="w-[180px] px-4 py-3 whitespace-nowrap text-center border-b border-blue-900">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="tracking-wide font-sarabun text-xs text-white/90">Unit Price</span>
+
+                                        <span
+                                            class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                            onclick="toggleFilterDropdown('unit_price', this)" data-col="unit_price">
+                                            <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <!-- 4. Unit Filter -->
+                                <th class="w-[180px] px-4 py-3 whitespace-nowrap text-center border-b border-blue-900">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="tracking-wide font-sarabun text-xs text-white/90">Unit</span>
+
+                                        <span
+                                            class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                            onclick="toggleFilterDropdown('unit', this)" data-col="unit">
+                                            <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <!-- 5. Status Filter -->
+                                <th class="w-[180px] px-4 py-3 whitespace-nowrap text-center border-b border-blue-900">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="tracking-wide font-sarabun text-xs text-white/90">Status</span>
+
+                                        <span
+                                            class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                            onclick="toggleFilterDropdown('status', this)" data-col="status">
+                                            <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                        </span>
+                                    </div>
+                                </th>
+
                             </tr>
                         </thead>
                         <tbody id="csvCheckTableBody" class="bg-white divide-y divide-gray-100">
-                            <tr class="text-center">
-                                <td colspan="6" class="py-8 text-lg italic text-gray-500">
+                            <tr class="text-center hover:bg-gray-50 transition-colors duration-150">
+                                <td colspan="5" class="py-8 text-lg italic text-gray-500">
                                     กรุณาอัพโหลดไฟล์ CSV เพื่อตรวจสอบข้อมูล
                                 </td>
                             </tr>
@@ -407,37 +602,44 @@
 
 
 
-<!-- Modal for Column Filter -->
-<div id="column-filter-modal" class="fixed z-[100] hidden bg-transparent">
-    <div id="column-filter-content"
-        class="shadow-2xl bg-white rounded-xl flex flex-col w-[300px] absolute border border-gray-100">
+<!-- ก้อน Filter ที่ใช้ทุกคอลั่ม -->
+<div id="column-filter-modal" class="fixed inset-0 z-[9999] hidden bg-transparent">
+    <div id="column-filter-content" onclick="event.stopPropagation()"
+        class="shadow-2xl bg-white rounded-xl flex flex-col w-[300px] h-[450px] absolute border border-gray-100">
 
-        <!-- Title Section -->
-        <div class="px-4 pt-4 pb-2 border-b border-gray-100 text-sm font-semibold text-gray-600">
-            <span id="modal-column-name" class="font-extrabold text-gray-800">Column</span>
+
+        <div class="px-2 pt-2">
+            <button type="button" onclick="clearColumnFilterExcel()"
+                class="w-full flex items-center gap-3 px-3 py-2 text-xs font-sarabun text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all group">
+                <div class="w-7 h-7 flex items-center justify-center bg-slate-100 group-hover:bg-red-100 rounded-lg">
+                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                </div>
+                <span>Clear Filter from this column</span>
+            </button>
         </div>
 
-        <!-- Search Input -->
-        <div class="px-4 py-3 border-b border-gray-100">
-            <div class="relative">
-                <i data-lucide="search"
-                    class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
-                <input type="text" id="column-filter-search" placeholder="Search values..."
-                    class="pl-9 pr-3 w-full h-9 outline-none bg-gray-50 border border-gray-200 rounded-lg text-sm transition-all focus:border-blue-400 focus:bg-white"
-                    oninput="handleSearch(this.value)">
-            </div>
+        <div class="px-2 pt-2">
+            <button type="button" onclick="clearAllTableFilters()"
+                class="w-full flex items-center gap-3 px-3 py-2 text-xs font-sarabun text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all group">
+                <div class="w-7 h-7 flex items-center justify-center bg-slate-100 group-hover:bg-red-100 rounded-lg">
+                    <i class="fa-solid fa-broom"></i>
+                </div>
+                <span>Clear Filter from all columns</span>
+            </button>
         </div>
+
+
 
         <!-- Selection and Sorting Controls -->
         <div class="px-4 pt-3 pb-2 border-b border-gray-100">
             <!-- Select / Deselect All -->
             <div class="flex justify-between space-x-2 mb-3">
                 <button type="button" id="selectAllFilter" onclick="selectAll()"
-                    class="w-1/2 text-xs text-center bg-green-300 hover:bg-green-400 text-gray-800 rounded py-1">
+                    class="w-1/2 text-xs font-sarabun text-center bg-green-300 hover:bg-green-400 text-gray-800 rounded py-1">
                     Select All
                 </button>
                 <button type="button" id="deselectAllFilter" onclick="deselectAll()"
-                    class="w-1/2 text-xs text-center bg-red-300 hover:bg-red-400 text-gray-800 rounded py-1">
+                    class="w-1/2 text-xs font-sarabun text-center bg-red-300 hover:bg-red-400 text-gray-800 rounded py-1">
                     Deselect All
                 </button>
             </div>
@@ -445,33 +647,142 @@
             <!-- Sort Buttons -->
             <div class="flex justify-between space-x-2">
                 <button type="button" onclick="sortAZ()"
-                    class="w-1/2 text-xs text-center bg-gray-200 hover:bg-gray-300 text-gray-700 rounded py-1">
+                    class="w-1/2 text-xs font-sarabun text-center bg-gray-200 hover:bg-gray-300 text-gray-700 rounded py-1">
                     <i data-lucide="arrow-down-a-to-z" class="w-3.5 h-3.5"></i>
                     <span>Sort A &rarr; Z</span>
                 </button>
                 <button type="button" onclick="sortZA()"
-                    class="w-1/2 text-xs text-center bg-gray-200 hover:bg-gray-300 text-gray-700 rounded py-1">
+                    class="w-1/2 text-xs font-sarabun text-center bg-gray-200 hover:bg-gray-300 text-gray-700 rounded py-1">
                     <i data-lucide="arrow-up-z-to-a" class="w-3.5 h-3.5"></i>
                     <span>Sort Z &rarr; A</span>
                 </button>
             </div>
         </div>
 
+        <!-- Search Input -->
+        <div class="px-4 py-3 border-b border-gray-100">
+            <div class="relative">
+                <i data-lucide="search"
+                    class="fa-solid fa-magnifying-glass w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+                <input type="text" id="column-filter-search" placeholder=""
+                    class="pl-9 pr-3 w-full h-9 outline-none bg-gray-50 border border-gray-200 rounded-lg text-sm transition-all focus:border-blue-400 focus:bg-white"
+                    oninput="handleSearch(this.value)" onkeydown="handleSearchEnter(event)">
+            </div>
+        </div>
+
         <!-- Checkbox List -->
-        <div id="column-filter-checkbox-list" class="overflow-y-auto px-4 py-2 text-sm max-h-60 flex-grow">
+        <div id="column-filter-checkbox-list" class="overflow-y-auto font-sarabun px-4 py-2 text-sm max-h-60 flex-grow">
             <!-- Checkboxes generated by JS -->
         </div>
 
         <!-- Apply / Cancel Footer -->
         <div class="flex justify-end space-x-2 border-t px-4 py-3 bg-gray-50 rounded-b-xl">
             <button type="button" onclick="applyColumnFilter()"
-                class="bg-blue-600 text-white px-4 py-2 text-xs rounded-lg font-semibold hover:bg-blue-700 transition shadow-md">Apply
-                Filter</button>
+                class="bg-blue-600 text-white px-4 py-2 text-xs rounded-lg font-sarabun hover:bg-blue-700 transition shadow-md">OK</button>
             <button type="button" onclick="closeColumnFilterModal()"
-                class="bg-white border border-gray-300 text-gray-700 px-4 py-2 text-xs rounded-lg font-semibold hover:bg-gray-100 transition shadow-sm">Cancel</button>
+                class="bg-white border border-gray-300 text-gray-700 px-4 py-2 text-xs rounded-lg font-sarabun hover:bg-gray-100 transition shadow-sm">Cancel</button>
         </div>
     </div>
 </div>
+
+
+<script>
+    let activeColumn = null;
+    let activeTable = null;
+
+    // toggleFilterDropdown ให้รู้ว่ามาจาก table
+    function toggleFilterDropdown(column, element) {
+
+    const modal = document.getElementById('column-filter-modal');
+    const content = document.getElementById('column-filter-content');
+
+    // 🔥 ถ้าเปิดอยู่แล้ว ให้ปิด
+    if (!modal.classList.contains('hidden') && activeColumn === column) {
+        modal.classList.add('hidden');
+        activeColumn = null;
+        activeTable = null;
+        return;
+    }
+
+    activeColumn = column;
+    activeTable = element.closest('table');
+
+    const rect = element.getBoundingClientRect();
+
+    content.style.top = (rect.bottom + window.scrollY) + "px";
+    content.style.left = (rect.left + window.scrollX - 150) + "px";
+
+    generateFilterOptions();
+
+    modal.classList.remove('hidden');
+}
+
+    // function ดึงข้อมูลจากตาราง
+    function generateFilterOptions() {
+
+    if (!activeTable || !activeColumn) return;
+
+    const tbody = activeTable.querySelector('tbody');
+    const rows = tbody.querySelectorAll('tr');
+
+    const colIndex = getColumnIndex(activeTable, activeColumn);
+    if (colIndex === -1) return;
+
+    const values = new Set();
+
+    rows.forEach(row => {
+
+        if (row.style.display === "none") return;
+
+        const cell = row.children[colIndex];
+
+        if (cell) {
+            const text = cell.innerText.trim();
+            if (text !== "") values.add(text);
+        }
+    });
+
+    renderCheckboxList(Array.from(values).sort());
+}
+
+
+//หา column index อัตโนมัติ
+function getColumnIndex(table, column) {
+
+    const headers = table.querySelectorAll('thead th');
+
+    for (let i = 0; i < headers.length; i++) {
+
+        const icon = headers[i].querySelector(`[data-col="${column}"]`);
+
+        if (icon) return i;
+    }
+
+    return -1;
+}
+
+//ฟังชันสำหรับ render Checkbox List
+function renderCheckboxList(values) {
+
+    const container = document.getElementById('column-filter-checkbox-list');
+    container.innerHTML = "";
+
+    values.forEach(value => {
+
+        const div = document.createElement('div');
+        div.className = "flex items-center gap-2 py-1";
+
+        div.innerHTML = `
+            <input type="checkbox" value="${value}" class="filter-checkbox">
+            <span>${value}</span>
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+    
+</script>
 
 
 
@@ -1138,8 +1449,12 @@
         }
 
         // สำเร็จ → redirect ไปหน้า show
-        Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ', text: 'กำลังไปที่หน้ารายละเอียด...' }).then(() => {
-            window.location.href = "/purchase-order/show/" + response.po_id;
+        Swal.fire({
+            icon: 'success',
+            title: 'บันทึกสำเร็จ',
+            text: 'กำลังไปที่หน้ารายละเอียด...'
+        }).then(() => {
+            window.location.href = "/purchase-order/show/" + result.po_id;
         });
 
     } catch (err) {
@@ -1318,12 +1633,13 @@ function checkDuplicates(items) {
         importedDataGlobal.forEach(row => {
             const exists = duplicates.includes(row.item_code);
             const tr = document.createElement('tr');
+            tr.className = "text-center hover:bg-red-50 transition-colors duration-150";
             tr.innerHTML = `
-                <td>${row.item_code}</td>
-                <td>${row.description}</td>
-                <td>${row.unit_price.toLocaleString()}</td>
-                <td>${row.unit}</td>
-                <td class="${exists ? 'text-red-600' : 'text-green-600'}">
+                <td class="py-2">${row.item_code}</td>
+                <td class="py-2">${row.description}</td>
+                <td class="py-2">${row.unit_price.toLocaleString()}</td>
+                <td class="py-2">${row.unit}</td>
+                <td class="py-2 font-semibold ${exists ? 'text-red-600' : 'text-green-600'}">
                     ${exists ? 'ซ้ำ' : 'นำเข้าได้'}
                 </td>
             `;

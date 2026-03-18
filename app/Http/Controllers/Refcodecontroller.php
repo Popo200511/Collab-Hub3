@@ -1,14 +1,15 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+// นำเข้า Namespace ของ Controller ตัวที่มีฟังก์ชัน Sync ไว้ด้านบน
+use App\Http\Controllers\Paymentcontroller;
 
 class Refcodecontroller extends Controller
 {
@@ -18,61 +19,59 @@ class Refcodecontroller extends Controller
         $this->middleware('auth');
     }
     public function index(Request $request)
-{
-    if ($request->has('export')) {
-        $rows = DB::table('r_import_refcode')->get();
-        $filePath = storage_path('app/refcode.csv');
-        $file = fopen($filePath, 'w');
+    {
+        if ($request->has('export')) {
+            $rows     = DB::table('r_import_refcode')->get();
+            $filePath = storage_path('app/refcode.csv');
+            $file     = fopen($filePath, 'w');
 
-        // 🔥 ใส่ BOM เพื่อป้องกันภาษาไทยเพี้ยน
-        fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            // 🔥 ใส่ BOM เพื่อป้องกันภาษาไทยเพี้ยน
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
-        // เขียนหัวตาราง
-        fputcsv($file, ["Refcode", "Sitecode", "Office", "Project"]);
+            // เขียนหัวตาราง
+            fputcsv($file, ["Refcode", "Sitecode", "Office", "Project"]);
 
-        // เขียนข้อมูลลงไฟล์
-        foreach ($rows as $row) {
-            fputcsv($file, [
-                $row->refcode,
-                $row->sitecode,
-                $row->office,
-                $row->project
-            ]);
+            // เขียนข้อมูลลงไฟล์
+            foreach ($rows as $row) {
+                fputcsv($file, [
+                    $row->refcode,
+                    $row->sitecode,
+                    $row->office,
+                    $row->project,
+                ]);
+            }
+
+            fclose($file);
+            return response()->download($filePath);
         }
 
-        fclose($file);
-        return response()->download($filePath);
+        // ดึงข้อมูล 50 รายการแรกจากฐานข้อมูล
+        $importrefcode = DB::table('r_import_refcode')->limit(50)->get();
+
+        // เช็คจำนวน Refcode
+        $recordCount = DB::table('r_import_refcode')->count('ref_code');
+
+        return view('user.erp.refcode.home', compact('importrefcode', 'recordCount'));
     }
 
-    // ดึงข้อมูล 50 รายการแรกจากฐานข้อมูล
-    $refcode = DB::table('r_import_refcode')->limit(50)->get();
-
-    // เช็คจำนวน Refcode
-    $count = DB::table('r_import_refcode')->count('refcode');
-
-    return view('refcode.home', compact('refcode', 'count'));
-}
-
-	public function searchRefcode(Request $request)
+    public function searchRefcode(Request $request)
     {
         $refcodeQuery = DB::table('r_import_refcode');
 
         // ตรวจสอบว่ามีค่าค้นหาในแต่ละช่องหรือไม่
-        if ($request->filled('refcode')) {
-            $refcodeQuery->where('refcode', 'like', '%' . $request->input('refcode') . '%');
+        if ($request->filled('project_name')) {
+            $refcodeQuery->where('project_name', 'like', '%' . $request->input('project_name') . '%');
         }
-        if ($request->filled('sitecode')) {
-            $refcodeQuery->where('sitecode', 'like', '%' . $request->input('sitecode') . '%');
+        if ($request->filled('ref_code')) {
+            $refcodeQuery->where('ref_code', 'like', '%' . $request->input('ref_code') . '%');
         }
-        if ($request->filled('office')) {
-            $refcodeQuery->where('office', 'like', '%' . $request->input('office') . '%');
+        if ($request->filled('group_group')) {
+            $refcodeQuery->where('group_group', 'like', '%' . $request->input('group_group') . '%');
         }
-        if ($request->filled('project')) {
-            $refcodeQuery->where('project', 'like', '%' . $request->input('project') . '%');
-        }
+        
 
-        // ถ้าทุกช่องว่าง ให้ดึง 100 รายการแรก
-        if (!$request->hasAny(['refcode', 'sitecode', 'office', 'project'])) {
+        // ถ้าทุกช่องว่าง ให้ดึง 50 รายการแรก
+        if (! $request->hasAny(['project_name', 'ref_code', 'group_group'])) {
             $refcodeQuery->limit(50);
         }
 
@@ -81,121 +80,205 @@ class Refcodecontroller extends Controller
         return response()->json($refcode);
     }
 
+    
+    
     public function importrefcode(Request $request)
-    {
-        $refcode = DB::table('r_import_refcode')->get();
+{
+    $request->validate([
+        'xlsx_file_add' => 'required|file|mimes:xlsx|max:40960', // 20 MB
+    ], [
+        'xlsx_file_add.required' => 'กรุณาเลือกไฟล์ Excel',
+        'xlsx_file_add.mimes'    => 'ไฟล์ต้องเป็น .xlsx เท่านั้น',
+        'xlsx_file_add.max'      => 'ไฟล์ต้องไม่เกิน 40MB',
+    ]);
 
-        $dataToSave = [];
-		
-		ini_set('max_execution_time', 600); // เพิ่มเป็น 5 นาที (300 วินาที)
+    ini_set('max_execution_time', 300); // 5 นาที
 
+    // โหลดไฟล์
+    $file = $request->file('xlsx_file_add')->getRealPath();
+    $zip  = new \ZipArchive;
 
-        //dd($dataToSave);
+    if ($zip->open($file) !== true) {
+        return back()->withErrors(['message' => 'เปิดไฟล์ Excel ไม่ได้']);
+    }
 
-        if ($request->isMethod('post')) {
-            $request->validate([
-                'csv_file_add' => 'required|file|mimes:csv,txt|max:5120',
-            ]);
-            $file = $request->file('csv_file_add');
-            // เปิดไฟล์ CSV
-            if (($handle = fopen($file->getRealPath(), 'r')) !== false) {
-                $isFirstRow = true;
+    // อ่าน sharedStrings.xml
+    $sharedStrings = [];
+    if (($xml = $zip->getStream('xl/sharedStrings.xml'))) {
+        $reader = new \XMLReader();
+        $reader->XML(stream_get_contents($xml));
+        while ($reader->read()) {
+            if ($reader->nodeType == \XMLReader::ELEMENT && $reader->name === 't') {
+                $reader->read();
+                $sharedStrings[] = $reader->value ?? '';
+            }
+        }
+        $reader->close();
+    }
 
-                while (($data = fgetcsv($handle, 300000, ',')) !== false) {
+    // อ่าน sheet1.xml
+    if (! ($xml = $zip->getStream('xl/worksheets/sheet1.xml'))) {
+        return back()->withErrors(['message' => 'ไม่พบ sheet1']);
+    }
 
-                    //dd($data);
+    $reader = new \XMLReader();
+    $reader->XML(stream_get_contents($xml));
 
-                    //เพิ่มมาใหม่
-                    if (empty(array_filter($data))) {
-                        continue;
-                    }
+    $skipHeader = true;
+    $currentRow = [];
+    $dataToInsert = [];
+    $batchSize = 200; // batch size ปลอดภัยสำหรับ MySQL
+    $rowCount = 0;
 
-                    // Read only the first two columns (index 0 and 1)
-                    if (!$isFirstRow) {
-                        $dataToSave[] = [
-                            'refcode' => $data[0], // First column
-                            'sitecode' => $data[1], // Second column
-                            'office' => $data[2], // First column
-                            'project' => $data[3], // Second column
-                        ];
-                    }
-                    $isFirstRow = false;
+    // truncate table ก่อน import
+    DB::table('r_import_refcode')->truncate();
+
+    while ($reader->read()) {
+        if ($reader->nodeType == \XMLReader::ELEMENT && $reader->name === 'row') {
+            $currentRow = [];
+        }
+
+        if ($reader->nodeType == \XMLReader::ELEMENT && $reader->name === 'c') {
+            $cellRef = $reader->getAttribute('r');
+            preg_match('/[A-Z]+/', $cellRef, $colLetters);
+            $colIndex = $this->excelColumnToIndex($colLetters[0]);
+            $type     = $reader->getAttribute('t');
+
+            $reader->read();
+            if ($reader->nodeType == \XMLReader::ELEMENT && $reader->name === 'v') {
+                $reader->read();
+                $value = $reader->value ?? null;
+                if ($type === 's') {
+                    $value = $sharedStrings[(int) $value] ?? null;
                 }
-
-                //dd($dataToSave);
-
-                fclose($handle);
-            } else {
-                return back()->withErrors(['message' => 'ไม่สามารถเปิดไฟล์ CSV']);
+                $currentRow[$colIndex] = $value;
             }
         }
 
-         //dd($refcode, $dataToSave);
-
-        $countDataToSave = count($dataToSave);
-
-       // dd($countDataToSave);
-
-
-        return view('refcode.import', compact('refcode', 'dataToSave','countDataToSave'));
-
-        }
-
-    //SAVE IMPORT Refcode 
-    public function saveAdd(Request $request)
-    {
-        $dataToSave = json_decode($request->data_add, true);
-
-        // ดึงข้อมูล refcode จากฐานข้อมูล
-        $refcode = DB::table('r_import_refcode')->get();
-
-
-        // เริ่มต้น transaction
-        DB::beginTransaction();
-
-        // ตรวจสอบว่า $dataToSave เป็น array และมีข้อมูล
-        if (!is_array($dataToSave)) {
-            return redirect('/addrefcode')->withErrors(['error' => 'ข้อมูลไม่ถูกต้องหรือไม่มีข้อมูลที่จะบันทึก']);
-        }
-
-        // Loop ผ่านแต่ละแถวใน $dataToSave
-        $newData = []; // สำหรับเก็บข้อมูลที่ไม่ซ้ำกัน
-        foreach ($dataToSave as $row) {
-            // เช็คว่า refcode ซ้ำหรือไม่
-            $matched = false;
-            foreach ($refcode as $item) {
-                if ($item->refcode === $row['refcode']) {
-                    $matched = true;
-                    break;
-                }
+        if ($reader->nodeType == \XMLReader::END_ELEMENT && $reader->name === 'row') {
+            if ($skipHeader) {
+                $skipHeader = false;
+                continue;
             }
 
-            // ถ้า refcode ไม่ซ้ำกัน ก็เพิ่มข้อมูลใหม่
-            if (!$matched) {
-                $newData[] = [
-                    'refCode' => $row['refcode'],
-                    'sitecode' => $row['sitecode'],
-                    'office' => $row['office'], 
-                    'project' => $row['project']        
-                    // เพิ่มคอลัมน์อื่นๆ ตามที่ต้องการ
-                ];
+            if (empty($currentRow)) continue;
+
+            // เตรียมช่องว่างให้ครบ 66 คอลัมน์ (0–65)
+            for ($i=0; $i<=65; $i++) {
+                $currentRow[$i] = $currentRow[$i] ?? null;
             }
-        }
 
-        //dd($newData);
+            // Mapping row
+            $mappedRow = [
+                'no'                  => $currentRow[0],
+                'project_no'          => $currentRow[1],
+                'project_name'        => $currentRow[2],
+                'ref_code'            => $currentRow[3],
+                'project_type'        => $currentRow[4],
+                'construction_status' => $currentRow[5],
+                'active_y_n'          => $currentRow[6],
+                'unit_type'           => $currentRow[7],
+                'owner'               => $currentRow[8],
+                'item'                => $currentRow[9],
+                'currency'            => $currentRow[10],
+                'budget_contract'     => $currentRow[11],
+                'group_group'         => $currentRow[12],
+                'control_budget'      => $currentRow[13],
+                'control_boq'         => $currentRow[14],
+                'project_contract'    => $currentRow[15],
+                'gl_ic'               => $currentRow[16],
+                'ac_ic_control'       => $currentRow[17],
+                'ac_ic_secondary'     => $currentRow[18],
+                'sale'                => $currentRow[19],
+                'project_manager'     => $currentRow[20],
+                'engineer'            => $currentRow[21],
+                'project_director'    => $currentRow[22],
+                'section_director'    => $currentRow[23],
+                'division_director'   => $currentRow[24],
+                'approve_bg'          => $currentRow[25],
+                'signing_no'          => $currentRow[26],
+                'amount'              => $currentRow[27],
+                'proj_budget'         => $currentRow[28],
+                'add_by'              => $currentRow[29],
+                'add_date'            => $currentRow[30],
+                'edit_by'             => $currentRow[31],
+                'edit_date'           => $currentRow[32],
+                'unit_re'             => $currentRow[33],
+                'runproject'          => $currentRow[34],
+                'hpre_event'          => $currentRow[35],
+                'proc2'               => $currentRow[36],
+                'proc3'               => $currentRow[37],
+                'proc4'               => $currentRow[38],
+                'proc5'               => $currentRow[39],
+                'pre_des_s'           => $currentRow[40],
+                'bank_code'           => $currentRow[41],
+                'pr_empno'            => $currentRow[42],
+                'projcenter'          => $currentRow[43],
+                'projno'              => $currentRow[44],
+                'projdate'            => $currentRow[45],
+                'projyear'            => $currentRow[46],
+                'totadd'              => $currentRow[47],
+                'areaqty'             => $currentRow[48],
+                'unitcode'            => $currentRow[49],
+                'unitstatus'          => $currentRow[50],
+                'revno'               => $currentRow[51],
+                'salecode'            => $currentRow[52],
+                'acvat'               => $currentRow[53],
+                'book2_no'            => $currentRow[54],
+                'book2'               => $currentRow[55],
+                'pre_thi'             => $currentRow[56],
+                'customer_code'       => $currentRow[57],
+                'plugin'              => $currentRow[58],
+                'type_code'           => $currentRow[59],
+                'area'                => $currentRow[60],
+                'allocate_status'     => $currentRow[61],
+                'projname2'           => $currentRow[62],
+                'sec_empno'           => $currentRow[63],
+                'div_empno'           => $currentRow[64],
+                'proj_location'       => $currentRow[65],
+            ];
 
-        // ถ้ามีข้อมูลที่ไม่ซ้ำกันให้ทำการบันทึก
-        if (count($newData) > 0) {
-            // Insert ข้อมูลที่ไม่ซ้ำ
-            DB::table('r_import_refcode')->insert($newData);
-            // Commit การทำธุรกรรม
-            DB::commit();
-            return redirect('refcode/home')->with('success', 'บันทึกข้อมูลสำเร็จ');
-        } else {
-            // ถ้าไม่มีข้อมูลใหม่ให้บันทึก
-            DB::rollBack(); // ยกเลิกการทำธุรกรรม
-            return redirect('refcode/home')->withErrors(['error' => 'ข้อมูล Refcode ซ้ำกัน']);
+            $dataToInsert[] = $mappedRow;
+            $rowCount++;
+
+            if (count($dataToInsert) >= $batchSize) {
+                DB::table('r_import_refcode')->insert($dataToInsert);
+                $dataToInsert = [];
+            }
         }
     }
+
+    // insert batch สุดท้าย
+    if (!empty($dataToInsert)) {
+        DB::table('r_import_refcode')->insert($dataToInsert);
+    }
+
+    $reader->close();
+    $zip->close();
+
+    // 🚀 สั่ง Sync ข้อมูลสรุปทันที (เรียก Static Function)
+        // วิธีนี้จะไม่ทำให้เกิด Error "No active transaction" เพราะข้างในมี DB::transaction แยกอยู่แล้ว
+    Paymentcontroller::refreshTimelineData();
+
+    return back()->with('success', "นำเข้าข้อมูลทั้งหมจำนวน {$rowCount} เรียบร้อยแล้ว");
+}
+
+
+
+/**
+ * แปลง column letter → index
+ * เช่น A=0, B=1, Z=25, AA=26, AB=27 ...
+ */
+
+    private function excelColumnToIndex($letters)
+    {
+        $letters = str_split($letters);
+        $index   = 0;
+        foreach ($letters as $char) {
+            $index = $index * 26 + (ord($char) - ord('A') + 1);
+        }
+        return $index - 1;
+    }
+
 
 }

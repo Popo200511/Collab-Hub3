@@ -1,4 +1,4 @@
-@extends('layouts.Tailwind')
+@extends('layouts.user')
 
 @section('title', 'PO หรือ Purchase Order ใบสั่งซื้อ')
 
@@ -14,6 +14,17 @@
 
 <!-- Export To Excel -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<!-- Hover สำหรับ Filter -->
+<style>
+    .filter-active i {
+        color: #60a5fa !important;
+    }
+
+    thead th:hover .filter-icon:not(.filter-active) i {
+        color: #93c5fd;
+    }
+</style>
 
 <style>
     body {
@@ -54,10 +65,10 @@
 <!-- Container for temporary messages (e.g., error notification) -->
 <div id="messageContainer" class="fixed top-5 right-5 z-50"></div>
 
-<div id="app" class="mx-auto bg-white shadow-2xl rounded-2xl p-6 md:p-10 h-[900px]">
+<div id="app" class="mx-auto bg-white shadow-2xl rounded-2xl p-6 md:p-10 h-[730px]">
 
     <!-- Header -->
-    <header class="mb-8 border-b-2 border-indigo-100 pb-4 flex justify-between items-center flex-wrap gap-4">
+    <header class="mb-5 border-b-2 border-indigo-100 pb-4 flex justify-between items-center flex-wrap gap-4">
         <div>
             <h1 class="text-header">จัดการใบสั่งซื้อ (Purchase Order)</h1>
             <p class="text-gray-500 mt-1">รายการทั้งหมดและรายละเอียด PO ที่ถูกบันทึกในระบบ</p>
@@ -95,63 +106,71 @@
                         <tr>
 
                             <!-- 1. PO No. Filter -->
-                            <th
-                                class="w-1/5 px-4 py-2 text-left text-xs font-extrabold uppercase tracking-wider rounded-tl-xl relative">
-                                <div class="relative inline-flex items-center space-x-2" data-column="po_no">
-                                    <span>PO No.</span>
-                                    <button data-column="po_no" onclick="toggleFilterDropdown('po_no')"
-                                        class="filter-btn-po_no text-white hover:text-yellow-300 p-1 rounded-full transition duration-150">
-                                        <i class="fas fa-chevron-down text-xs"></i>
-                                    </button>
+                            <th class="whitespace-nowrap text-center border-b border-blue-900">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="tracking-wide font-sarabun text-xs text-white/90">PO No.</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        onclick="toggleFilterDropdown('po_no')" data-col="po_no">
+                                        <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                    </span>
                                 </div>
                             </th>
 
+
                             <!-- 2. Customer Name Filter -->
-                            <th
-                                class="w-2/5 px-4 py-2 text-left text-xs font-extrabold uppercase tracking-wider relative">
-                                <div class="relative inline-flex items-center space-x-2" data-column="customer_name">
-                                    <span>Customer Name</span>
-                                    <button data-column="customer_name" onclick="toggleFilterDropdown('customer_name')"
-                                        class="filter-btn-customer_name text-white hover:text-yellow-300 p-1 rounded-full transition duration-150">
-                                        <i class="fas fa-chevron-down text-xs"></i>
-                                    </button>
+                            <th class="whitespace-nowrap text-center border-b border-blue-900">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="tracking-wide font-sarabun text-xs text-white/90">Customer Name</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        onclick="toggleFilterDropdown('customer_name')" data-col="customer_name">
+                                        <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                    </span>
                                 </div>
                             </th>
 
                             <!-- 3. PO Date Filter -->
-                            <th
-                                class="w-1/5 px-4 py-2 text-left text-xs font-extrabold uppercase tracking-wider relative">
-                                <div class="relative inline-flex items-center space-x-2" data-column="po_date">
-                                    <span>PO Date</span>
-                                    <button data-column="po_date" onclick="toggleFilterDropdown('po_date')"
-                                        class="filter-btn-po_date text-white hover:text-yellow-300 p-1 rounded-full transition duration-150">
-                                        <i class="fas fa-chevron-down text-xs"></i>
-                                    </button>
+                            <th class="whitespace-nowrap text-center border-b border-blue-900">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="tracking-wide font-sarabun text-xs text-white/90">PO Date</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        onclick="toggleFilterDropdown('po_date')" data-col="po_date">
+                                        <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                    </span>
                                 </div>
                             </th>
 
                             <!-- 4. Total Amount Filter -->
-                            <th
-                                class="w-1/5 px-4 py-2 text-right text-xs font-extrabold uppercase tracking-wider relative">
-                                <div class="relative inline-flex items-center space-x-2" data-column="total_amount">
-                                    <span>Total Amount</span>
-                                    <button data-column="total_amount" onclick="toggleFilterDropdown('total_amount')"
-                                        class="filter-btn-total_amount text-white hover:text-yellow-300 p-1 rounded-full transition duration-150">
-                                        <i class="fas fa-chevron-down text-xs"></i>
-                                    </button>
+                            <th class="whitespace-nowrap text-center border-b border-blue-900">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="tracking-wide font-sarabun text-xs text-white/90">Total Amount</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        onclick="toggleFilterDropdown('total_amount')" data-col="total_amount">
+                                        <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                    </span>
                                 </div>
                             </th>
 
                             <!-- 5. Balanced Amount Filter -->
+
                             <th
                                 class="w-1/5 px-4 py-2 text-right text-xs font-extrabold uppercase tracking-wider rounded-tr-xl relative">
-                                <div class="relative inline-flex items-center space-x-2" data-column="balanced_amount">
-                                    <span>Balanced Amount</span>
-                                    <button data-column="balanced_amount"
-                                        onclick="toggleFilterDropdown('balanced_amount')"
-                                        class="text-white hover:text-yellow-300 p-1 rounded-full transition duration-150">
-                                        <i class="fas fa-chevron-down text-xs"></i>
-                                    </button>
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="tracking-wide font-sarabun text-xs text-white/90">Balanced
+                                        Amount</span>
+
+                                    <span
+                                        class="filter-icon cursor-pointer inline-flex items-center opacity-60 group-hover:opacity-100 transition-opacity"
+                                        onclick="toggleFilterDropdown('balanced_amount')" data-col="balanced_amount">
+                                        <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                    </span>
                                 </div>
                             </th>
                         </tr>
@@ -168,38 +187,59 @@
             </p>
 
             <div id="listViewPagination"
-                class="mt-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 p-4 bg-gray-50 rounded-b-xl border border-t-0 border-gray-200">
-                <!-- Row Count Dropdown -->
-                <div class="flex items-center space-x-3">
-                    <label for="rowsPerPage" class="text-sm font-medium text-gray-600">แสดงรายการ:</label>
-                    <select id="rowsPerPageList" onchange="changeRowsPerPage(this.value)"
-                        class="py-2 px-4 border border-gray-300 rounded-lg text-sm font-semibold bg-white cursor-pointer shadow-sm transition duration-150 hover:border-indigo-400 focus:ring-indigo-500 focus:border-indigo-500 appearance-none">
-                        <option value="5">5 แถว</option>
-                        <option value="10" selected>10 แถว</option>
-                        <option value="20">20 แถว</option>
-                    </select>
+                class="mt-4 flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0 p-5 bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-300">
+
+                <div class="flex items-center space-x-3 order-2 lg:order-1">
+                    <label for="rowsPerPageList"
+                        class="font-sarabun text-xs font-medium tracking-wide text-gray-600">แสดงรายการ:</label>
+                    <div class="relative">
+                        <select id="rowsPerPageList" onchange="changeRowsPerPage(this.value)"
+                            class="block py-2 pl-4 pr-10 border border-gray-200 rounded-xl text-xs font-sarabun bg-gray-50 cursor-pointer appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                            <option value="10" selected>10 รายการ</option>
+                            <option value="20">20 รายการ</option>
+                        </select>
+                        {{-- Custom Arrow Icon --}}
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Pagination -->
-                <nav class="flex items-center space-x-1" aria-label="Pagination">
+                <nav class="flex items-center space-x-2 order-1 lg:order-2" aria-label="Pagination">
+                    {{-- Previous Button --}}
                     <button id="prevPageBtnList" onclick="goToPage(currentPage - 1)"
-                        class="pagination-btn p-3 rounded-full text-indigo-600 hover:bg-indigo-100 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-                        < </button>
+                        class="pagination-btn group flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none shadow-sm">
+                        <i
+                            class="fa-solid fa-chevron-left text-xs transition-transform group-hover:-translate-x-0.5"></i>
+                    </button>
 
-                            <div id="pageNumbersList" class="flex space-x-1">
-                                <!-- Page buttons -->
-                            </div>
+                    {{-- Page Numbers Container --}}
+                    <div id="pageNumbersList" class="flex items-center space-x-1">
+                        {{-- ตัวอย่างปุ่ม Active --}}
+                        <button
+                            class="w-10 h-10 rounded-xl bg-indigo-600 text-white font-sarabun text-sm shadow-md shadow-indigo-200">1</button>
+                        <button
+                            class="w-10 h-10 rounded-xl bg-white text-gray-600 font-sarabun text-sm hover:bg-indigo-50 transition-all">2</button>
+                        <button
+                            class="w-10 h-10 rounded-xl bg-white text-gray-600 font-sarabun text-sm hover:bg-indigo-50 transition-all">3</button>
+                    </div>
 
-                            <button id="nextPageBtnList" onclick="goToPage(currentPage + 1)"
-                                class="pagination-btn p-3 rounded-full text-indigo-600 hover:bg-indigo-100 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-                                >
-                            </button>
+                    {{-- Next Button --}}
+                    <button id="nextPageBtnList" onclick="goToPage(currentPage + 1)"
+                        class="pagination-btn group flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none shadow-sm">
+                        <i
+                            class="fa-solid fa-chevron-right text-xs transition-transform group-hover:translate-x-0.5"></i>
+                    </button>
                 </nav>
 
-                <!-- Status/Summary Text -->
-                <span id="paginationSummaryList" class="text-sm text-gray-600">
-                    แสดง 1-10 จากทั้งหมด 15 รายการ
-                </span>
+                <div class="order-3 text-right">
+                    <span id="paginationSummaryList"
+                        class="text-xs font-sarabun text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
+                        แสดง <span class="text-indigo-600 font-sarabun">1-10</span> จากทั้งหมด <span
+                            class="text-gray-900 font-sarabun">15</span> รายการ
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -207,7 +247,7 @@
 
 
 
-    <!-- 2. PO Detail View (Show) -->
+    <!-- 2. ตาราง PO Detail View (Show) -->
     <div id="showView" class="view-section hidden">
 
         <div class="flex items-center justify-between mb-6">
@@ -266,7 +306,7 @@
         </div>
 
 
-        <!-- PO Items Detail Table -->
+        <!--ตาราง PO Items Detail Table -->
         <h3 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-green-500 pl-3">รายการสินค้า/บริการ
         </h3>
         <div class="overflow-x-auto rounded-xl shadow-lg border border-gray-200">
@@ -352,51 +392,93 @@
 
 </div>
 
-<!-- Modal for Column Filter -->
-<div id="column-filter-modal" class="fixed inset-0 hidden bg-transparent z-50" onclick="closeColumnFilterModal()">
+<!-- ก้อน Filter ที่ใช้ทุกคอลั่ม -->
+<div id="column-filter-modal" class="fixed inset-0 z-[9999] hidden bg-transparent">
     <div id="column-filter-content" onclick="event.stopPropagation()"
-        class="shadow-2xl bg-white rounded-xl flex flex-col w-[300px] absolute border border-gray-100">
+        class="shadow-2xl bg-white rounded-xl flex flex-col w-[300px] h-[450px] absolute border border-gray-100">
 
-        <div class="px-4 pt-4 pb-2 border-b border-gray-100 text-sm font-semibold text-gray-600">
-            <span id="modal-column-name" class="font-extrabold text-gray-800">Column</span>
+
+        <div class="px-2 pt-2">
+            <button type="button" onclick="clearColumnFilterExcel()"
+                class="w-full flex items-center gap-3 px-3 py-2 text-xs font-sarabun text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all group">
+                <div class="w-7 h-7 flex items-center justify-center bg-slate-100 group-hover:bg-red-100 rounded-lg">
+                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                </div>
+                <span>Clear Filter from this column</span>
+            </button>
         </div>
 
+        <div class="px-2 pt-2">
+            <button type="button" onclick="clearAllTableFilters()"
+                class="w-full flex items-center gap-3 px-3 py-2 text-xs font-sarabun text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all group">
+                <div class="w-7 h-7 flex items-center justify-center bg-slate-100 group-hover:bg-red-100 rounded-lg">
+                    <i class="fa-solid fa-broom"></i>
+                </div>
+                <span>Clear Filter from all columns</span>
+            </button>
+        </div>
+
+
+
+        <!-- Selection and Sorting Controls -->
+        <div class="px-4 pt-3 pb-2 border-b border-gray-100">
+            <!-- Select / Deselect All -->
+            <div class="flex justify-between space-x-2 mb-3">
+                <button type="button" id="selectAllFilter" onclick="selectAll()"
+                    class="w-1/2 text-xs font-sarabun text-center bg-green-300 hover:bg-green-400 text-gray-800 rounded py-1">
+                    Select All
+                </button>
+                <button type="button" id="deselectAllFilter" onclick="deselectAll()"
+                    class="w-1/2 text-xs font-sarabun text-center bg-red-300 hover:bg-red-400 text-gray-800 rounded py-1">
+                    Deselect All
+                </button>
+            </div>
+
+            <!-- Sort Buttons -->
+            <div class="flex justify-between space-x-2">
+                <button type="button" onclick="sortAZ()"
+                    class="w-1/2 text-xs font-sarabun text-center bg-gray-200 hover:bg-gray-300 text-gray-700 rounded py-1">
+                    <i data-lucide="arrow-down-a-to-z" class="w-3.5 h-3.5"></i>
+                    <span>Sort A &rarr; Z</span>
+                </button>
+                <button type="button" onclick="sortZA()"
+                    class="w-1/2 text-xs font-sarabun text-center bg-gray-200 hover:bg-gray-300 text-gray-700 rounded py-1">
+                    <i data-lucide="arrow-up-z-to-a" class="w-3.5 h-3.5"></i>
+                    <span>Sort Z &rarr; A</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Input -->
         <div class="px-4 py-3 border-b border-gray-100">
             <div class="relative">
-                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                <input type="text" id="column-filter-search" placeholder="Search values..."
+                <i data-lucide="search"
+                    class="fa-solid fa-magnifying-glass w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+                <input type="text" id="column-filter-search" placeholder=""
                     class="pl-9 pr-3 w-full h-9 outline-none bg-gray-50 border border-gray-200 rounded-lg text-sm transition-all focus:border-blue-400 focus:bg-white"
-                    oninput="handleSearch(this.value)">
+                    oninput="handleSearch(this.value)" onkeydown="handleSearchEnter(event)">
             </div>
         </div>
 
-        <div class="px-4 pt-3 pb-2 border-b border-gray-100">
-            <div class="flex justify-between space-x-2 mb-3">
-                <button type="button" onclick="selectAll()"
-                    class="w-1/2 text-xs text-center bg-green-300 hover:bg-green-400 text-gray-800 rounded py-1">Select All</button>
-                <button type="button" onclick="deselectAll()"
-                    class="w-1/2 text-xs text-center bg-red-300 hover:bg-red-400 text-gray-800 rounded py-1">Deselect All</button>
-            </div>
+        <!-- Checkbox List -->
+        <div id="column-filter-checkbox-list" class="overflow-y-auto font-sarabun px-4 py-2 text-sm max-h-60 flex-grow">
+            <!-- Checkboxes generated by JS -->
         </div>
 
-        <div id="column-filter-checkbox-list" class="overflow-y-auto px-4 py-2 text-sm max-h-60 flex-grow"></div>
-
+        <!-- Apply / Cancel Footer -->
         <div class="flex justify-end space-x-2 border-t px-4 py-3 bg-gray-50 rounded-b-xl">
             <button type="button" onclick="applyColumnFilter()"
-                class="bg-blue-600 text-white px-4 py-2 text-xs rounded-lg font-semibold hover:bg-blue-700 transition shadow-md">Apply</button>
+                class="bg-blue-600 text-white px-4 py-2 text-xs rounded-lg font-sarabun hover:bg-blue-700 transition shadow-md">OK</button>
             <button type="button" onclick="closeColumnFilterModal()"
-                class="bg-white border border-gray-300 text-gray-700 px-4 py-2 text-xs rounded-lg font-semibold hover:bg-gray-100 transition shadow-sm">Cancel</button>
+                class="bg-white border border-gray-300 text-gray-700 px-4 py-2 text-xs rounded-lg font-sarabun hover:bg-gray-100 transition shadow-sm">Cancel</button>
         </div>
     </div>
 </div>
 
 
-
-
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
+<!-- ฟังชั่น Filter  -->
 <script>
-let currentColumn = null;
+    let currentColumn = null;
 let allValues = [];
 let filterState = {};           // filtered / closed / open
 let filterStateValues = {};     // เก็บค่า checkbox ที่เลือกแต่ละ column
@@ -405,12 +487,23 @@ let tempSelected = []; // เก็บค่าที่ติ๊กก่อน
 
 // เปิด modal
 function toggleFilterDropdown(column) {
+    const modal = document.getElementById("column-filter-modal");
+
+    // ถ้าเปิดอยู่ และกดคอลัมน์เดิม → ปิด
+    if (!modal.classList.contains("hidden") && currentColumn === column) {
+        closeColumnFilterModal();
+        return;
+    }
+
     currentColumn = column;
+
     loadColumnValues(column);
     showColumnFilterModal(column, allValues);
 
     const btn = document.querySelector(`button[data-column="${column}"]`);
-    btn.innerHTML = `<i class="fas fa-chevron-up"></i>`;
+    if (btn) {
+        btn.innerHTML = `<i class="fi fi-br-bars-filter"></i>`;
+    }
 }
 
 function showColumnFilterModal(column, values) {
@@ -531,13 +624,34 @@ function filterAllColumns() {
 
 
 // Search
-function handleSearch(val) {
-    const checkboxes = document.querySelectorAll('#column-filter-checkbox-list div');
-    checkboxes.forEach(div => {
-        const label = div.querySelector('label').textContent.toLowerCase();
-        div.style.display = label.includes(val.toLowerCase()) ? 'flex' : 'none';
+function handleSearch(text) {
+    const keyword = text.toLowerCase().trim();
+    const wrappers = document.querySelectorAll("#column-filter-checkbox-list > div");
+
+    wrappers.forEach(wrapper => {
+        const label = wrapper.querySelector("label");
+        const value = label.textContent.toLowerCase();
+
+        if (value.includes(keyword)) {
+            wrapper.style.display = "flex";
+        } else {
+            wrapper.style.display = "none";
+        }
     });
 }
+
+        function handleSearchEnter(e) {
+            if (e.key === "Enter") {
+                e.preventDefault(); // กัน form submit (ถ้ามี)
+                applyColumnFilter(); // = กด OK
+            }
+        }
+
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape") {
+                closeColumnFilterModal();
+            }
+        });
 
 // Select/Deselect All
 function selectAll() {
@@ -565,6 +679,8 @@ function updateColumnIcon(column) {
 }
 
 </script>
+
+
 
 
 
@@ -752,7 +868,6 @@ function renderPODetail(poId) {
 }
 
 </script>
-
 
 
 
