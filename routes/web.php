@@ -62,6 +62,9 @@ Route::get('user/project/projectview_83', [UserProjectDatabasescontroller::class
 Route::post('user/permissions/save/83/{project_code}', [UserProjectDatabasescontroller::class, 'save83'])->name('permissions.save_83');
 // Inline update for collab_newjob
 Route::post('user/newjob/inline-update83', [UserProjectDatabasescontroller::class, 'inlineUpdate83'])->name('newjob.inlineUpdate_83');
+// Route สำหรับดึงตัวเลือกฟิลเตอร์แบบไดนามิก
+Route::get('/83/filter-options/{column}', [UserProjectDatabasescontroller::class, 'getFilterOptions83'])
+    ->name('project83.filter_options');
 
 // Project Databases 85
 Route::get('user/project/projectview_85', [UserProjectDatabasescontroller::class, 'project85'])->name('project.projectview_85');

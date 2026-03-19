@@ -392,13 +392,13 @@ class UserProjectDatabasescontroller extends Controller
         $projectRole = DB::table('collab_user_permissions83')
             ->where('user_id', Auth::id())
             ->value('project_role');
+            
 
         $total = DB::table('collab_table_project83')->count();
 
-        // ดึงทั้งหมด
-        $perPage = DB::table('collab_table_project83')->get()->count();
-
+        // ✅ ค่าเริ่มต้นตอนเข้าเว็บครั้งแรก = 10 รายการ
         $perPage = request()->get('per_page', 10);
+
 
         // กันค่ามั่ว
         if (!is_numeric($perPage) || $perPage <= 0) {
@@ -647,7 +647,57 @@ class UserProjectDatabasescontroller extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+        
     }
+
+    public function getFilterOptions83($column)
+{
+    $userStatus = Auth::user()->status;
+    $projectRole = DB::table('collab_user_permissions83')
+        ->where('user_id', Auth::id())
+        ->value('project_role');
+    
+    // ✅ Whitelist คอลัมน์ที่อนุญาต
+    $allowedColumns = [
+        'Refcode_PJ', 'Site_Code_PJ','Job Description', 'Office_Code_PJ', 'Customer_Region_PJ',
+        'Estimated_Revenue_PJ', 'Estimated_Service_Cost_PJ',
+        'Estimated_Material_Cost_PJ', 'Estimated_Transportation_Cost_PJ',
+        'Estimated_Other_Cost_PJ', 'Estimated_Gross_Profit_PJ',
+        'Estimated_Gross_ProfitMargin_PJ'
+    ];
+    
+    // เพิ่ม col1-col50
+    for ($i = 1; $i <= 50; $i++) {
+        $allowedColumns[] = 'col' . $i;
+    }
+    
+    if (!in_array($column, $allowedColumns)) {
+        return response()->json(['values' => []], 400);
+    }
+    
+    try {
+        // ✅ ดึงค่าที่ไม่ซ้ำจากฐานข้อมูล (เคารพสิทธิ์ผู้ใช้)
+        $values = DB::table('collab_table_project83')
+            ->when(! in_array($projectRole, ['Admin', 'Project Manager']), function ($q) use ($userStatus) {
+                $q->where('Office_Code_PJ', $userStatus);
+            })
+            ->whereNotNull($column)
+            ->where($column, '!=', '')
+            ->distinct()
+            ->pluck($column)
+            ->filter(fn($v) => $v !== null && trim((string)$v) !== '')
+            ->map(fn($v) => (string) $v) // ✅ แปลงเป็น String ทั้งหมด
+            ->values()
+            ->toArray();
+        
+        return response()->json(['values' => $values]);
+        
+    } catch (\Exception $e) {
+        \Log::error('Filter Options Error: ' . $e->getMessage());
+        return response()->json(['values' => []], 200);
+    }
+}
+    
 
 
 
