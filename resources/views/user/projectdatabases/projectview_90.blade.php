@@ -473,7 +473,7 @@
 
 
             <div id="permissionModal"
-                class="fixed inset-0 z-[500] hidden bg-black bg-opacity-50 flex items-center justify-center ">
+                class="fixed inset-0 z-[9999] hidden bg-black bg-opacity-50 flex items-center justify-center ">
                 <div class="bg-white w-full max-w-[1200px] h-[80vh] rounded-xl shadow-lg overflow-hidden flex flex-col">
 
                     <!-- Header -->
@@ -1881,11 +1881,11 @@
                         </tr>
                     </thead>
 
-
+                    
                     <tbody id="tableBody" class="text-xs [&_input]:text-xs">
 
-                        @foreach ($projectData as $item)
-                        <tr class="group bg-white hover:bg-red-100 transition-colors font-sarabun duration-200 text-xs">
+                        @foreach ($projectData as $index => $item)
+                        <tr class="group bg-white hover:bg-red-100 transition-colors font-sarabun duration-200 text-xs" style="{{ $index >= 10 ? 'display:none;' : '' }}">
 
                             {{-- Refcode --}}
                             <td data-col="Refcode_PJ"
@@ -2101,117 +2101,89 @@
             </div>
         </div>
 
+        <!-- ✅ 1. ซ่อน Laravel Pagination (เก็บไว้เป็น backup) -->
         <div id="listViewPagination"
+            class="mt-4 p-4 sm:p-5 bg-white rounded-xl border border-gray-200 shadow-sm" 
+            style="display:none;">
+            <!-- เนื้อหาเดิมของ Laravel Pagination (ไม่ต้องลบ) -->
+        </div>
+
+        <!-- ✅ 2. Client-Side Pagination (ย้ายออกมาอยู่นอก) -->
+        <div id="clientPagination"
             class="mt-4 p-4 sm:p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
-
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-
-                {{-- Left: Rows per page --}}
-                    <div class="flex items-center gap-2">
-                        <!-- Label with Icon -->
-                        <label class="flex items-center gap-1.5 text-xs font-sarabun font-medium text-gray-600 whitespace-nowrap">
-                            <i class="fa-solid fa-list-ul text-indigo-400"></i>
-                            แสดงรายการ:
-                        </label>
-
-                        @php
-                            $total = $projectData->total();
-                            $baseOptions = [10, 20, 50, 100];
-                            $options = array_filter($baseOptions, fn($v) => $v < $total);
-                            $options[] = $total;
-                        @endphp
-
-                        <!-- Custom Select Container -->
-                        <div class="relative group">
-                            @php
-                                $query = request()->except(['per_page','page']);
-                            @endphp
-
-                            <select 
-                            onchange="window.location='{{ request()->url() }}?{{ http_build_query($query) }}&per_page='+this.value+'&page=1'"
-                            class="appearance-none py-2 pl-3 pr-8 border border-gray-200 rounded-xl text-xs font-sarabun font-medium
-                            bg-white text-gray-700 cursor-pointer min-w-[80px] text-center
-                            hover:border-indigo-300 hover:bg-indigo-50/50
-                            focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500
-                            transition-all duration-300 shadow-sm hover:shadow-md">
-                                
-                                @foreach($options as $size)
-                                    <option value="{{ $size }}"
-                                        {{ $projectData->perPage() == $size ? 'selected' : '' }}>
-                                        {{ $size == $total ? 'ทั้งหมด ('.$total.')' : $size }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            
-                            <!-- Custom Dropdown Arrow -->
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-                                <i class="fa-solid fa-chevron-down text-[9px] text-gray-400 
-                                        group-hover:text-indigo-500 transition-colors"></i>
-                            </div>
+                
+                <!-- Left: Rows per page -->
+                <div class="flex items-center gap-2">
+                    <label class="flex items-center gap-1.5 text-xs font-sarabun font-medium text-gray-600 whitespace-nowrap">
+                        <i class="fa-solid fa-list-ul text-indigo-400"></i>
+                        แสดงรายการ:
+                    </label>
+                    <div class="relative group">
+                        <select id="rowsPerPageList"
+                                onchange="changeRowsPerPage(this.value)"
+                                class="appearance-none py-2 pl-3 pr-8 border border-gray-200 rounded-xl text-xs font-sarabun font-medium
+                                    bg-white text-gray-700 cursor-pointer min-w-[80px] text-center
+                                    hover:border-indigo-300 hover:bg-indigo-50/50
+                                    focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500
+                                    transition-all duration-300 shadow-sm hover:shadow-md">
+                            <option value="10" selected>10 รายการ</option>
+                            <option value="20">20 รายการ</option>
+                            <option value="50">50 รายการ</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                            <i class="fa-solid fa-chevron-down text-[9px] text-gray-400
+                                    group-hover:text-indigo-500 transition-colors"></i>
                         </div>
                     </div>
-
-                {{-- Center: Pagination --}}
+                </div>
+                
+                <!-- Center: Pagination Buttons -->
                 <nav class="flex items-center gap-1.5">
-
-                    {{-- Previous --}}
-                    @if ($projectData->onFirstPage())
-                        <button disabled
-                            class="w-9 h-9 rounded-xl border opacity-30">
-                            <i class="fa-solid fa-chevron-left text-xs"></i>
-                        </button>
-                    @else
-                        <a href="{{ $projectData->previousPageUrl() }}"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
-                            <i class="fa-solid fa-chevron-left text-xs"></i>
-                        </a>
-                    @endif
-
-
-                    {{-- Page Numbers --}}
-                    @for ($i = 1; $i <= $projectData->lastPage(); $i++)
-                        <a href="{{ $projectData->url($i) }}"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl text-xs
-                            {{ $projectData->currentPage() == $i
-                                ? 'bg-indigo-600 text-white'
-                                : 'bg-white text-gray-600 border hover:bg-indigo-50' }}">
-                            {{ $i }}
-                        </a>
-                    @endfor
-
-
-                    {{-- Next --}}
-                    @if ($projectData->hasMorePages())
-                        <a href="{{ $projectData->nextPageUrl() }}"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </a>
-                    @else
-                        <button disabled
-                            class="w-9 h-9 rounded-xl border opacity-30">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </button>
-                    @endif
-
+                    <button id="prevPageBtnList" 
+                            onclick="goToPage(tables.main.currentPage - 1)"
+                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition
+                                disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-600">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    </button>
+                    
+                    <!-- ✅ Pre-render Page Numbers ด้วย PHP -->
+                    <div id="pageNumbersList" class="flex items-center gap-1.5">
+                        @php
+                            $totalRows = $projectData->total();
+                            $rowsPerPage = 10;
+                            $totalPages = max(1, ceil($totalRows / $rowsPerPage));
+                        @endphp
+                        @for ($i = 1; $i <= $totalPages; $i++)
+                            <button onclick="goToPage({{ $i }})"
+                                    class="w-10 h-10 rounded-xl font-sarabun text-sm transition-all {{ $i === 1 ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-indigo-50' }}">
+                                {{ $i }}
+                            </button>
+                        @endfor
+                    </div>
+                    
+                    <button id="nextPageBtnList" 
+                            onclick="goToPage(tables.main.currentPage + 1)"
+                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition
+                                disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-600">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
                 </nav>
-
-                {{-- Right: Summary --}}
+                
+                <!-- Right: Summary -->
                 <div>
-                    <span class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full">
-                        แสดง
-                        <span class="text-indigo-600 font-semibold">
-                            {{ $projectData->firstItem() }}-{{ $projectData->lastItem() }}
-                        </span>
-                        จากทั้งหมด
-                        <span class="font-semibold">
-                            {{ $projectData->total() }}
-                        </span>
-                        รายการ
+                    <span class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full" id="paginationSummaryList">
+                        <!-- ✅ Pre-render ด้วย PHP -->
+                        @php
+                            $start = 1;
+                            $end = min($rowsPerPage, $totalRows);
+                        @endphp
+                        แสดง <span class="text-indigo-600 font-semibold">{{ $start }}-{{ $end }}</span>
+                        จากทั้งหมด <span class="font-semibold">{{ $totalRows }}</span> รายการ
                     </span>
                 </div>
-
             </div>
-        </div>
+        </div>   
     </div>
 
 </main>
@@ -2960,8 +2932,6 @@ function handleSearch(text) {
 }
 
 
-
-
 let permissionTableInited = false;
 
 function openPermissionModal() {
@@ -2976,23 +2946,26 @@ function openPermissionModal() {
 }
 
 
-
 function initTable(tableKey) {
     const t = tables[tableKey];
     const rows = document.querySelectorAll(`${t.tbody} tr`);
-
     t.allRows = [...rows];
     t.visibleRows = [...rows];
     t.filters = {};
     t.sort = { col: null, dir: null };
     t.currentPage = 1;
-
-    // ✅ แสดง 10 แถวแรกทันทีก่อน render เต็ม
+    
+    // ✅ ซ่อนแถวที่เกิน 10 ทันที
     t.allRows.forEach((r, i) => {
         r.style.display = i < t.rowsPerPage ? "" : "none";
     });
-
-    renderTable(tableKey);
+    
+    // ✅ อัปเดต Pagination UI ทันที (ไม่ต้องรอ renderPagination)
+    if (tableKey === "main") {
+        updatePaginationUI(1, Math.ceil(t.allRows.length / t.rowsPerPage), t.allRows.length, 1, Math.min(t.rowsPerPage, t.allRows.length));
+    }
+    
+    updateIcons(tableKey);
 }
 
 /* =====================================================
@@ -3127,6 +3100,61 @@ function loadFilterValues(tableKey, colIndex) {
         `;
 
         list.appendChild(label);
+        originalFilterOrder.push(label);
+    });
+}
+
+// ฟังก์ชันเสริมสำหรับ Render Checkbox จากข้อมูลที่ได้รับ
+function renderCheckboxList(values, selected, container) {
+    container.innerHTML = "";
+    values.forEach(v => {
+        const label = document.createElement("label");
+        label.className = "flex gap-2 text-xs py-1";
+        const displayText = v === "" ? "(Blank)" : v;
+        label.innerHTML = `
+            <input type="checkbox" class="filter-checkbox" value="${v}" ${selected.includes(v) ? "checked" : ""}>
+            <span>${displayText}</span>
+        `;
+        container.appendChild(label);
+        originalFilterOrder.push(label);
+    });
+}
+
+// ฟังก์ชันเดิมที่ดึงจาก DOM (แยกออกมาเพื่อใช้ตอน Fallback)
+function loadFilterValuesFromDOM(t, colIndex, selected, container) {
+    container.innerHTML = "";
+    originalFilterOrder = [];
+    const values = new Set();
+    let hasRealValue = false;
+
+    const activeFilters = Object.keys(t.filters).filter(c => c != colIndex);
+    const sourceRows = activeFilters.length > 0 
+        ? t.allRows.filter(row => {
+            return activeFilters.every(c => {
+                const v = getCellValue(row, c, false) ?? "";
+                return t.filters[c].includes(v);
+            });
+        }) 
+        : t.allRows;
+
+    sourceRows.forEach(row => {
+        const v = getCellValue(row, colIndex, false);
+        if (v !== null) {
+            values.add(v);
+            if (v !== "") hasRealValue = true;
+        }
+    });
+    if (!hasRealValue) values.add("");
+
+    values.forEach(v => {
+        const label = document.createElement("label");
+        label.className = "flex gap-2 text-xs py-1";
+        const displayText = v === "" ? "(Blank)" : v;
+        label.innerHTML = `
+            <input type="checkbox" class="filter-checkbox" value="${v}" ${selected.includes(v) ? "checked" : ""}>
+            <span>${displayText}</span>
+        `;
+        container.appendChild(label);
         originalFilterOrder.push(label);
     });
 }
@@ -3442,7 +3470,7 @@ function updateRowsPerPageDropdown() {
 
     // ✅ กรณีไม่มีข้อมูล
     if (total === 0) {
-        select.innerHTML = `<option value="10">ทั้งหมด (0 แถว)</option>`;
+        select.innerHTML = `<option value="10">ทั้งหมด (0 รายการ)</option>`;
         t.rowsPerPage = 10;      
         t.currentPage = 1;
         return;
@@ -3462,7 +3490,7 @@ function updateRowsPerPageDropdown() {
 
     select.innerHTML += `
         <option value="${total}" ${current === total ? "selected" : ""}>
-            ทั้งหมด (${total} แถว)
+            ทั้งหมด (${total} รายการ)
         </option>
     `;
 
@@ -3575,803 +3603,6 @@ document.addEventListener("keydown", e => {
         closeColumnFilterModal();
     }
 });
-
-
-
-function changeRowsPerPage(value) {
-    const v = parseInt(value);
-    if (!v) return;
-
-    tables.main.rowsPerPage = v;
-    tables.main.currentPage = 1;
-    renderTable("main");
-}
-
-
-</script><!-- ฟังชั่น Filter -->
-<script>
-const tables = {
-    main: {
-        tbody: "#tableBody",
-        allRows: [],
-        visibleRows: [],
-        filters: {},
-        sort: { col: null, dir: null },
-        rowsPerPage: 10,
-        currentPage: 1
-    },
-
-    permission: {
-        tbody: "#permissionTableBody",
-        allRows: [],
-        visibleRows: [],
-        filters: {},
-        sort: { col: null, dir: null }
-    }
-};
-
-const urlParams = new URLSearchParams(window.location.search);
-const perPage = parseInt(urlParams.get("per_page"));
-
-if (perPage) {
-    tables.main.rowsPerPage = perPage;
-}
-
-let openFilter = { table: null, col: null };
-let openFilterColumn = null;
-let originalFilterOrder = [];
-
-/* =====================================================
-   ICONS
-===================================================== */
-const ICONS = {
-    normal: `<i class="fi fi-br-bars-filter text-xs text-gray-300"></i>`,
-    filter: `<i class="fi fi-br-bars-filter text-xs text-blue-500"></i>`,
-    sortAsc: `<i class="fa-solid fa-arrow-down-a-z text-xs text-indigo-500"></i>`,
-    sortDesc: `<i class="fa-solid fa-arrow-down-z-a text-xs text-indigo-500"></i>`
-};
-
-/* =====================================================
-   INIT
-===================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-    initTable("main");
-});
-
-function clearColumnFilterExcel() {
-    const { table, col } = openFilter;
-    if (!table || col === null) return;
-
-    const t = tables[table];
-
-    delete t.filters[col];
-
-    if (t.sort.col === col) {
-        t.sort = { col: null, dir: null };
-    }
-
-    t.currentPage = 1;
-
-    if (table === "main") {
-        t.rowsPerPage = 10;
-        const select = document.getElementById("rowsPerPageList");
-        if (select) select.value = "10";
-    }
-
-    applyAll(table);
-
-    document.getElementById("column-filter-search").value = "";
-    closeColumnFilterModal();
-}
-
-
-
-function clearAllTableFilters() {
-    const { table } = openFilter;
-    if (!table) return;
-
-    const t = tables[table];
-
-    t.filters = {};
-    t.sort = { col: null, dir: null };
-    t.currentPage = 1;
-
-    // ✅ RESET rowsPerPage กลับค่าเริ่มต้น
-    if (table === "main") {
-        t.rowsPerPage = 10;
-        const select = document.getElementById("rowsPerPageList");
-        if (select) select.value = "10";
-    }
-
-    applyAll(table);
-
-    document.getElementById("column-filter-search").value = "";
-    closeColumnFilterModal();
-}
-
-
-function selectAll() {
-    document
-        .querySelectorAll("#column-filter-checkbox-list .filter-checkbox")
-        .forEach(cb => {
-            cb.checked = true;                 // ⭐ เพิ่ม
-            cb.closest("label").style.display = "";
-        });
-}
-
-
-function deselectAll() {
-    document
-        .querySelectorAll("#column-filter-checkbox-list .filter-checkbox")
-        .forEach(cb => {
-            cb.checked = false;
-            cb.closest("label").style.display = ""; // เผื่อถูก search ซ่อน
-        });
-}
-
-function handleSearch(text) {
-    const keyword = text.toLowerCase().trim();
-    const list = document.getElementById("column-filter-checkbox-list");
-
-    // reset order
-    originalFilterOrder.forEach(label => list.appendChild(label));
-
-    const { table, col } = openFilter;
-    const selected = tables[table].filters[col] ?? [];
-
-    // ✅ ลบ search → แค่แสดงทั้งหมด (ไม่ยุ่ง checkbox)
-    if (keyword === "") {
-        originalFilterOrder.forEach(label => {
-            const cb = label.querySelector("input");
-            label.style.display = "";
-            cb.checked = selected.includes(cb.value);
-        });
-        return;
-    }
-
-    const startsWith = [];
-    const includes = [];
-
-    originalFilterOrder.forEach(label => {
-        const text = label.querySelector("span").innerText.toLowerCase();
-        const cb = label.querySelector("input");
-
-        if (text.startsWith(keyword)) {
-            label.style.display = "";
-            cb.checked = true;
-            startsWith.push(label);
-        }
-        else if (text.includes(keyword)) {
-            label.style.display = "";
-            cb.checked = true;
-            includes.push(label);
-        }
-        else {
-            label.style.display = "none";
-            cb.checked = false;
-        }
-    });
-
-    [...startsWith, ...includes].forEach(label => list.appendChild(label));
-}
-
-
-
-
-let permissionTableInited = false;
-
-function openPermissionModal() {
-    document.getElementById("permissionModal").classList.remove("hidden");
-
-    if (!permissionTableInited) {
-        setTimeout(() => {
-            initTable("permission");
-            permissionTableInited = true;
-        }, 0);
-    }
-}
-
-
-
-function initTable(tableKey) {
-    const t = tables[tableKey];
-    const rows = document.querySelectorAll(`${t.tbody} tr`);
-
-    t.allRows = [...rows];
-    t.visibleRows = [...rows];
-    t.filters = {};
-    t.sort = { col: null, dir: null };
-    t.currentPage = 1;
-
-    // ✅ แสดง 10 แถวแรกทันทีก่อน render เต็ม
-    t.allRows.forEach((r, i) => {
-        r.style.display = i < t.rowsPerPage ? "" : "none";
-    });
-
-    renderTable(tableKey);
-}
-
-/* =====================================================
-   OPEN FILTER
-===================================================== */
-function openColumnFilter(tableKey, colKey, icon) {
-    if (!tables[tableKey] || tables[tableKey].allRows.length === 0) {
-        console.warn("Table not ready:", tableKey);
-        return;
-    }
-
-    openFilter = { table: tableKey, col: String(colKey) };
-    openFilterColumn = colKey;
-
-    const search = document.getElementById("column-filter-search");
-    search.value = "";
-
-    loadFilterValues(tableKey, colKey);
-    showFilterModal(icon);
-
-    setTimeout(() => search.focus(), 0);
-}
-
-
-
-
-/* =====================================================
-   FILTER MODAL
-===================================================== */
-function showFilterModal(icon) {
-    const modal = document.getElementById("column-filter-modal");
-    const box = document.getElementById("column-filter-content");
-
-    modal.classList.remove("hidden");
-
-    const rect = icon.getBoundingClientRect();
-    const boxRect = box.getBoundingClientRect();
-
-    const margin = 8;
-
-    // ✅ header sticky height (ปรับตามของจริง)
-    const STICKY_HEADER_HEIGHT = 48;
-
-    // ✅ left = ตรงคอลัมน์ที่กด
-    let left = rect.left;
-
-    // ✅ top = ใต้ header เสมอ (ถ้า icon อยู่ใน sticky)
-    let top =
-        rect.top <= STICKY_HEADER_HEIGHT
-            ? STICKY_HEADER_HEIGHT + margin
-            : rect.bottom + margin;
-
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    // กันล้นขวา
-    if (left + boxRect.width > viewportWidth) {
-        left = viewportWidth - boxRect.width - margin;
-    }
-
-    // กันล้นซ้าย
-    if (left < margin) {
-        left = margin;
-    }
-
-    // กันล้นล่าง
-    if (top + boxRect.height > viewportHeight) {
-        top = viewportHeight - boxRect.height - margin;
-    }
-
-    box.style.left = `${left}px`;
-    box.style.top = `${top}px`;
-}
-
-
-
-function closeColumnFilterModal() {
-    document.getElementById("column-filter-modal").classList.add("hidden");
-    openFilterColumn = null;
-}
-
-/* =====================================================
-   LOAD FILTER VALUES
-===================================================== */
-
-function loadFilterValues(tableKey, colIndex) {
-    const t = tables[tableKey];
-    const list = document.getElementById("column-filter-checkbox-list");
-    list.innerHTML = "";
-
-    const selected = t.filters[colIndex] ?? [];
-    originalFilterOrder = [];
-
-    const values = new Set();
-    let hasRealValue = false;
-
-    // ⭐ สำคัญมาก
-    const activeFilters = Object.keys(t.filters).filter(c => c != colIndex);
-
-    const sourceRows =
-        activeFilters.length > 0
-            ? t.allRows.filter(row => {
-                return activeFilters.every(c => {
-                    const v = getCellValue(row, c, false) ?? "";
-                    return t.filters[c].includes(v);
-                });
-            })
-            : t.allRows;
-
-    sourceRows.forEach(row => {
-        const v = getCellValue(row, colIndex, false);
-
-        if (v !== null) {
-            values.add(v);
-            if (v !== "") hasRealValue = true;
-        }
-    });
-
-    if (!hasRealValue) values.add("");
-
-    values.forEach(v => {
-        const label = document.createElement("label");
-        label.className = "flex gap-2 text-xs py-1";
-
-        const displayText = v === "" ? "DD/MMM/YYYY" : v;
-        label.innerHTML = `
-            <input type="checkbox"
-                class="filter-checkbox"
-                value="${v}"
-                ${selected.includes(v) ? "checked" : ""}>
-            <span>${displayText}</span>
-        `;
-
-        list.appendChild(label);
-        originalFilterOrder.push(label);
-    });
-}
-
-
-
-
-/* =====================================================
-   APPLY FILTER
-===================================================== */
-function applyColumnFilter() {
-    const { table, col } = openFilter;
-    const t = tables[table];
-
-    const checked = [...document.querySelectorAll(".filter-checkbox")]
-        .filter(cb => cb.checked)
-        .map(cb => cb.value); // ❌ ไม่ lower
-
-    if (checked.length === 0) delete t.filters[col];
-    else t.filters[col] = checked;
-
-    applyAll(table);
-    closeColumnFilterModal();
-}
-
-
-
-
-function applyAll(tableKey) {
-    const t = tables[tableKey];
-
-    t.visibleRows = t.allRows.filter(row => {
-        for (let col in t.filters) {
-            let cellVal = getCellValue(row, col, false);
-
-            // ✅ สำคัญมาก
-            if (cellVal === null) {
-                cellVal = "";
-            }
-
-            if (!t.filters[col].includes(cellVal)) return false;
-        }
-        return true;
-    });
-
-    t.currentPage = 1;
-    applySort(tableKey);
-    renderTable(tableKey);
-}
-
-
-
-
-
-function reorderDOM(tableKey) {
-    const t = tables[tableKey];
-    const tbody = document.querySelector(t.tbody);
-
-    t.visibleRows.forEach(row => {
-        tbody.appendChild(row); // ⭐ ย้าย DOM จริง
-    });
-}
-
-
-
-
-// ฟังชั่น sortAZ / sortZA
-function sortAZ() {
-    sortTable(openFilter.table, openFilter.col, "asc");
-    closeColumnFilterModal();
-}
-
-function sortZA() {
-    sortTable(openFilter.table, openFilter.col, "desc");
-    closeColumnFilterModal();
-}
-
-
-
-function sortTable(tableKey, col, dir) {
-    if (!tableKey || col === null || col === undefined) {
-        console.warn("Sort ignored: no active column");
-        return;
-    }
-
-    const t = tables[tableKey];
-    t.sort = { col: String(col), dir };
-
-    applySort(tableKey);
-    renderTable(tableKey);
-}
-
-function parseDMY(value) {
-    if (!value) return null;
-
-    // รองรับเฉพาะ DD/MMM/YYYY เท่านั้น
-    const parts = value.split("/");
-    if (parts.length !== 3) return null;
-
-    const day   = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10);
-    const year  = parseInt(parts[2], 10);
-
-    if (
-        isNaN(day)   || day < 1 || day > 31 ||
-        isNaN(month) || month < 1 || month > 12 ||
-        isNaN(year)
-    ) {
-        return null;
-    }
-
-    return { day, month, year };
-}
-
-function parseDMYToTime(value) {
-    if (!value) return null;
-
-
-    if (value === "DD-MMM-YYYY") return null;
-
-    const parts = value.split("-");
-    if (parts.length !== 3) return null;
-
-    const day   = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year  = parseInt(parts[2], 10);
-
-    if (
-        isNaN(day) || isNaN(month) || isNaN(year)
-    ) return null;
-
-    return new Date(year, month, day).getTime();
-}
-
-
-function applySort(tableKey) {
-    const t = tables[tableKey];
-    if (!t.sort.col || !t.sort.dir) return;
-
-    const colKey = String(t.sort.col);
-
-    t.visibleRows.sort((a, b) => {
-        const v1 = getCellValue(a, colKey, false);
-        const v2 = getCellValue(b, colKey, false);
-
-        // =============================
-        // ⭐ DATE SORT (DD-MMM-YYYY)
-        // =============================
-        const d1 = parseDMYToTime(v1);
-        const d2 = parseDMYToTime(v2);
-
-        // ✅ ถ้าไม่มีวันที่จริง → ดันลงล่างเสมอ
-        if (d1 === null && d2 !== null) return 1;
-        if (d1 !== null && d2 === null) return -1;
-        if (d1 !== null && d2 !== null) {
-            return t.sort.dir === "asc" ? d1 - d2 : d2 - d1;
-        }
-
-        // =============================
-        // SORT NUMBER
-        // =============================
-        const n1 = parseFloat(v1.replace(/,/g, "").replace('%',''));
-        const n2 = parseFloat(v2.replace(/,/g, "").replace('%',''));
-
-        if (!isNaN(n1) && !isNaN(n2)) {
-            return t.sort.dir === "asc" ? n1 - n2 : n2 - n1;
-        }
-
-        // =============================
-        // SORT TEXT (fallback สุดท้าย)
-        // =============================
-        return t.sort.dir === "asc"
-            ? v1.localeCompare(v2, 'th', { sensitivity: "base" })
-            : v2.localeCompare(v1, 'th', { sensitivity: "base" });
-    });
-
-    reorderDOM(tableKey);
-}
-
-function sortByDatePart(part) {
-    const { table, col } = openFilter;
-    if (!table || col == null) return;
-
-    tables[table].sort = {
-        col: String(col),
-        dir: part // day | month | year
-    };
-
-    applySort(table);
-    renderTable(table);
-    closeColumnFilterModal();
-}
-
-
-
-
-/* =====================================================
-   RENDER TABLE
-===================================================== */
-function renderTable(tableKey) {
-    const t = tables[tableKey];
-    const rows = t.visibleRows;
-
-    t.allRows.forEach(r => r.style.display = "none");
-
-    if (tableKey === "main") {
-        updateRowsPerPageDropdown(); // ⭐⭐⭐
-
-        const start = (t.currentPage - 1) * t.rowsPerPage;
-        const end = start + t.rowsPerPage;
-
-        rows.slice(start, end).forEach(r => r.style.display = "");
-        renderPagination();
-    } else {
-        rows.forEach(r => r.style.display = "");
-    }
-
-    updateIcons(tableKey);
-}
-
-
-
-
-/* =====================================================
-   PAGINATION (MAIN ONLY)
-===================================================== */
-function renderPagination() {
-    const t = tables.main;
-    const totalRows = t.visibleRows.length;
-    const totalPages = Math.max(1, Math.ceil(totalRows / t.rowsPerPage));
-
-    // ป้องกัน currentPage เกิน
-    if (t.currentPage > totalPages) t.currentPage = totalPages;
-
-    const summaryEl = document.getElementById("paginationSummaryList");
-
-    // ✅ กรณีไม่มีข้อมูลเลย
-    if (totalRows === 0) {
-        summaryEl.innerHTML =
-            `แสดง <span class="text-indigo-600 font-semibold">0</span>
-             จากทั้งหมด <span class="font-semibold">0</span> รายการ`;
-
-        document.getElementById("prevPageBtnList").disabled = true;
-        document.getElementById("nextPageBtnList").disabled = true;
-        document.getElementById("pageNumbersList").innerHTML = "";
-        return;
-    }
-
-    // ✅ คำนวณจากแถวจริงในตาราง
-    const start = (t.currentPage - 1) * t.rowsPerPage + 1;
-    const end = Math.min(start + t.rowsPerPage - 1, totalRows);
-
-    summaryEl.innerHTML =
-        `แสดง <span class="text-indigo-600 font-semibold">${start}-${end}</span>
-         จากทั้งหมด <span class="font-semibold">${totalRows}</span> รายการ`;
-
-    // prev / next
-    document.getElementById("prevPageBtnList").disabled = t.currentPage === 1;
-    document.getElementById("nextPageBtnList").disabled = t.currentPage === totalPages;
-
-    // page numbers
-    const container = document.getElementById("pageNumbersList");
-    container.innerHTML = "";
-
-    for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement("button");
-        btn.innerText = i;
-        btn.className =
-            "w-10 h-10 rounded-xl font-sarabun text-sm transition-all " +
-            (i === t.currentPage
-                ? "bg-indigo-600 text-white shadow-md"
-                : "bg-white text-gray-600 hover:bg-indigo-50");
-
-        btn.onclick = () => goToPage(i);
-        container.appendChild(btn);
-    }
-}
-
-function updateRowsPerPageOptions() {
-    const t = tables.main;
-    const totalRows = t.visibleRows.length;
-    const select = document.getElementById("rowsPerPageList");
-
-    if (!select) return;
-
-    [...select.options].forEach(opt => {
-        const val = parseInt(opt.value);
-
-        if (val > totalRows && totalRows !== 0) {
-            opt.disabled = true;
-        } else {
-            opt.disabled = false;
-        }
-    });
-
-    // ถ้า rowsPerPage มากกว่าข้อมูลจริง → ปรับอัตโนมัติ
-    if (t.rowsPerPage > totalRows && totalRows > 0) {
-        t.rowsPerPage = totalRows;
-        select.value = totalRows;
-        t.currentPage = 1;
-    }
-}
-
-function updateRowsPerPageDropdown() {
-    const t = tables.main;
-    const select = document.getElementById("rowsPerPageList");
-    if (!select) return;
-
-    const total = t.visibleRows.length;
-    const current = t.rowsPerPage;
-
-    select.innerHTML = "";
-
-    // ✅ กรณีไม่มีข้อมูล
-    if (total === 0) {
-        select.innerHTML = `<option value="10">ทั้งหมด (0 แถว)</option>`;
-        t.rowsPerPage = 10;      
-        t.currentPage = 1;
-        return;
-    }
-
-    const options = [10, 20];
-
-    options.forEach(v => {
-        if (v < total) {
-            select.innerHTML += `
-                <option value="${v}" ${current === v ? "selected" : ""}>
-                    ${v} รายการ
-                </option>
-            `;
-        }
-    });
-
-    select.innerHTML += `
-        <option value="${total}" ${current === total ? "selected" : ""}>
-            ทั้งหมด (${total} แถว)
-        </option>
-    `;
-
-    // ✅ FIX เพิ่มความปลอดภัย
-    if (t.rowsPerPage <= 0) {
-        t.rowsPerPage = Math.min(10, total);
-        t.currentPage = 1;
-    }
-}
-
-
-function goToPage(p) {
-    tables.main.currentPage = p;
-    renderTable("main");
-}
-
-/* =====================================================
-   ICON UPDATE
-===================================================== */
-function updateIcons(tableKey) {
-    const t = tables[tableKey];
-
-    document.querySelectorAll(`.filter-icon[data-table="${tableKey}"]`)
-        .forEach(icon => {
-            const col = icon.dataset.col;
-
-
-            if (t.sort.col === col) {
-                icon.innerHTML = t.sort.dir === "asc" ? ICONS.sortAsc : ICONS.sortDesc;
-            } else if (t.filters[col]) {
-                icon.innerHTML = ICONS.filter;
-            } else {
-                icon.innerHTML = ICONS.normal;
-            }
-        });
-}
-
-/* =====================================================
-   HELPERS
-===================================================== */
-function getCellValue(row, colKey, toLower = true) {
-    const cell = row.querySelector(`td[data-col="${colKey}"]`);
-    if (!cell) return "";
-
-    let value = "";
-
-    const select = cell.querySelector("select");
-    const input  = cell.querySelector("input");
-
-    if (select) {
-        const opt = select.options[select.selectedIndex];
-
-        // ⭐ ใช้ text ที่แสดงจริง
-        if (opt && opt.textContent) {
-            value = opt.textContent.trim();
-        } else {
-            value = cell.textContent.trim();
-        }
-
-    } else if (input && input.type !== "hidden") {
-        // ⭐ input ที่ user เห็นจริง
-        value = input.value.trim();
-
-    } else {
-        // ⭐ fallback สุดท้าย
-        value = cell.textContent.trim();
-    }
-
-    return toLower ? value.toLowerCase() : value;
-}
-
-
-
-
-/* =====================================================
-   FILTER ICON CLICK
-===================================================== */
-document.addEventListener("click", e => {
-    const icon = e.target.closest(".filter-icon");
-    if (!icon) return;
-
-    e.stopPropagation();
-    openColumnFilter(icon.dataset.table, icon.dataset.col, icon);
-
-});
-
-/* =====================================================
-   CLOSE MODAL ON OUTSIDE
-===================================================== */
-document.addEventListener("mousedown", e => {
-    const modal = document.getElementById("column-filter-modal");
-    if (!modal || modal.classList.contains("hidden")) return;
-
-    if (!document.getElementById("column-filter-content").contains(e.target))
-        closeColumnFilterModal();
-});
-
-document.addEventListener("keydown", e => {
-    const modal = document.getElementById("column-filter-modal");
-    if (!modal || modal.classList.contains("hidden")) return;
-    if (document.activeElement.id !== "column-filter-search") return;
-
-    if (e.key === "Enter") {
-        e.preventDefault();
-        applyColumnFilter();
-    }
-
-    if (e.key === "Escape") {
-        e.preventDefault();
-        closeColumnFilterModal();
-    }
-});
-
 
 
 function changeRowsPerPage(value) {

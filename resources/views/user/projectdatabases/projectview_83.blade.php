@@ -516,7 +516,7 @@
             <input type="hidden" name="project_code" value="{{ $projectCode }}">
 
             <div id="permissionModal"
-                class="fixed inset-0 z-[500] hidden bg-black bg-opacity-50 flex items-center justify-center">
+                class="fixed inset-0 z-[9999] hidden bg-black bg-opacity-50 flex items-center justify-center">
                 <div class="bg-white w-full max-w-[1200px] h-[80vh] rounded-xl shadow-lg overflow-hidden flex flex-col">
 
                     <!-- Header -->
@@ -1995,8 +1995,8 @@
 
                     <tbody id="tableBody" class="text-xs [&_input]:text-xs">
 
-                        @foreach ($projectData as $item)
-                        <tr class="group bg-white hover:bg-red-100 transition-colors font-sarabun duration-200 text-xs">
+                        @foreach ($projectData as $index => $item)
+                        <tr class="group bg-white hover:bg-red-100 transition-colors font-sarabun duration-200 text-xs" style="{{ $index >= 10 ? 'display:none;' : '' }}">
 
                             {{-- Refcode --}}
                             <td data-col="Refcode_PJ"
@@ -2197,108 +2197,84 @@
             </div>
         </div>
 
-        <div id="listViewPagination"
+        <!-- ✅ 2. Client-Side Pagination (ย้ายออกมาอยู่นอก) -->
+        <div id="clientPagination"
             class="mt-4 p-4 sm:p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
-
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-
-                {{-- Left: Rows per page --}}
-                    <div class="flex items-center gap-2">
-                        <!-- Label with Icon -->
-                        <label class="flex items-center gap-1.5 text-xs font-sarabun font-medium text-gray-600 whitespace-nowrap">
-                            <i class="fa-solid fa-list-ul text-indigo-400"></i>
-                            แสดงรายการ:
-                        </label>
-
-
-                        @php
-                            $total = $projectData->total();
-                            $baseOptions = [10, 20, 50, 100];
-                            $options = array_filter($baseOptions, fn($v) => $v < $total);
-                            $options[] = $total;
-                        @endphp
-
-                        <!-- Custom Select Container -->
-                        <div class="relative group">
-                            @php
-                                $query = request()->except(['per_page','page']);
-                            @endphp
-
-                            <select
-                                id="rowsPerPageList"
+                
+                <!-- Left: Rows per page -->
+                <div class="flex items-center gap-2">
+                    <label class="flex items-center gap-1.5 text-xs font-sarabun font-medium text-gray-600 whitespace-nowrap">
+                        <i class="fa-solid fa-list-ul text-indigo-400"></i>
+                        แสดงรายการ:
+                    </label>
+                    <div class="relative group">
+                        <select id="rowsPerPageList"
                                 onchange="changeRowsPerPage(this.value)"
                                 class="appearance-none py-2 pl-3 pr-8 border border-gray-200 rounded-xl text-xs font-sarabun font-medium
-                                bg-white text-gray-700 cursor-pointer min-w-[80px] text-center">
-                                
-                                @foreach($options as $size)
-                                    <option value="{{ $size }}"
-                                        {{ $projectData->perPage() == $size ? 'selected' : '' }}>
-                                        {{ $size == $total ? 'ทั้งหมด ('.$total.')' : $size }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            
-                            <!-- Custom Dropdown Arrow -->
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-                                <i class="fa-solid fa-chevron-down text-[9px] text-gray-400 
-                                        group-hover:text-indigo-500 transition-colors"></i>
-                            </div>
+                                    bg-white text-gray-700 cursor-pointer min-w-[80px] text-center
+                                    hover:border-indigo-300 hover:bg-indigo-50/50
+                                    focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500
+                                    transition-all duration-300 shadow-sm hover:shadow-md">
+                                <option value="10" selected>10 รายการ</option>
+                                <option value="20">20 รายการ</option>
+                                <option value="50">50 รายการ</option>
+                                <option value="100">100 รายการ</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                            <i class="fa-solid fa-chevron-down text-[9px] text-gray-400
+                                    group-hover:text-indigo-500 transition-colors"></i>
                         </div>
                     </div>
-
-                {{-- Center: Pagination --}}
+                </div>
+                
+                <!-- Center: Pagination Buttons -->
                 <nav class="flex items-center gap-1.5">
-
-                    {{-- Previous --}}
-                    @if ($projectData->onFirstPage())
-                        <button disabled
-                            class="w-9 h-9 rounded-xl border opacity-30">
-                            <i class="fa-solid fa-chevron-left text-xs"></i>
-                        </button>
-                    @else
-                        <a href="{{ $projectData->previousPageUrl() }}"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
-                            <i class="fa-solid fa-chevron-left text-xs"></i>
-                        </a>
-                    @endif
-
-
-                    {{-- Page Numbers --}}
-                    @for ($i = 1; $i <= $projectData->lastPage(); $i++)
-                        <a href="{{ $projectData->url($i) }}"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl text-xs
-                            {{ $projectData->currentPage() == $i
-                                ? 'bg-indigo-600 text-white'
-                                : 'bg-white text-gray-600 border hover:bg-indigo-50' }}">
-                            {{ $i }}
-                        </a>
-                    @endfor
-
-
-                    {{-- Next --}}
-                    @if ($projectData->hasMorePages())
-                        <a href="{{ $projectData->nextPageUrl() }}"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </a>
-                    @else
-                        <button disabled
-                            class="w-9 h-9 rounded-xl border opacity-30">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </button>
-                    @endif
-
+                    <button id="prevPageBtnList" 
+                            onclick="goToPage(tables.main.currentPage - 1)"
+                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition
+                                disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-600">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    </button>
+                    
+                    <!-- ✅ Pre-render Page Numbers ด้วย PHP -->
+                    <div id="pageNumbersList" class="flex items-center gap-1.5">
+                        @php
+                            $totalRows = $projectData->total();
+                            $rowsPerPage = 10;
+                            $totalPages = max(1, ceil($totalRows / $rowsPerPage));
+                        @endphp
+                        @for ($i = 1; $i <= $totalPages; $i++)
+                            <button onclick="goToPage({{ $i }})"
+                                    class="w-10 h-10 rounded-xl font-sarabun text-sm transition-all {{ $i === 1 ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-indigo-50' }}">
+                                {{ $i }}
+                            </button>
+                        @endfor
+                    </div>
+                    
+                    <button id="nextPageBtnList" 
+                            onclick="goToPage(tables.main.currentPage + 1)"
+                            class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition
+                                disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-600">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
                 </nav>
-
-                {{-- Right: Summary --}}
+                
+                <!-- Right: Summary -->
                 <div>
-                    <span id="paginationSummaryList"
-                        class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full">
+                    <span class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full" id="paginationSummaryList">
+                        <!-- ✅ Pre-render ด้วย PHP -->
+                        @php
+                            $start = 1;
+                            $end = min($rowsPerPage, $totalRows);
+                        @endphp
+                        แสดง <span class="text-indigo-600 font-semibold">{{ $start }}-{{ $end }}</span>
+                        จากทั้งหมด <span class="font-semibold">{{ $totalRows }}</span> รายการ
                     </span>
                 </div>
-
             </div>
         </div>
+    </div>
 
 </main>
 
@@ -2372,7 +2348,7 @@
 
         <!-- Checkbox List -->
         <div id="column-filter-checkbox-list" class="overflow-y-auto font-sarabun px-4 py-2 text-sm max-h-60 flex-grow">
-            <!-- Checkboxes generated by JS -->
+            <!-- ID สำหรับอ้างอิงใน JavaScript เพื่อสร้าง checkbox แบบไดนามิก -->
         </div>
 
         <!-- Apply / Cancel Footer -->
@@ -2858,20 +2834,6 @@ function exportToExcel() {
 
 
 <!-- ฟังชั่น Filter -->
-
-<script>
-const allData = @json($projectDataAll);
-
-const allDataMap = {};
-allData.forEach(r=>{
-    for(let k in r){
-        if(!allDataMap[k]) allDataMap[k]=new Set();
-        allDataMap[k].add(r[k] ?? "");
-    }
-});
-
-</script>
-
 <script>
 const tables = {
     main: {
@@ -3059,18 +3021,17 @@ function openPermissionModal() {
 function initTable(tableKey) {
     const t = tables[tableKey];
     const rows = document.querySelectorAll(`${t.tbody} tr`);
-
     t.allRows = [...rows];
     t.visibleRows = [...rows];
     t.filters = {};
     t.sort = { col: null, dir: null };
     t.currentPage = 1;
-
-    // ✅ แสดง 10 แถวแรกทันทีก่อน render เต็ม
-    t.allRows.forEach((r, i) => {
-        r.style.display = i < t.rowsPerPage ? "" : "none";
+    
+    // ✅ แสดงทุกแถวทันที
+    t.allRows.forEach(r => {
+        r.style.display = "";  // ลบการซ่อน
     });
-
+    
     renderTable(tableKey);
 }
 
@@ -3157,40 +3118,46 @@ function closeColumnFilterModal() {
    LOAD FILTER VALUES
 ===================================================== */
 
-function loadFilterValues(tableKey, colKey) {
-
+function loadFilterValues(tableKey, colIndex) {
     const t = tables[tableKey];
     const list = document.getElementById("column-filter-checkbox-list");
-
     list.innerHTML = "";
+
+    const selected = t.filters[colIndex] ?? [];
     originalFilterOrder = [];
 
-    const selected = t.filters[colKey] ?? [];
+    const values = new Set();  //  Set ไม่เก็บค่าซ้ำอัตโนมัติ
+    let hasRealValue = false;
 
-    const values = new Set();
+    // ⭐ สำคัญมาก
+    const activeFilters = Object.keys(t.filters).filter(c => c != colIndex);
 
-    // ⭐ ใช้ข้อมูลทั้งหมดจาก database
-    allData.forEach(row => {
+    const sourceRows =
+        activeFilters.length > 0
+            ? t.allRows.filter(row => {
+                return activeFilters.every(c => {
+                    const v = getCellValue(row, c, false) ?? "";
+                    return t.filters[c].includes(v); // ✅ เช็คเฉพาะค่าที่ผ่านฟิลเตอร์อื่น
+                });
+            })
+            : t.allRows;
 
-        let v = row[colKey];
+    sourceRows.forEach(row => {
+        const v = getCellValue(row, colIndex, false);
 
-        if (v === null || v === undefined) v = "";
-
-        values.add(String(v));
-
+        if (v !== null) {
+            values.add(v); // ถ้ามีค่าซ้ำแล้ว จะไม่เพิ่มใหม่
+            if (v !== "") hasRealValue = true;
+        }
     });
 
-    const sorted = [...values].sort((a,b)=>
-        a.localeCompare(b,'th',{numeric:true,sensitivity:'base'})
-    );
+    if (!hasRealValue) values.add(""); // ถ้าไม่มีค่าจริงเลย → เพิ่มค่าว่างเข้าไป
 
-    sorted.forEach(v => {
-
+    values.forEach(v => {
         const label = document.createElement("label");
         label.className = "flex gap-2 text-xs py-1";
 
-        const displayText = v === "" ? "(Blank)" : v;
-
+        const displayText = v === "" ? "DD/MMM/YYYY" : v; // แสดงข้อความแทนค่าว่าง
         label.innerHTML = `
             <input type="checkbox"
                 class="filter-checkbox"
@@ -3201,9 +3168,7 @@ function loadFilterValues(tableKey, colKey) {
 
         list.appendChild(label);
         originalFilterOrder.push(label);
-
     });
-
 }
 
 
@@ -3226,8 +3191,6 @@ function applyColumnFilter() {
     applyAll(table);
     closeColumnFilterModal();
 }
-
-
 
 
 function applyAll(tableKey) {
@@ -3432,51 +3395,72 @@ function renderPagination() {
     const t = tables.main;
     const totalRows = t.visibleRows.length;
     const totalPages = Math.max(1, Math.ceil(totalRows / t.rowsPerPage));
-
-    // ป้องกัน currentPage เกิน
-    if (t.currentPage > totalPages) t.currentPage = totalPages;
-
+    
     const summaryEl = document.getElementById("paginationSummaryList");
-
+    const container = document.getElementById("pageNumbersList");
+    
     // ✅ กรณีไม่มีข้อมูลเลย
     if (totalRows === 0) {
-        summaryEl.innerHTML =
-            `แสดง <span class="text-indigo-600 font-semibold">0</span>
-             จากทั้งหมด <span class="font-semibold">0</span> รายการ`;
-
+        summaryEl.innerHTML = `แสดง <span class="text-indigo-600 font-semibold">0</span> จากทั้งหมด <span class="font-semibold">0</span> รายการ`;
         document.getElementById("prevPageBtnList").disabled = true;
         document.getElementById("nextPageBtnList").disabled = true;
-        document.getElementById("pageNumbersList").innerHTML = "";
+        container.innerHTML = "";
         return;
     }
-
+    
     // ✅ คำนวณจากแถวจริงในตาราง
     const start = (t.currentPage - 1) * t.rowsPerPage + 1;
     const end = Math.min(start + t.rowsPerPage - 1, totalRows);
-
-    summaryEl.innerHTML =
-        `แสดง <span class="text-indigo-600 font-semibold">${start}-${end}</span>
-         จากทั้งหมด <span class="font-semibold">${totalRows}</span> รายการ`;
-
-    // prev / next
+    
+    // ✅ อัปเดต Summary
+    summaryEl.innerHTML = `แสดง <span class="text-indigo-600 font-semibold">${start}-${end}</span> จากทั้งหมด <span class="font-semibold">${totalRows}</span> รายการ`;
+    
+    // ✅ อัปเดต Prev/Next Buttons
     document.getElementById("prevPageBtnList").disabled = t.currentPage === 1;
     document.getElementById("nextPageBtnList").disabled = t.currentPage === totalPages;
-
-    // page numbers
-    const container = document.getElementById("pageNumbersList");
+    
+    // ✅ สร้างปุ่มหน้าใหม่ทั้งหมด (ไม่ต้องเช็คเงื่อนไขเก่า)
     container.innerHTML = "";
-
     for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement("button");
         btn.innerText = i;
-        btn.className =
-            "w-10 h-10 rounded-xl font-sarabun text-sm transition-all " +
-            (i === t.currentPage
-                ? "bg-indigo-600 text-white shadow-md"
+        btn.className = "w-10 h-10 rounded-xl font-sarabun text-sm transition-all " +
+            (i === t.currentPage 
+                ? "bg-indigo-600 text-white shadow-md" 
                 : "bg-white text-gray-600 hover:bg-indigo-50");
-
         btn.onclick = () => goToPage(i);
         container.appendChild(btn);
+    }
+}
+
+function updatePaginationUI(currentPage, totalPages, totalRows, start = null, end = null) {
+    const summaryEl = document.getElementById("paginationSummaryList");
+    const container = document.getElementById("pageNumbersList");
+    
+    // ✅ อัปเดต Summary
+    if (totalRows === 0) {
+        summaryEl.innerHTML = `แสดง <span class="text-indigo-600 font-semibold">0</span>
+            จากทั้งหมด <span class="font-semibold">0</span> รายการ`;
+    } else {
+        start = start ?? ((currentPage - 1) * tables.main.rowsPerPage + 1);
+        end = end ?? Math.min(start + tables.main.rowsPerPage - 1, totalRows);
+        summaryEl.innerHTML = `แสดง <span class="text-indigo-600 font-semibold">${start}-${end}</span>
+            จากทั้งหมด <span class="font-semibold">${totalRows}</span> รายการ`;
+    }
+    
+    // ✅ อัปเดต Prev/Next Buttons
+    document.getElementById("prevPageBtnList").disabled = currentPage === 1;
+    document.getElementById("nextPageBtnList").disabled = currentPage === totalPages;
+    
+    // ✅ อัปเดต Active Class บน Page Numbers (ถ้ามีจาก PHP)
+    if (container && container.children.length > 0) {
+        [...container.children].forEach((btn, i) => {
+            const pageNum = i + 1;
+            btn.className = "w-10 h-10 rounded-xl font-sarabun text-sm transition-all " +
+                (pageNum === currentPage
+                    ? "bg-indigo-600 text-white shadow-md"
+                    : "bg-white text-gray-600 hover:bg-indigo-50");
+        });
     }
 }
 
@@ -3509,38 +3493,31 @@ function updateRowsPerPageDropdown() {
     const t = tables.main;
     const select = document.getElementById("rowsPerPageList");
     if (!select) return;
-
+    
     const total = t.visibleRows.length;
     const current = t.rowsPerPage;
-
+    
+    // ✅ ล้าง options เก่า
     select.innerHTML = "";
-
-    // ✅ กรณีไม่มีข้อมูล
-    if (total === 0) {
-        select.innerHTML = `<option value="10">ทั้งหมด (0 แถว)</option>`;
-        t.rowsPerPage = 10;      
-        t.currentPage = 1;
-        return;
-    }
-
-    const options = [10, 20];
-
+    
+    // ✅ แสดงทุกตัวเลือกเสมอ (ไม่ตรวจสอบว่ามากกว่า total หรือไม่)
+    const options = [10, 20, 50, 100];
+    
     options.forEach(v => {
-        if (v < total) {
-            select.innerHTML += `
-                <option value="${v}" ${current === v ? "selected" : ""}>
-                    ${v} รายการ
-                </option>
-            `;
-        }
+        const option = document.createElement("option");
+        option.value = v;
+        option.textContent = `${v} รายการ`;
+        option.selected = current === v;
+        select.appendChild(option);
     });
-
-    select.innerHTML += `
-        <option value="${total}" ${current === total ? "selected" : ""}>
-            ทั้งหมด (${total} แถว)
-        </option>
-    `;
-
+    
+    // ✅ เพิ่มตัวเลือก "ทั้งหมด"
+    const allOption = document.createElement("option");
+    allOption.value = total;
+    allOption.textContent = `ทั้งหมด (${total} รายการ)`;
+    allOption.selected = current === total;
+    select.appendChild(allOption);
+    
     // ✅ FIX เพิ่มความปลอดภัย
     if (t.rowsPerPage <= 0) {
         t.rowsPerPage = Math.min(10, total);
@@ -3654,11 +3631,18 @@ document.addEventListener("keydown", e => {
 
 
 function changeRowsPerPage(value) {
-    const v = parseInt(value);
-    if (!v) return;
-
-    tables.main.rowsPerPage = v;
-    tables.main.currentPage = 1;
+    const t = tables.main;
+    const total = t.visibleRows.length;
+    
+    if (value === 'all') {
+        t.rowsPerPage = total;
+    } else {
+        const v = parseInt(value);
+        if (!v) return;
+        t.rowsPerPage = v;
+    }
+    
+    t.currentPage = 1;
     renderTable("main");
 }
 

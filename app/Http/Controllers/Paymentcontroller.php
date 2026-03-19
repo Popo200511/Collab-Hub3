@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+// --- นำเข้า Library PhpSpreadsheet ไว้ด้านบนสุดของไฟล์ (ห้ามไว้ใน Class) ---
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
+
 class Paymentcontroller extends Controller
 {
 
@@ -11,27 +17,144 @@ class Paymentcontroller extends Controller
     {
         $this->middleware('auth');
     }
+	
+    public function exportExcel()
+{
+    try {
+        set_time_limit(0);
+        ini_set('memory_limit', '1024M');
 
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // ===== สร้าง Header =====
+        $headers = [
+            'Refcode','Job Description','Vendors','Remark','PR NO.',
+            'PR Issued Date','PR Approved Date','PR Amount',
+            'WO No.','WO Issued Date','WO Approved Date','WO Amount'
+        ];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $headers[] = "Billing{$i} No.";
+            $headers[] = "Billing{$i} Issued Date";
+            $headers[] = "Billing{$i} Signed";
+            $headers[] = "Billing{$i} Amount";
+            $headers[] = "Billing{$i} AP No.";
+            $headers[] = "Billing{$i} Due Date - Confirm";
+        }
+
+        $sheet->fromArray($headers, null, 'A1');
+        $rowNumber = 2;
+
+        // ===== ดึง PR ทีละชุด (ไม่ใช้ get() ทั้งหมดป้องกันแรมเต็ม) =====
+        DB::table('r_import_paymenttimeline')
+            ->select('PR_MR_No')
+            ->distinct()
+            ->orderByDesc('PR_MR_No')
+            ->chunk(500, function ($prs) use ($sheet, &$rowNumber) {
+
+                foreach ($prs as $pr) {
+                    // ดึง billing ของ PR นี้เท่านั้น
+                    $items = DB::table('r_import_paymenttimeline')
+                        ->where('PR_MR_No', $pr->PR_MR_No)
+                        ->orderBy('billNo')
+                        ->get();
+
+                    if ($items->isEmpty()) continue;
+
+                    $first = $items->first();
+
+                    $row = [
+                        $first->ref_code ?? '',
+                        $first->project_name ?? '',
+                        $first->Vendors ?? '',
+                        $first->Remark ?? '',
+                        $first->PR_MR_No ?? '',
+                        $first->Delivery_Date ?? '',
+                        $first->Approve_Date ?? '',
+                        $first->Amount ?? '',
+                        $first->docno ?? '',
+                        $first->docdate ?? '',
+                        $first->docapp_dt ?? '',
+                        $first->wo_amount ?? '',
+                    ];
+
+                    // Billing 1-12
+                    for ($i = 0; $i < 12; $i++) {
+                        $bill = $items->get($i);
+                        $row[] = $bill->billNo ?? '';
+                        $row[] = $bill->addDate ?? '';
+                        $row[] = $bill->Sign ?? '';
+                        $row[] = $bill->bill_amount ?? '';
+                        $row[] = $bill->voucherNo ?? '';
+                        $row[] = $bill->dueDate ?? '';
+                    }
+
+                    $sheet->fromArray($row, null, 'A'.$rowNumber);
+                    $rowNumber++;
+                }
+            });
+
+        $writer = new Xlsx($spreadsheet);
+
+        // ===== การส่งไฟล์แบบป้องกัน Buffer ปน (สำคัญมากสำหรับ Server) =====
+        return response()->streamDownload(function () use ($writer) {
+            // 1. ล้างทุกอย่างที่ Server แอบพ่นออกมาก่อนหน้านี้ (Warning, Space, ฯลฯ)
+            while (ob_get_level() > 0) {
+                ob_end_clean();
+            }
+            
+            // 2. เริ่มต้นส่งข้อมูลใหม่ที่สะอาด 100%
+            $writer->save('php://output');
+            
+            // 3. หยุดการทำงานทันที ไม่ให้ Laravel พ่นอะไรตามหลังมาอีก
+            exit; 
+        }, 'Payment_Timeline_total.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
+
+    } catch (\Exception $e) {
+        // ถ้าเกิด Error ให้พ่นเป็นข้อความออกมาแทนไฟล์เสีย
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
+	// Controller export Total
     // Controller
+	/*
     public function exportJson()
     {
         $items = DB::table('r_import_paymenttimeline')->orderBy('PR_MR_No', 'asc')->get();
         return response()->json($items);
     }
+	*/
 
 
     public function payment(Request $request)
 {
     $search   = $request->input('search');
-    $showAll  = $request->boolean('show_all'); // 👈 เพิ่มตรงนี้
-    $query    = DB::table('r_import_paymenttimeline');
+    $showAll  = $request->boolean('show_all');
 
-    // กันค่า -, 0, -0, - 0
-    if (in_array(str_replace(' ', '', $search), ['-', '0', '-0' , '- 0'])) {
+    // กันค่า -, 0, -0
+    if (in_array(str_replace(' ', '', $search), ['-', '0', '-0', '- 0'])) {
         $search = null;
     }
 
-    if (!empty($search)) {
+    // ตรวจว่ามี search จริงหรือไม่
+    $hasSearch = !empty(trim($search));
+
+    // ถ้าไม่มี search → ปิด showAll
+    if (!$hasSearch) {
+        $showAll = false;
+    }
+
+    $query = DB::table('r_import_paymenttimeline');
+    
+
+    if ($hasSearch) {
         $query->where(function ($q) use ($search) {
             $q->where('ref_code', 'LIKE', "%{$search}%")
               ->orWhere('project_name', 'LIKE', "%{$search}%")
@@ -48,22 +171,36 @@ class Paymentcontroller extends Controller
 
     $count = $groupedTimeline->count();
 
+    // กัน Division by zero
+    if ($count == 0) {
+
+        $timeline = new \Illuminate\Pagination\LengthAwarePaginator(
+            collect(),
+            0,
+            10,
+            1,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        return view('user.erp.payment_timeline.payment', compact('timeline','count','search','showAll'));
+    }
+
     // ===============================
-    // ถ้ากด Show All
+    // Show ALL
     // ===============================
     if ($showAll) {
 
         $timeline = new \Illuminate\Pagination\LengthAwarePaginator(
             $groupedTimeline,
             $count,
-            $count, // แสดงทั้งหมด
+            $count,
             1,
             ['path' => request()->url(), 'query' => request()->query()]
         );
 
     } else {
 
-        $page    = request()->get('page', 1);
+        $page = request()->get('page', 1);
         $perPage = 10;
 
         $paged = $groupedTimeline->slice(($page - 1) * $perPage, $perPage);
@@ -77,7 +214,7 @@ class Paymentcontroller extends Controller
         );
     }
 
-    return view('user.erp.payment_timeline.payment', compact('timeline', 'count', 'search', 'showAll'));
+    return view('user.erp.payment_timeline.payment', compact('timeline','count','search','showAll'));
 }
 
     /* NEW
@@ -299,6 +436,21 @@ class Paymentcontroller extends Controller
                     for ($i = 0; $i <= 26; $i++) {
                         $currentRow[$i] = $currentRow[$i] ?? null;
                     }
+					
+					// รายชื่อสงวน
+                    $reservedNames = [
+                        'นายธนิตพงศ์ ถิระเฉลิมโรจน์',
+                        'นางสาวภุมรี ส่วนเสน่ห์',
+                        'นายชัยชาญ บุญทวี',
+                        'นายนาวิน สุขโข',
+                        'นายไกรศร บุญอนันต์',
+                        'นางศศิเพ็ญ อดิศรพันธ์กุล',
+                        'นายวิทยา แก่นจักร์',
+                        'น.ส.กัญญารัตน์ เชื้อนิล',
+                        'นางชัชฎา ขอดเมชัย',
+                        'น.ส.จารุภา ชาญสินจิรกุล',
+                        'นางสาวกัลยาณัฐ กัลยาศิลปิน',
+                    ];
 
                     // --- Mapping ข้อมูล ---
                     $dataToInsert[] = [
@@ -313,7 +465,10 @@ class Paymentcontroller extends Controller
                         'Remark'             => $currentRow[8],
                         'Amount'             => $currentRow[9],
                         'Requestor_by'       => $currentRow[10],
-                        'Vendors'            => $currentRow[11],
+                        
+						// ถ้าเจอชื่อสงวน → ให้เป็นค่าว่าง
+                        'Vendors'            => in_array(trim($currentRow[11]), $reservedNames, true) ? null : $currentRow[11],
+						
                         'Approve'            => $currentRow[12],
                         'Approve_Date'       => $currentRow[13],
                         'Status'             => $currentRow[14],
