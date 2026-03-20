@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class UserProjectDatabasescontroller extends Controller
 {
-    //
+    
     public function __construct()
     {
         $this->middleware('auth');
@@ -85,17 +85,15 @@ class UserProjectDatabasescontroller extends Controller
             ->where('user_id', Auth::id())
             ->value('project_role');
 
-        $perPage = $request->get('per_page', 10);
-
         $projectData = DB::table('collab_table_project90 as pj90') 
             ->leftJoin('r_import_paymenttimeline as payment', 'payment.ref_code', '=', 'pj90.Refcode_PJ')
             ->select('pj90.*', 'payment.Amount','payment.wo_amount','payment.bill_amount')
             ->when(! in_array($projectRole, ['Admin', 'Project Manager']), function ($query) use ($userStatus) {
+                // ถ้าไม่ใช่ Admin และไม่ใช่ Project Manager
                 $query->where('Office_Code_PJ', $userStatus);
             })
             ->orderBy('Refcode_PJ')
-            ->paginate($perPage)
-            ->withQueryString();
+            ->get();
 
         //dd($projectData);
 
@@ -315,8 +313,7 @@ class UserProjectDatabasescontroller extends Controller
             ], 500);
         }
     }
-
-
+    
 
     // PM พี่ฟ้า 2 Project 83
     public function project83(Request $request)
@@ -419,7 +416,15 @@ class UserProjectDatabasescontroller extends Controller
             ->paginate($perPage)
             ->withQueryString();
 
-        //dd($projectData);
+    //dd($projectData);
+
+        $allData = DB::table('collab_table_project83')
+        ->when(! in_array($projectRole, ['Admin', 'Project Manager']), function ($query) use ($userStatus) {
+            $query->where('Office_Code_PJ', $userStatus);
+        })
+        ->orderBy('Refcode_PJ')
+        ->get(); // 🔥 เอาทั้งหมด
+
 
         // 3️⃣ user ที่ใช้จัด permission
         $users = DB::table('users')
@@ -439,7 +444,7 @@ class UserProjectDatabasescontroller extends Controller
 
         return view(
             'user.projectdatabases.projectview_83',
-            compact('projectData', 'users', 'permissions', 'projectName', 'projectCode')
+            compact('projectData', 'users', 'permissions', 'projectName', 'projectCode', 'allData')
         );
 
     }
@@ -447,6 +452,7 @@ class UserProjectDatabasescontroller extends Controller
     public function save83(Request $request)
     {
         $userIds = array_keys($request->member_status);
+        //dd($userIds);
 
         foreach ($userIds as $userId) {
 
@@ -474,8 +480,16 @@ class UserProjectDatabasescontroller extends Controller
                 $data["col{$i}"] = $request->{"col{$i}_permission"}[$userId] ?? 'invisible';
             }
 
+            /*
+            DB::table('collab_user_permissions83')
+            ->where('user_id', $userId)
+            ->where('project_code', $request->project_code)
+            ->update($data);
+            */
+
             //dd($data);
 
+            
             DB::table('collab_user_permissions83')->updateOrInsert(
                 [
                     'user_id'      => $userId,
@@ -483,12 +497,15 @@ class UserProjectDatabasescontroller extends Controller
                 ],
                 $data
             );
+            
         }
 
         return back()->with('success', 'Permissions saved successfully!');
+
     }
 
     public function inlineUpdate83(Request $request)
+    
     {
         $request->validate([
             'id'    => 'required|string', // Refcode_PJ
@@ -496,9 +513,10 @@ class UserProjectDatabasescontroller extends Controller
             'value' => 'nullable|string',
         ]);
 
-        /* ===============================
+       /* ===============================
        1) allow fields
        =============================== */
+
         $allowedCols = [];
         for ($i = 1; $i <= 50; $i++) {
             $allowedCols[] = 'col' . $i;
@@ -512,7 +530,7 @@ class UserProjectDatabasescontroller extends Controller
             'Estimated_Other_Cost_PJ',
 
             'col25',
-            'col25',
+            'col27',
             'col29',
         ];
 
@@ -647,61 +665,11 @@ class UserProjectDatabasescontroller extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
-        
     }
-
-    public function getFilterOptions83($column)
-{
-    $userStatus = Auth::user()->status;
-    $projectRole = DB::table('collab_user_permissions83')
-        ->where('user_id', Auth::id())
-        ->value('project_role');
-    
-    // ✅ Whitelist คอลัมน์ที่อนุญาต
-    $allowedColumns = [
-        'Refcode_PJ', 'Site_Code_PJ','Job Description', 'Office_Code_PJ', 'Customer_Region_PJ',
-        'Estimated_Revenue_PJ', 'Estimated_Service_Cost_PJ',
-        'Estimated_Material_Cost_PJ', 'Estimated_Transportation_Cost_PJ',
-        'Estimated_Other_Cost_PJ', 'Estimated_Gross_Profit_PJ',
-        'Estimated_Gross_ProfitMargin_PJ'
-    ];
-    
-    // เพิ่ม col1-col50
-    for ($i = 1; $i <= 50; $i++) {
-        $allowedColumns[] = 'col' . $i;
-    }
-    
-    if (!in_array($column, $allowedColumns)) {
-        return response()->json(['values' => []], 400);
-    }
-    
-    try {
-        // ✅ ดึงค่าที่ไม่ซ้ำจากฐานข้อมูล (เคารพสิทธิ์ผู้ใช้)
-        $values = DB::table('collab_table_project83')
-            ->when(! in_array($projectRole, ['Admin', 'Project Manager']), function ($q) use ($userStatus) {
-                $q->where('Office_Code_PJ', $userStatus);
-            })
-            ->whereNotNull($column)
-            ->where($column, '!=', '')
-            ->distinct()
-            ->pluck($column)
-            ->filter(fn($v) => $v !== null && trim((string)$v) !== '')
-            ->map(fn($v) => (string) $v) // ✅ แปลงเป็น String ทั้งหมด
-            ->values()
-            ->toArray();
-        
-        return response()->json(['values' => $values]);
-        
-    } catch (\Exception $e) {
-        \Log::error('Filter Options Error: ' . $e->getMessage());
-        return response()->json(['values' => []], 200);
-    }
-}
-    
 
 
 
-    // PM พี่ฟ้า Project 88
+    // PM พี่ฟ้า Project 85
     public function project85(Request $request)
     {
 
@@ -776,15 +744,13 @@ class UserProjectDatabasescontroller extends Controller
             ->where('user_id', Auth::id())
             ->value('project_role');
 
-        $perPage = $request->get('per_page', 10);
-
         $projectData = DB::table('collab_table_project85')
             ->when(! in_array($projectRole, ['Admin', 'Project Manager']), function ($query) use ($userStatus) {
+                // ถ้าไม่ใช่ Admin และไม่ใช่ Project Manager
                 $query->where('Office_Code_PJ', $userStatus);
             })
             ->orderBy('Refcode_PJ')
-            ->paginate($perPage)
-            ->withQueryString();
+            ->get();
 
         //dd($projectData);
 
@@ -1095,15 +1061,13 @@ class UserProjectDatabasescontroller extends Controller
             ->where('user_id', Auth::id())
             ->value('project_role');
 
-        $perPage = $request->get('per_page', 10);
-
         $projectData = DB::table('collab_table_project88')
             ->when(! in_array($projectRole, ['Admin', 'Project Manager']), function ($query) use ($userStatus) {
+                // ถ้าไม่ใช่ Admin และไม่ใช่ Project Manager
                 $query->where('Office_Code_PJ', $userStatus);
             })
             ->orderBy('Refcode_PJ')
-            ->paginate($perPage)
-            ->withQueryString();
+            ->get();
 
         //dd($projectData);
 
@@ -1333,15 +1297,11 @@ class UserProjectDatabasescontroller extends Controller
             ], 500);
         }
     }
-	
-	
-	
-	
-	
-	
-	
-	// PM  Project 84
-    // PM  Project 84
+
+
+
+
+    // PM แนค Project 84
     public function project84(Request $request)
     {
         $projectCode   = 84;
@@ -1413,17 +1373,15 @@ class UserProjectDatabasescontroller extends Controller
             ->where('user_id', Auth::id())
             ->value('project_role');
 
-       $perPage = $request->get('per_page', 10);
-
         $projectData = DB::table('collab_table_project84 as pj84') 
             ->leftJoin('r_import_paymenttimeline as payment', 'payment.ref_code', '=', 'pj84.Refcode_PJ')
             ->select('pj84.*', 'payment.Amount','payment.wo_amount','payment.bill_amount')
             ->when(! in_array($projectRole, ['Admin', 'Project Manager']), function ($query) use ($userStatus) {
+                // ถ้าไม่ใช่ Admin และไม่ใช่ Project Manager
                 $query->where('Office_Code_PJ', $userStatus);
             })
             ->orderBy('Refcode_PJ')
-            ->paginate($perPage)
-            ->withQueryString();
+            ->get();
 
         //dd($projectData);
 
@@ -1432,7 +1390,7 @@ class UserProjectDatabasescontroller extends Controller
             ->orderBy('name')
             ->get();
 
-        // 4️⃣ permissions (ผูกกับ project_code = 90)
+        // 4️⃣ permissions (ผูกกับ project_code = 84)
         $permissions = DB::table('collab_user_permissions84')
             ->where('project_code', $projectCode)
             ->get()
@@ -1563,7 +1521,7 @@ class UserProjectDatabasescontroller extends Controller
             }
 
             /* ===============================
-           4) update collab_table_project84
+           4) update collab_table_project90
            =============================== */
             DB::table('collab_table_project84')
                 ->where('Refcode_PJ', $request->id)
@@ -1643,9 +1601,11 @@ class UserProjectDatabasescontroller extends Controller
             ], 500);
         }
     }
-	
-	
-	 // PD เพ้ง Project 09
+
+
+
+
+    // PD เพ้ง Project 09
     public function project09(Request $request)
     {
         $projectCode   = '09' ;
@@ -1653,7 +1613,7 @@ class UserProjectDatabasescontroller extends Controller
 
         /*
             |--------------------------------------------------------------------------
-            | STEP 1️⃣ ลบข้อมูลที่ไม่ใช่ 90- ออกจากตาราง
+            | STEP 1️⃣ ลบข้อมูลที่ไม่ใช่ 09- ออกจากตาราง
             | (ทำครั้งเดียว หรือทำทุกครั้งก็ได้ ปลอดภัย)
             |--------------------------------------------------------------------------
         */
@@ -1874,24 +1834,6 @@ class UserProjectDatabasescontroller extends Controller
                 ]);
 
             /* ===============================
-           5) sync basic fields → collab_newjob
-           =============================== 
-            $syncMap = [
-                'Customer_Region_PJ'         => 'Customer_Region',
-                'Estimated_Revenue_PJ'       => 'Estimated_Revenue',
-                'Estimated_Service_Cost_PJ'  => 'Estimated_Service_Cost',
-                'Estimated_Material_Cost_PJ' => 'Estimated_Material_Cost',
-            ];
-
-            if (isset($syncMap[$request->field])) {
-                DB::table('collab_newjob')
-                    ->where('Refcode', $request->id)
-                    ->update([
-                        $syncMap[$request->field] => $storeValue,
-                    ]);
-            }*/
-
-            /* ===============================
            6) calculate gross (money only)
            =============================== */
             if (in_array($request->field, $moneyFields)) {
@@ -1920,14 +1862,6 @@ class UserProjectDatabasescontroller extends Controller
                         'Estimated_Gross_ProfitMargin_PJ' => $grossMarginFormatted,
                     ]);
 
-                /* sync → collab_newjob 
-                DB::table('collab_newjob')
-                    ->where('Refcode', $request->id)
-                    ->update([
-                        'Estimated_Gross_Profit'       => $grossProfitFormatted,
-                        'Estimated_Gross_ProfitMargin' => $grossMarginFormatted,
-                    ]);
-                */
             }
 
             DB::commit();
@@ -1946,4 +1880,288 @@ class UserProjectDatabasescontroller extends Controller
         }
     }
 
+
+
+
+
+    // PM พี่เก่ง TE Project 91
+    public function project91(Request $request)
+    {
+        $projectCode   = '91' ;
+        $refcodePrefix = '91-';
+
+        /*
+            |--------------------------------------------------------------------------
+            | STEP 1️⃣ ลบข้อมูลที่ไม่ใช่ 91- ออกจากตาราง
+            | (ทำครั้งเดียว หรือทำทุกครั้งก็ได้ ปลอดภัย)
+            |--------------------------------------------------------------------------
+        */
+
+        DB::table('collab_table_project91')
+            ->where('Refcode_PJ', 'not like', $refcodePrefix . '%')
+            ->delete();
+
+        /*
+            |--------------------------------------------------------------------------
+            | STEP 2️⃣ insert เฉพาะ newjob ที่เป็น 09-
+            | และยังไม่เคยมีใน collab_table_project09
+            |--------------------------------------------------------------------------
+        */
+
+        DB::table('collab_table_project91')->insertUsing(
+            [
+                'Refcode_PJ',
+                'Site_Code_PJ',
+                'Job_Description_PJ',
+                'Office_Code_PJ',
+                'Customer_Region_PJ',
+                'Estimated_Revenue_PJ',             //เงิน
+                'Estimated_Service_Cost_PJ',        //เงิน
+                'Estimated_Material_Cost_PJ',       //เงิน
+                'Estimated_Transportation_Cost_PJ', //เงิน
+                'Estimated_Other_Cost_PJ',          //เงิน
+                'Estimated_Gross_Profit_PJ',        //คำนวน
+                'Estimated_Gross_ProfitMargin_PJ',  //คำนวน
+            ],
+            DB::table('collab_newjob')
+                ->select(
+                    'Refcode',
+                    'Site_Code',
+                    'Job_Description',
+                    'Office_Code',
+                    'Customer_Region',
+                    'Estimated_Revenue',             //เงิน
+                    'Estimated_Service_Cost',        //เงิน
+                    'Estimated_Material_Cost',       //เงิน
+                    'Estimated_Transportation_Cost', //เงิน
+                    'Estimated_Other_Cost',          //เงิน
+                    'Estimated_Gross_Profit',        //คำนวน
+                    'Estimated_Gross_ProfitMargin'   //คำนวน
+                )
+                ->where('Refcode', 'like', $refcodePrefix . '%')
+                ->whereNotExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('collab_table_project91')
+                        ->whereColumn(
+                            'collab_table_project91.Refcode_PJ',
+                            'collab_newjob.Refcode'
+                        );
+                })
+        );
+
+                                            // 2️⃣ ดึงข้อมูลจาก project91 มาแสดงตาม status ของ user
+        $userStatus = Auth::user()->status; // เช่น "01_BKK" หรือ "admin"
+
+        $projectRole = DB::table('collab_user_permissions91')
+            ->where('user_id', Auth::id())
+            ->value('project_role');
+
+        $projectData = DB::table('collab_table_project91 as pj91') 
+            ->leftJoin('r_import_paymenttimeline as payment', 'payment.ref_code', '=', 'pj91.Refcode_PJ')
+            ->select('pj91.*', 'payment.Amount','payment.wo_amount','payment.bill_amount')
+            ->when(! in_array($projectRole, ['Admin', 'Project Manager']), function ($query) use ($userStatus) {
+                // ถ้าไม่ใช่ Admin และไม่ใช่ Project Manager
+                $query->where('Office_Code_PJ', $userStatus);
+            })
+            ->orderBy('Refcode_PJ')
+            ->get();
+
+        //dd($projectData);
+
+        // 3️⃣ user ที่ใช้จัด permission
+        $users = DB::table('users')
+            ->orderBy('name')
+            ->get();
+
+        // 4️⃣ permissions (ผูกกับ project_code = 91)
+        $permissions = DB::table('collab_user_permissions91')
+            ->where('project_code', $projectCode)
+            ->get()
+            ->keyBy('user_id');
+
+        // 5️⃣ ชื่อโปรเจค (แสดงผล)
+        $projectName = '91_Ericsson Equipment for True';
+
+        //dd($showProjectView16);
+
+        return view(
+            'user.projectdatabases.projectview_91',
+            compact('projectData', 'users', 'permissions', 'projectName', 'projectCode')
+        );
+    }
+
+    // update or insert permissions
+    public function save91(Request $request)
+    {
+        //dd('ok');
+        $userIds = array_keys($request->member_status);
+
+        foreach ($userIds as $userId) {
+
+            $data = [
+                'member_status'                    => $request->member_status[$userId] ?? 'no',
+                'project_role'                     => $request->project_role[$userId] ?? null,
+
+                // ✅ อ่านจาก *_permission
+                'Customer_Region_PJ'               => $request->Customer_Region_PJ_permission[$userId] ?? 'invisible',
+                'Estimated_Revenue_PJ'             => $request->Estimated_Revenue_PJ_permission[$userId] ?? 'invisible',
+                'Estimated_Service_Cost_PJ'        => $request->Estimated_Service_Cost_PJ_permission[$userId] ?? 'invisible',
+                'Estimated_Material_Cost_PJ'       => $request->Estimated_Material_Cost_PJ_permission[$userId] ?? 'invisible',
+                'Estimated_Transportation_Cost_PJ' => $request->Estimated_Transportation_Cost_PJ_permission[$userId] ?? 'invisible',
+                'Estimated_Other_Cost_PJ'          => $request->Estimated_Other_Cost_PJ_permission[$userId] ?? 'invisible',
+
+                // 🔥 เพิ่ม 2 ตัวนี้
+                'Estimated_Gross_Profit_PJ'        => $request->Estimated_Gross_Profit_PJ_permission[$userId] ?? 'invisible',
+                'Estimated_Gross_Profit_Margin_PJ' => $request->Estimated_Gross_Profit_Margin_PJ_permission[$userId] ?? 'invisible',
+            ];
+
+            //dd($data);
+
+            // col 1 - col 50
+            for ($i = 1; $i <= 50; $i++) {
+                $data["col{$i}"] = $request->{"col{$i}_permission"}[$userId] ?? 'invisible';
+            }
+
+            //dd($data);
+
+            DB::table('collab_user_permissions91')->updateOrInsert(
+                [
+                    'user_id'      => $userId,
+                    'project_code' => $request->project_code,
+                ],
+                $data
+            );
+        }
+
+        return back()->with('success', 'Permissions saved successfully!');
+    }
+
+    public function inlineUpdate91(Request $request)
+    {
+        $request->validate([
+            'id'    => 'required|string', // Refcode_PJ
+            'field' => 'required|string',
+            'value' => 'nullable|string',
+        ]);
+
+        /* ===============================
+            1) allow fields
+       =============================== */
+        $allowedCols = [];
+        for ($i = 1; $i <= 50; $i++) {
+            $allowedCols[] = 'col' . $i;
+        }
+
+        $moneyFields = [
+            'Estimated_Revenue_PJ',
+            'Estimated_Service_Cost_PJ',
+            'Estimated_Material_Cost_PJ',
+            'Estimated_Transportation_Cost_PJ',
+            'Estimated_Other_Cost_PJ',
+        ];
+
+        $projectFields = array_merge([
+            'Customer_Region_PJ',
+        ], $moneyFields);
+
+        if (! in_array($request->field, array_merge($allowedCols, $projectFields))) {
+            return response()->json(['success' => false], 403);
+        }
+
+        /* ===============================
+       2) permission
+       =============================== */
+        $permission = DB::table('collab_user_permissions91')
+            ->where('user_id', Auth::id())
+            ->where('project_code', '91')
+            ->first();
+
+        if (! $permission || $permission->member_status !== 'yes') {
+            return response()->json(['success' => false], 403);
+        }
+
+        if (
+            ! isset($permission->{$request->field}) ||
+            $permission->{$request->field} !== 'write'
+        ) {
+            return response()->json(['success' => false], 403);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            /* ===============================
+           3) prepare value
+           =============================== */
+            $rawValue   = trim((string) $request->value);
+            $storeValue = $rawValue;
+
+            // ถ้าเป็น field เงิน → format ให้มี comma + 2 decimals
+            if (in_array($request->field, $moneyFields)) {
+                $numeric    = (float) str_replace(',', '', $rawValue);
+                $storeValue = number_format($numeric, 2, '.', ',');
+            }
+
+            /* ===============================
+           4) update collab_table_project90
+           =============================== */
+            DB::table('collab_table_project91')
+                ->where('Refcode_PJ', $request->id)
+                ->update([
+                    $request->field => $storeValue,
+                ]);
+
+            /* ===============================
+           6) calculate gross (money only)
+           =============================== */
+            if (in_array($request->field, $moneyFields)) {
+
+                $row = DB::table('collab_table_project91')
+                    ->where('Refcode_PJ', $request->id)
+                    ->first();
+
+                $revenue  = (float) str_replace(',', '', $row->Estimated_Revenue_PJ ?? 0);
+                $service  = (float) str_replace(',', '', $row->Estimated_Service_Cost_PJ ?? 0);
+                $material = (float) str_replace(',', '', $row->Estimated_Material_Cost_PJ ?? 0);
+
+                $grossProfit = $revenue - $service - $material;
+                $grossMargin = $revenue > 0
+                    ? ($grossProfit / $revenue) * 100
+                    : 0;
+
+                $grossProfitFormatted = number_format($grossProfit, 2, '.', ',');
+                $grossMarginFormatted = number_format($grossMargin, 2, '.', ',');
+
+                // update project table
+                DB::table('collab_table_project91')
+                    ->where('Refcode_PJ', $request->id)
+                    ->update([
+                        'Estimated_Gross_Profit_PJ'       => $grossProfitFormatted,
+                        'Estimated_Gross_ProfitMargin_PJ' => $grossMarginFormatted,
+                    ]);
+
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'value'   => $storeValue,
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+
+
+    
+    
 };

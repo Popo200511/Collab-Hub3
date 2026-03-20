@@ -1,9 +1,7 @@
 
-
 @extends('layouts.user')
 
 @section('title', '83 True Tower Strengthening')
-
 
 @section('content')
 <!-- Export To Excel -->
@@ -516,7 +514,7 @@
             <input type="hidden" name="project_code" value="{{ $projectCode }}">
 
             <div id="permissionModal"
-                class="fixed inset-0 z-[9999] hidden bg-black bg-opacity-50 flex items-center justify-center">
+                class="fixed inset-0 z-[500] hidden bg-black bg-opacity-50 flex items-center justify-center">
                 <div class="bg-white w-full max-w-[1200px] h-[80vh] rounded-xl shadow-lg overflow-hidden flex flex-col">
 
                     <!-- Header -->
@@ -533,7 +531,7 @@
                         <div style="width: 7500px;">
                             <table id="permissionTable" 
                                 class="w-full border-separate border-spacing-0 text-center text-xs font-sarabun">
-                                <thead class="bg-blue-950 text-white sticky top-0 z-[200]">
+                                <thead class="bg-blue-950 text-white">
                                     <tr class="h-8 text-xs">
 
                                         <th class="sticky top-0 sticky-col-1 sticky-header border px-1 group">
@@ -668,7 +666,9 @@
                                             </div>
                                         </th>
 
-                                        <!-- Swap Code-->
+                                        <!-- COl 1 - COl 50
+
+                                        <! Swap Code-->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-sky-500 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Swap Code</span>
@@ -1153,7 +1153,7 @@
                                             </div>
                                         </th>
 
-                                        <!------------------------------------- Col38-Col50 ---------------------------------------->
+                                        <!------------------------------------- Col37-Col50 ---------------------------------------->
 
 
                                         <!-- Col38 -->
@@ -1167,7 +1167,7 @@
                                             </div>
                                         </th>
 
-                                        <!-- Col39 -->
+                                        <!-- Col38 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col39</span>
@@ -1178,7 +1178,7 @@
                                             </div>
                                         </th>
 
-                                        <!-- Col40 -->
+                                        <!-- Col39 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col40</span>
@@ -1189,7 +1189,7 @@
                                             </div>
                                         </th>
 
-                                        <!-- Col41 -->
+                                        <!-- Col40 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col41</span>
@@ -1200,7 +1200,7 @@
                                             </div>
                                         </th>
 
-                                        <!-- Col42 -->
+                                        <!-- Col41 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col42</span>
@@ -1211,7 +1211,7 @@
                                             </div>
                                         </th>
 
-                                        <!-- Col43 -->
+                                        <!-- Col42 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col43</span>
@@ -1222,7 +1222,7 @@
                                             </div>
                                         </th>
 
-                                        <!-- Col44 -->
+                                        <!-- Col43 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col44</span>
@@ -1233,7 +1233,7 @@
                                             </div>
                                         </th>
 
-                                        <!-- Col45 -->
+                                        <!-- Col44 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col45</span>
@@ -1244,7 +1244,7 @@
                                             </div>
                                         </th>
 
-                                        <!-- Col46 -->
+                                        <!-- Col45 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col46</span>
@@ -1255,7 +1255,7 @@
                                             </div>
                                         </th>
 
-                                        <!-- Col47 -->
+                                        <!-- Col46 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col47</span>
@@ -1266,7 +1266,7 @@
                                             </div>
                                         </th>
 
-                                         <!-- Col48 -->
+                                         <!-- Col47 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col48</span>
@@ -1277,7 +1277,7 @@
                                             </div>
                                         </th>
 
-                                         <!-- Col49 -->
+                                         <!-- Col48 -->
                                         <th class="sticky top-0 border px-1 w-[100px] bg-red-400 text-white">
                                             <div class="flex items-center justify-center gap-2">
                                                 <span>Col49</span>
@@ -1299,7 +1299,7 @@
                                             </div>
                                         </th>
 
-                                    
+                                        
 
                                     </tr>
                                 </thead>
@@ -1957,6 +1957,8 @@
 
 
 
+
+
                             {{-- ===== THEAD ===== --}}
                             @for ($i = 1; $i <= 50; $i++) @php $col="col$i" ; $visibility=$permissions[Auth::id()]->$col
                                 ?? 'invisible';
@@ -1995,8 +1997,8 @@
 
                     <tbody id="tableBody" class="text-xs [&_input]:text-xs">
 
-                        @foreach ($projectData as $index => $item)
-                        <tr class="group bg-white hover:bg-red-100 transition-colors font-sarabun duration-200 text-xs" style="{{ $index >= 10 ? 'display:none;' : '' }}">
+                        @foreach ($projectData as $item)
+                        <tr class="group bg-white hover:bg-red-100 transition-colors font-sarabun duration-200 text-xs">
 
                             {{-- Refcode --}}
                             <td data-col="Refcode_PJ"
@@ -2201,31 +2203,27 @@
         <div id="listViewPagination"
             class="mt-4 p-4 sm:p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                
+        
                 <!-- Left: Rows per page -->
                 <div class="flex items-center gap-2">
                     <label class="flex items-center gap-1.5 text-xs font-sarabun font-medium text-gray-600 whitespace-nowrap">
                         <i class="fa-solid fa-list-ul text-indigo-400"></i>
                         แสดงรายการ:
                     </label>
-                    @php
-                    $baseOptions = [10, 20, 50, 100];  // ✅ แสดงครบทุกตัวเลือก
-                    $query = request()->except(['per_page','page']);
-                    @endphp
                     <div class="relative group">
                         <select
-                            onchange="window.location='{{ request()->url() }}?{{ http_build_query($query) }}&per_page='+this.value+'&page=1'"
+                            id="rowsPerPageList"
+                            onchange="changeRowsPerPage(this.value)"
                             class="appearance-none py-2 pl-3 pr-8 border border-gray-200 rounded-xl text-xs font-sarabun font-medium
                                 bg-white text-gray-700 cursor-pointer min-w-[80px] text-center
                                 hover:border-indigo-300 hover:bg-indigo-50/50
                                 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500
                                 transition-all duration-300 shadow-sm hover:shadow-md">
-                            @foreach($baseOptions as $size)
-                            <option value="{{ $size }}"
-                                {{ $projectData->perPage() == $size ? 'selected' : '' }}>
-                                {{ $size }} รายการ
-                            </option>
-                            @endforeach
+                            <option value="10">10 รายการ</option>
+                            <option value="20">20 รายการ</option>
+                            <option value="50">50 รายการ</option>
+                            <option value="100">100 รายการ</option>
+                            <option value="99999" id="optionAll">ทั้งหมด</option>
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
                             <i class="fa-solid fa-chevron-down text-[9px] text-gray-400
@@ -2236,71 +2234,40 @@
                 
                 <!-- Center: Pagination Links -->
                 <nav class="flex items-center gap-1.5">
-                    <!-- Previous -->
-                    @if ($projectData->onFirstPage())
-                    <button disabled
+                    <button id="prevPageBtnList"
+                            onclick="if(!this.disabled) goToPage(tables.main.currentPage - 1)"
                             class="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 
-                                text-gray-400 opacity-30 cursor-not-allowed">
+                                text-gray-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600
+                                transition-all duration-200 shadow-sm hover:shadow-md
+                                disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white 
+                                disabled:hover:text-gray-600 disabled:hover:border-gray-200">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    @else
-                    <a href="{{ $projectData->previousPageUrl() }}"
-                    class="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 
-                            text-gray-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600
-                            transition-all duration-200 shadow-sm hover:shadow-md">
-                        <i class="fa-solid fa-chevron-left text-xs"></i>
-                    </a>
-                    @endif
-                    
-                    <!-- Page Numbers -->
-                    @for ($i = 1; $i <= $projectData->lastPage(); $i++)
-                        @if ($i == 1 || $i == $projectData->lastPage() || abs($i - $projectData->currentPage()) <= 2)
-                            <a href="{{ $projectData->url($i) }}"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl text-xs font-sarabun font-medium
-                                    {{ $projectData->currentPage() == $i
-                                        ? 'bg-indigo-600 text-white shadow-md'
-                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-indigo-50 hover:border-indigo-300' }}
-                                    transition-all duration-200">
-                                {{ $i }}
-                            </a>
-                        @elseif ($i == $projectData->currentPage() - 2 || $i == $projectData->currentPage() + 2)
-                            <span class="text-gray-400 px-1">...</span>
-                        @endif
-                    @endfor
-                    
-                    <!-- Next -->
-                    @if ($projectData->hasMorePages())
-                    <a href="{{ $projectData->nextPageUrl() }}"
-                    class="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 
-                            text-gray-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600
-                            transition-all duration-200 shadow-sm hover:shadow-md">
-                        <i class="fa-solid fa-chevron-right text-xs"></i>
-                    </a>
-                    @else
-                    <button disabled
+
+                    <div id="pageNumbersList" class="flex items-center gap-1.5"></div>
+
+                    <button id="nextPageBtnList"
+                            onclick="if(!this.disabled) goToPage(tables.main.currentPage + 1)"
                             class="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 
-                                text-gray-400 opacity-30 cursor-not-allowed">
+                                text-gray-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600
+                                transition-all duration-200 shadow-sm hover:shadow-md
+                                disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white 
+                                disabled:hover:text-gray-600 disabled:hover:border-gray-200">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
-                    @endif
                 </nav>
-                
-                <!-- Right: Summary -->
+
+                <!-- Right: Summary (JS-driven) -->
                 <div>
-                    <span class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full">
-                        แสดง
-                        <span class="text-indigo-600 font-semibold">
-                            {{ $projectData->firstItem() }}-{{ $projectData->lastItem() }}
-                        </span>
-                        จากทั้งหมด
-                        <span class="font-semibold">
-                            {{ $projectData->total() }}
-                        </span>
-                        รายการ
+                    <span id="paginationSummaryList" 
+                        class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full">
+                        แสดง <span class="text-indigo-600 font-semibold">0-0</span> 
+                        จากทั้งหมด <span class="font-semibold">0</span> รายการ
                     </span>
                 </div>
             </div>
         </div>
+        
     </div>
 
 </main>
@@ -2375,12 +2342,7 @@
 
         <!-- Checkbox List -->
         <div id="column-filter-checkbox-list" class="overflow-y-auto font-sarabun px-4 py-2 text-sm max-h-60 flex-grow">
-            <!-- แสดงจำนวน Total Items -->
-            <div class="text-xs text-gray-500 mb-2 pb-2 border-b border-gray-200 flex justify-between items-center">
-                <span>Total Items:</span>
-                <span id="filter-total-count" class="font-semibold text-indigo-600">0</span>
-            </div>
-            <!-- ID สำหรับอ้างอิงใน JavaScript เพื่อสร้าง checkbox แบบไดนามิก -->
+            <!-- Checkboxes generated by JS -->
         </div>
 
         <!-- Apply / Cancel Footer -->
@@ -2613,7 +2575,7 @@ function toggleDateValueStyle(input) {
                         read: Array.from({
                             length: 37
                         }, (_, i) => i + 1)
-                        // col 1–37 = read
+                        // col 1–36 = read
                         // col 35–50 = invisible
                     },
                     project: {
@@ -2867,7 +2829,18 @@ function exportToExcel() {
 
 <!-- ฟังชั่น Filter -->
 <script>
-const tables = {
+function formatDateDMY(dateStr) {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    if (isNaN(date)) return dateStr;
+    const day = String(date.getDate()).padStart(2, '0');
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+}
+
+    const tables = {
     main: {
         tbody: "#tableBody",
         allRows: [],
@@ -2877,7 +2850,6 @@ const tables = {
         rowsPerPage: 10,
         currentPage: 1
     },
-
     permission: {
         tbody: "#permissionTableBody",
         allRows: [],
@@ -2886,13 +2858,6 @@ const tables = {
         sort: { col: null, dir: null }
     }
 };
-
-const urlParams = new URLSearchParams(window.location.search);
-const perPage = parseInt(urlParams.get("per_page"));
-
-if (perPage) {
-    tables.main.rowsPerPage = perPage;
-}
 
 let openFilter = { table: null, col: null };
 let openFilterColumn = null;
@@ -3052,29 +3017,183 @@ function openPermissionModal() {
 
 function initTable(tableKey) {
     const t = tables[tableKey];
-    const rows = document.querySelectorAll(`${t.tbody} tr`);
-    t.allRows = [...rows];
-    t.visibleRows = [...rows];
+
+    if (tableKey === "main") {
+        const tbody = document.querySelector(t.tbody);
+
+        // ✅ สร้าง rows ทั้งหมดก่อน
+        t.allRows = ALL_DATA.map(item => createRowFromData(item));
+
+        // ✅ ใช้ fragment เพื่อ append ทีเดียว (เร็วกว่า loop append)
+        const fragment = document.createDocumentFragment();
+        t.allRows.forEach(row => {
+            row.style.display = "none";
+            fragment.appendChild(row);
+        });
+
+        tbody.innerHTML = "";       // clear 10 rows เดิม
+        tbody.appendChild(fragment); // append ทีเดียว
+
+    } else {
+        const rows = document.querySelectorAll(`${t.tbody} tr`);
+        t.allRows = [...rows];
+    }
+
+    t.visibleRows = [...t.allRows];
     t.filters = {};
     t.sort = { col: null, dir: null };
     t.currentPage = 1;
-    
-    // ✅ แสดงทุกแถวทันที
-    t.allRows.forEach(r => {
-        r.style.display = "";  // ลบการซ่อน
-    });
-    
+
     renderTable(tableKey);
 }
+
+
+function createRowFromData(item) {
+    const tr = document.createElement("tr");
+    tr.className = "group bg-white hover:bg-red-100 transition-colors font-sarabun duration-200 text-xs";
+
+    let tds = "";
+
+    // ── Fixed columns (ไม่มี permission) ───────────
+    tds += `<td data-col="Refcode_PJ" class="sticky left-0 z-[120] bg-white px-2 py-1 whitespace-nowrap text-center group-hover:bg-red-100 transition">${item.Refcode_PJ ?? ""}</td>`;
+    tds += `<td data-col="Site_Code_PJ" class="sticky left-[var(--col-1)] z-[110] w-[var(--col-2)] bg-white px-2 py-1 whitespace-nowrap text-center group-hover:bg-red-100 transition">${item.Site_Code_PJ ?? ""}</td>`;
+    tds += `<td data-col="Job_Description_PJ">${item.Job_Description_PJ ?? ""}</td>`;
+    tds += `<td data-col="Office_Code_PJ">${item.Office_Code_PJ ?? ""}</td>`;
+
+    // ── Project Columns (เช็ค permission) ──────────
+    PROJECT_COLS.forEach(field => {
+        const visibility = USER_PERMISSIONS[field] ?? "invisible";
+        const isInvisible = visibility === "invisible";
+        const isRead      = visibility === "read";
+        const isMoney     = MONEY_FIELDS.includes(field);
+        const raw         = item[field] ?? "";
+
+        const display = isInvisible ? "display:none;" : "";
+        const formatted = isMoney && raw !== ""
+            ? parseFloat(String(raw).replace(/,/g,"")).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})
+            : raw;
+
+        tds += `
+            <td data-col="${field}" class="project-col ${field}" style="${display}">
+                <input type="text"
+                    class="excel-input ${isMoney ? "money-input" : ""} ${isRead ? "readonly-cell" : ""}"
+                    style="${isMoney ? "text-align:right;" : ""}"
+                    value="${String(formatted).replace(/"/g,'&quot;')}"
+                    data-id="${item.Refcode_PJ}"
+                    data-field="${field}"
+                    data-original="${String(raw).replace(/"/g,'&quot;')}"
+                    ${isRead ? "readonly disabled tabindex=-1" : ""}>
+            </td>`;
+    });
+
+    // ── Gross Profit / Margin ───────────────────────
+    const gpVisibility = USER_PERMISSIONS["Estimated_Gross_Profit_PJ"] ?? "invisible";
+    const gmVisibility = USER_PERMISSIONS["Estimated_Gross_Profit_Margin_PJ"] ?? "invisible";
+
+    const rev = parseFloat(String(item.Estimated_Revenue_PJ ?? 0).replace(/,/g,"")) || 0;
+    const svc = parseFloat(String(item.Estimated_Service_Cost_PJ ?? 0).replace(/,/g,"")) || 0;
+    const mat = parseFloat(String(item.Estimated_Material_Cost_PJ ?? 0).replace(/,/g,"")) || 0;
+    const trn = parseFloat(String(item.Estimated_Transportation_Cost_PJ ?? 0).replace(/,/g,"")) || 0;
+    const oth = parseFloat(String(item.Estimated_Other_Cost_PJ ?? 0).replace(/,/g,"")) || 0;
+    const gp  = rev - svc - mat - trn - oth;
+    const gm  = rev !== 0 ? (gp / rev) * 100 : 0;
+
+    tds += `
+        <td data-col="Estimated_Gross_Profit_PJ" style="${gpVisibility === "invisible" ? "display:none;" : ""}">
+            <input type="text" class="excel-input gross-profit readonly-cell" style="text-align:right;"
+                value="${gp.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}"
+                readonly disabled tabindex="-1">
+        </td>`;
+
+    tds += `
+        <td data-col="Estimated_Gross_Profit_Margin_PJ" style="${gmVisibility === "invisible" ? "display:none;" : ""}">
+            <input type="text" class="excel-input gross-margin readonly-cell"
+                value="${gm.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}%"
+                readonly disabled tabindex="-1">
+        </td>`;
+
+    // ── col1–col50 (เช็ค permission) ────────────────
+    const columnConfig = {
+        2:  "date", 3:  "date", 4:  "select",
+        5:  "date", 7:  "date", 8:  "date",
+        9:  "date", 10: "date", 11: "money",
+        12: "date", 13: "date", 20: "money",
+        22: "date", 23: "money", 25: "money",
+        27: "money", 29: "money", 30: "money",
+        31: "date", 32: "date", 33: "date",
+        34: "date", 35: "date", 36: "date",
+    };
+
+    for (let i = 1; i <= 50; i++) {
+        const key        = `col${i}`;
+        const type       = columnConfig[i] ?? "text";
+        const visibility = USER_PERMISSIONS[key] ?? "invisible";
+        const isInvisible = visibility === "invisible";
+        const isRead     = visibility === "read";
+        const val        = item[key] ?? "";
+        const display    = isInvisible ? "display:none;" : "";
+        const safeVal    = String(val).replace(/"/g, '&quot;');
+
+        if (type === "select") {
+            tds += `
+                <td data-col="${key}" class="col-${i}" style="${display}">
+                    <select class="excel-input ${isRead ? "readonly-cell" : ""}"
+                        data-id="${item.Refcode_PJ}" data-field="${key}"
+                        style="${isRead ? "pointer-events:none;background:#f3f4f6;" : ""}">
+                        ${["Go","NoGo"].map(o =>
+                            `<option value="${o}" ${val == o ? "selected" : ""}>${o}</option>`
+                        ).join("")}
+                    </select>
+                </td>`;
+
+        } else if (type === "date") {
+            // ✅ มี date-wrapper + icon ปฏิทิน
+            const formatted = val ? formatDateDMY(val) : "";
+            tds += `
+                <td data-col="${key}" class="col-${i}" style="${display}" title="${safeVal}">
+                    <div class="date-wrapper">
+                        <input type="text"
+                            class="excel-input date-input ${!val ? 'date-empty' : ''} ${isRead ? 'readonly-cell' : ''}"
+                            value="${formatted}"
+                            placeholder="DD-MMM-YYYY"
+                            data-id="${item.Refcode_PJ}"
+                            data-field="${key}"
+                            ${isRead ? "readonly tabindex=-1" : ""}>
+                        <span class="date-icon ${isRead ? 'disabled' : ''}">
+                            <i class="fa-regular fa-calendar-days"></i>
+                        </span>
+                    </div>
+                </td>`;
+
+        } else {
+            const formatted = type === "money" && val !== ""
+                ? parseFloat(String(val).replace(/,/g,"")).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})
+                : safeVal;
+
+            tds += `
+                <td data-col="${key}" class="col-${i}" style="${display}" title="${safeVal}">
+                    <input type="text"
+                        class="excel-input ${type === "money" ? "money-input text-end" : ""} ${isRead ? "readonly-cell" : ""}"
+                        value="${formatted}"
+                        data-id="${item.Refcode_PJ}" data-field="${key}"
+                        ${isRead ? "readonly tabindex=-1" : ""}>
+                </td>`;
+        }
+    }
+
+    tr.innerHTML = tds;
+    return tr;
+}
+
 
 /* =====================================================
    OPEN FILTER
 ===================================================== */
 function openColumnFilter(tableKey, colKey, icon) {
-    if (!tables[tableKey] || tables[tableKey].allRows.length === 0) {
-        console.warn("Table not ready:", tableKey);
-        return;
-    }
+    const t = tables[tableKey];
+
+    // ✅ ใช้ rows จาก DOM จริง ไม่ต้องสร้างใหม่
+    // t.allRows ถูก set ตอน initTable แล้ว → ไม่ต้องแตะ
 
     openFilter = { table: tableKey, col: String(colKey) };
     openFilterColumn = colKey;
@@ -3087,6 +3206,8 @@ function openColumnFilter(tableKey, colKey, icon) {
 
     setTimeout(() => search.focus(), 0);
 }
+
+
 
 
 
@@ -3158,38 +3279,26 @@ function loadFilterValues(tableKey, colIndex) {
     const selected = t.filters[colIndex] ?? [];
     originalFilterOrder = [];
 
-    const values = new Set();  //  Set ไม่เก็บค่าซ้ำอัตโนมัติ
+    const values = new Set();
     let hasRealValue = false;
 
-    // ⭐ สำคัญมาก
-    const activeFilters = Object.keys(t.filters).filter(c => c != colIndex);
-
-    const sourceRows =
-        activeFilters.length > 0
-            ? t.allRows.filter(row => {
-                return activeFilters.every(c => {
-                    const v = getCellValue(row, c, false) ?? "";
-                    return t.filters[c].includes(v); // ✅ เช็คเฉพาะค่าที่ผ่านฟิลเตอร์อื่น
-                });
-            })
-            : t.allRows;
+    // ✅ ใช้ visibleRows แทน allRows → Cascading Filter
+    // แต่ถ้า column นี้มี filter อยู่แล้ว ให้ใช้ rows ที่ไม่นับ filter ของ column นี้
+    const sourceRows = getRowsExcludingCol(tableKey, colIndex);
 
     sourceRows.forEach(row => {
         const v = getCellValue(row, colIndex, false);
-
-        if (v !== null) {
-            values.add(v); // ถ้ามีค่าซ้ำแล้ว จะไม่เพิ่มใหม่
-            if (v !== "") hasRealValue = true;
-        }
+        values.add(v);
+        if (v !== "") hasRealValue = true;
     });
 
-    if (!hasRealValue) values.add(""); // ถ้าไม่มีค่าจริงเลย → เพิ่มค่าว่างเข้าไป
+    if (!hasRealValue) values.add("");
 
     values.forEach(v => {
         const label = document.createElement("label");
         label.className = "flex gap-2 text-xs py-1";
+        const displayText = v === "" ? "-" : v;
 
-        const displayText = v === "" ? "DD/MMM/YYYY" : v; // แสดงข้อความแทนค่าว่าง
         label.innerHTML = `
             <input type="checkbox"
                 class="filter-checkbox"
@@ -3200,6 +3309,24 @@ function loadFilterValues(tableKey, colIndex) {
 
         list.appendChild(label);
         originalFilterOrder.push(label);
+    });
+}
+
+// ✅ คืน rows ที่ผ่าน filter ทุก column ยกเว้น column ที่กำลังเปิดอยู่
+// → ทำให้ checkbox ของ column นั้นแสดง value ที่ยังเป็นไปได้ทั้งหมด
+function getRowsExcludingCol(tableKey, excludeCol) {
+    const t = tables[tableKey];
+
+    // ✅ วิ่งผ่าน allRows (ทุก row) ไม่ใช่แค่ที่แสดงอยู่
+    return t.allRows.filter(row => {
+        for (let col in t.filters) {
+            if (String(col) === String(excludeCol)) continue;
+
+            let cellVal = getCellValue(row, col, false);
+            if (cellVal === null) cellVal = "";
+            if (!t.filters[col].includes(cellVal)) return false;
+        }
+        return true;
     });
 }
 
@@ -3215,28 +3342,31 @@ function applyColumnFilter() {
 
     const checked = [...document.querySelectorAll(".filter-checkbox")]
         .filter(cb => cb.checked)
-        .map(cb => cb.value); // ❌ ไม่ lower
+        .map(cb => cb.value);
 
-    if (checked.length === 0) delete t.filters[col];
-    else t.filters[col] = checked;
+    console.log("checked:", checked);
 
-    applyAll(table);
+    if (checked.length === 0) {
+        delete t.filters[col];
+    } else {
+        t.filters[col] = checked;
+    }
+
+    applyAll(table); // ⭐ ตัวนี้สำคัญมาก
     closeColumnFilterModal();
 }
+
+
 
 
 function applyAll(tableKey) {
     const t = tables[tableKey];
 
+    // ✅ Filter จาก allRows (DOM จริง) ทุก table
     t.visibleRows = t.allRows.filter(row => {
         for (let col in t.filters) {
             let cellVal = getCellValue(row, col, false);
-
-            // ✅ สำคัญมาก
-            if (cellVal === null) {
-                cellVal = "";
-            }
-
+            if (cellVal === null) cellVal = "";
             if (!t.filters[col].includes(cellVal)) return false;
         }
         return true;
@@ -3398,195 +3528,85 @@ function sortByDatePart(part) {
 ===================================================== */
 function renderTable(tableKey) {
     const t = tables[tableKey];
-    const rows = t.visibleRows;
+    const tbody = document.querySelector(t.tbody);
+
     t.allRows.forEach(r => r.style.display = "none");
+
     if (tableKey === "main") {
         updateRowsPerPageDropdown();
+
         const start = (t.currentPage - 1) * t.rowsPerPage;
         const end = start + t.rowsPerPage;
-        rows.slice(start, end).forEach(r => r.style.display = "");
-        // ✅ เปลี่ยนจาก renderPagination() เป็น updatePaginationUI()
-        updatePaginationUI(t.currentPage, Math.ceil(t.visibleRows.length / t.rowsPerPage), t.visibleRows.length);
+
+        t.visibleRows.slice(start, end).forEach(r => r.style.display = "");
+
+        // ✅ init flatpickr สำหรับ rows ที่แสดงอยู่
+        setTimeout(() => initializeFlatpickrForDynamicContent(), 100);
+
+        renderPagination();
     } else {
-        rows.forEach(r => r.style.display = "");
+        t.visibleRows.forEach(r => r.style.display = "");
     }
+
     updateIcons(tableKey);
 }
 
 
-/*PAGINATION*/
+
+
+/* =====================================================
+   PAGINATION (MAIN ONLY)
+===================================================== */
 function renderPagination() {
     const t = tables.main;
     const totalRows = t.visibleRows.length;
     const totalPages = Math.max(1, Math.ceil(totalRows / t.rowsPerPage));
+
+    // ป้องกัน currentPage เกิน
+    if (t.currentPage > totalPages) t.currentPage = totalPages;
+
     const summaryEl = document.getElementById("paginationSummaryList");
-    const container = document.getElementById("pageNumbersList");
-    
+
     // ✅ กรณีไม่มีข้อมูลเลย
     if (totalRows === 0) {
-        summaryEl.innerHTML = `แสดง <span class="text-indigo-600 font-semibold">0</span> จากทั้งหมด <span class="font-semibold">0</span> รายการ`;
+        summaryEl.innerHTML =
+            `แสดง <span class="text-indigo-600 font-semibold">0</span>
+             จากทั้งหมด <span class="font-semibold">0</span> รายการ`;
+
         document.getElementById("prevPageBtnList").disabled = true;
         document.getElementById("nextPageBtnList").disabled = true;
-        // ❌ อย่าลบ container.innerHTML = "";
+        document.getElementById("pageNumbersList").innerHTML = "";
         return;
     }
-    
+
     // ✅ คำนวณจากแถวจริงในตาราง
     const start = (t.currentPage - 1) * t.rowsPerPage + 1;
     const end = Math.min(start + t.rowsPerPage - 1, totalRows);
-    
-    // ✅ อัปเดต Summary
-    summaryEl.innerHTML = `แสดง <span class="text-indigo-600 font-semibold">${start}-${end}</span> จากทั้งหมด <span class="font-semibold">${totalRows}</span> รายการ`;
-    
-    // ✅ อัปเดต Prev/Next Buttons
+
+    summaryEl.innerHTML =
+        `แสดง <span class="text-indigo-600 font-semibold">${start}-${end}</span>
+         จากทั้งหมด <span class="font-semibold">${totalRows}</span> รายการ`;
+
+    // prev / next
     document.getElementById("prevPageBtnList").disabled = t.currentPage === 1;
     document.getElementById("nextPageBtnList").disabled = t.currentPage === totalPages;
-    
-    // ✅ อัปเดต Active Class บนปุ่มที่มีอยู่แล้ว (ไม่ต้องสร้างใหม่)
-    if (container && container.children.length > 0) {
-        [...container.children].forEach((btn, i) => {
-            const pageNum = i + 1;
-            btn.className = "w-10 h-10 rounded-xl font-sarabun text-sm transition-all " +
-                (pageNum === t.currentPage
-                    ? "bg-indigo-600 text-white shadow-md"
-                    : "bg-white text-gray-600 hover:bg-indigo-50");
-        });
-    }
-}
 
-function updatePaginationUI(currentPage, totalPages, totalRows, start = null, end = null) {
-    const summaryEl = document.getElementById("paginationSummaryList");
+    // page numbers
     const container = document.getElementById("pageNumbersList");
-    const currentPageDisplay = document.getElementById("currentPageDisplay");
-    
-    // ✅ Safe update for summary element
-    if (summaryEl) {
-        if (totalRows === 0) {
-            summaryEl.innerHTML = `แสดง <span class="text-indigo-600 font-semibold">0</span> จากทั้งหมด <span class="font-semibold">0</span> รายการ`;
-        } else {
-            start = start ?? ((currentPage - 1) * tables.main.rowsPerPage + 1);
-            end = end ?? Math.min(start + tables.main.rowsPerPage - 1, totalRows);
-            summaryEl.innerHTML = `แสดง <span class="text-indigo-600 font-semibold">${start}-${end}</span>
-            จากทั้งหมด <span class="font-semibold">${totalRows}</span> รายการ
-            <span class="mx-2 text-gray-400">|</span>
-            หน้า <span class="text-indigo-600 font-semibold">${currentPage}</span>
-            จาก <span class="font-semibold">${totalPages}</span> หน้า`;
-        }
-    }
-    
-    // ✅ Safe update for navigation buttons
-    const prevBtn = document.getElementById("prevPageBtnList");
-    const nextBtn = document.getElementById("nextPageBtnList");
-    if (prevBtn) prevBtn.disabled = currentPage === 1;
-    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
-    
-    // ✅ Safe update for page number buttons
-    if (container && container.children.length > 0) {
-        [...container.children].forEach((btn, i) => {
-            const pageNum = i + 1;
-            btn.className = "w-10 h-10 rounded-xl font-sarabun text-sm transition-all " +
-                (pageNum === currentPage
-                    ? "bg-indigo-600 text-white shadow-md"
-                    : "bg-white text-gray-600 hover:bg-indigo-50");
-        });
-    }
-}
-
-async function loadFilterValues(tableKey, colKey) {
-    const t = tables[tableKey];
-    const list = document.getElementById("column-filter-checkbox-list");
-    const selected = t.filters[colKey] ?? [];
-    originalFilterOrder = [];
-
-    // ✅ แสดงสถานะกำลังโหลด
-    list.innerHTML = `<div class="text-center py-4 text-gray-500 text-xs">
-        <i class="fa-solid fa-circle-notch fa-spin"></i> Loading options...
-    </div>`;
-
-    try {
-        // ✅ แปลง colKey เป็นชื่อคอลัมน์จริง (เช่น "col1" → "col1", "Refcode_PJ" → "Refcode_PJ")
-        const columnName = colKey; 
-
-        // ✅ ดึงค่าจากฐานข้อมูลผ่าน AJAX
-        const response = await fetch(`/83/filter-options/${columnName}`);
-        if (!response.ok) throw new Error('Failed to fetch');
-        
-        const data = await response.json();
-        
-        if (data.success && Array.isArray(data.values)) {
-            renderCheckboxList(data.values, selected, list);
-            return;
-        }
-        throw new Error('Invalid response format');
-        
-    } catch (error) {
-        console.warn('AJAX Filter failed, fallback to DOM:', error);
-        // ✅ Fallback: ใช้ข้อมูลจาก DOM ถ้า AJAX ล้มเหลว
-        loadFilterValuesFromDOM(t, colKey, selected, list);
-    }
-}
-
-// ✅ ฟังก์ชันสำหรับสร้าง Checkbox จากข้อมูลที่ดึงมา
-function renderCheckboxList(values, selected, container) {
     container.innerHTML = "";
-    
-    if (!values || values.length === 0) {
-        container.innerHTML = `<div class="text-center py-4 text-gray-400 text-xs">No data available</div>`;
-        // อัปเดต total count
-        document.getElementById('filter-total-count').textContent = '0';
-        return;
+
+    for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.innerText = i;
+        btn.className =
+            "w-10 h-10 rounded-xl font-sarabun text-sm transition-all " +
+            (i === t.currentPage
+                ? "bg-indigo-600 text-white shadow-md"
+                : "bg-white text-gray-600 hover:bg-indigo-50");
+
+        btn.onclick = () => goToPage(i);
+        container.appendChild(btn);
     }
-    
-    // อัปเดตจำนวน total
-    const totalCountEl = document.getElementById('filter-total-count');
-    if (totalCountEl) {
-        totalCountEl.textContent = values.length;
-    }
-    
-    values.forEach(v => {
-        const label = document.createElement("label");
-        label.className = "flex gap-2 text-xs py-1 cursor-pointer hover:bg-gray-50 rounded px-1";
-        const displayText = v === "" ? "(Blank)" : String(v);
-        label.innerHTML = `
-            <input type="checkbox"
-                class="filter-checkbox flex-shrink-0 mt-0.5"
-                value="${escapeHtml(v)}"
-                ${selected.includes(String(v)) ? "checked" : ""}>
-            <span class="truncate" title="${escapeHtml(displayText)}">${escapeHtml(displayText)}</span>
-        `;
-        container.appendChild(label);
-        originalFilterOrder.push(label);
-    });
-}
-
-// ✅ ฟังก์ชัน Fallback ดึงจาก DOM (เดิม)
-function loadFilterValuesFromDOM(t, colIndex, selected, container) {
-    container.innerHTML = "";
-    originalFilterOrder = [];
-    const values = new Set();
-    let hasRealValue = false;
-
-    t.allRows.forEach(row => {
-        const v = getCellValue(row, colIndex, false);
-        if (v !== null && v !== undefined) {
-            values.add(v);
-            if (v !== "") hasRealValue = true;
-        }
-    });
-    if (!hasRealValue) values.add("");
-
-    values.forEach(v => {
-        const label = document.createElement("label");
-        label.className = "flex gap-2 text-xs py-1";
-        const displayText = v === "" ? "(Blank)" : String(v);
-        label.innerHTML = `
-            <input type="checkbox" class="filter-checkbox" value="${v}" 
-                   ${selected.includes(v) ? "checked" : ""}>
-            <span>${displayText}</span>
-        `;
-        container.appendChild(label);
-        originalFilterOrder.push(label);
-    });
 }
 
 function updateRowsPerPageOptions() {
@@ -3618,36 +3638,15 @@ function updateRowsPerPageDropdown() {
     const t = tables.main;
     const select = document.getElementById("rowsPerPageList");
     if (!select) return;
-    
-    const total = t.visibleRows.length;
-    const current = t.rowsPerPage;
-    
-    // ✅ ล้าง options เก่า
-    select.innerHTML = "";
-    
-    // ✅ แสดงทุกตัวเลือกเสมอ (ไม่ตรวจสอบว่ามากกว่า total หรือไม่)
-    const options = [10, 20, 50, 100];
-    
-    options.forEach(v => {
-        const option = document.createElement("option");
-        option.value = v;
-        option.textContent = `${v} รายการ`;
-        option.selected = current === v;
-        select.appendChild(option);
-    });
-    
-    // ✅ เพิ่มตัวเลือก "ทั้งหมด"
-    const allOption = document.createElement("option");
-    allOption.value = total;
-    allOption.textContent = `ทั้งหมด (${total} รายการ)`;
-    allOption.selected = current === total;
-    select.appendChild(allOption);
-    
-    // ✅ FIX เพิ่มความปลอดภัย
-    if (t.rowsPerPage <= 0) {
-        t.rowsPerPage = Math.min(10, total);
-        t.currentPage = 1;
+
+    // ✅ อัปเดตข้อความ "ทั้งหมด" ให้แสดงจำนวน
+    const optAll = document.getElementById("optionAll");
+    if (optAll) {
+        optAll.textContent = `ทั้งหมด (${t.visibleRows.length} รายการ)`;
     }
+
+    // ✅ sync selected value เท่านั้น — ไม่แตะ options อื่น
+    select.value = String(t.rowsPerPage);
 }
 
 
@@ -3756,18 +3755,11 @@ document.addEventListener("keydown", e => {
 
 
 function changeRowsPerPage(value) {
-    const t = tables.main;
-    const total = t.visibleRows.length;
-    
-    if (value === 'all') {
-        t.rowsPerPage = total;
-    } else {
-        const v = parseInt(value);
-        if (!v) return;
-        t.rowsPerPage = v;
-    }
-    
-    t.currentPage = 1;
+    const v = parseInt(value);
+    if (!v) return;
+
+    tables.main.rowsPerPage = v;
+    tables.main.currentPage = 1;
     renderTable("main");
 }
 
@@ -3871,6 +3863,80 @@ function changeRowsPerPage(value) {
             updateAllColumnSummaries();
         });
     </script>
+
+    <script>
+        function initializeFlatpickrForDynamicContent() {
+    document.querySelectorAll('.date-wrapper').forEach(wrapper => {
+        if (wrapper._flatpickr) return; // ป้องกัน double-init
+        const input = wrapper.querySelector('.date-input');
+        const icon  = wrapper.querySelector('.date-icon');
+        if (!input || input.hasAttribute('readonly')) return;
+
+        const fp = flatpickr(input, {
+            dateFormat: 'd-m-Y',
+            allowInput: true,
+            clickOpens: false,
+            disableMobile: true,
+            locale: { firstDayOfWeek: 1 },
+            onChange(selectedDates, dateStr) {
+                input.classList.toggle('date-empty', !dateStr);
+                input.classList.toggle('has-value', !!dateStr);
+            },
+            onReady(_, __, instance) {
+                if (!instance.calendarContainer.querySelector('.fp-footer')) {
+                    const footer = document.createElement('div');
+                    footer.className = 'fp-footer';
+                    const btnToday = document.createElement('button');
+                    btnToday.type = 'button';
+                    btnToday.innerHTML = '<i class="fa-solid fa-calendar-check"></i> Today';
+                    btnToday.className = 'fp-btn fp-today';
+                    const btnClear = document.createElement('button');
+                    btnClear.type = 'button';
+                    btnClear.innerHTML = '<i class="fa-solid fa-trash-can"></i> Clear';
+                    btnClear.className = 'fp-btn fp-clear';
+                    footer.append(btnToday, btnClear);
+                    instance.calendarContainer.appendChild(footer);
+                    btnToday.addEventListener('click', () => {
+                        instance.setDate(new Date(), true);
+                        input.classList.remove('date-empty');
+                        instance.close();
+                    });
+                    btnClear.addEventListener('click', () => {
+                        instance.clear();
+                        input.value = '';
+                        input.classList.add('date-empty');
+                        instance.close();
+                    });
+                }
+            }
+        });
+
+        if (icon && !icon.classList.contains('disabled')) {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                fp.open();
+            });
+        }
+        wrapper._flatpickr = fp;
+    });
+}
+
+
+    </script>
+
+{{-- ใน Blade ต่อจาก ALL_DATA --}}
+<script>
+    const ALL_DATA = @json($allData);
+    
+    {{-- ✅ ส่ง permission ของ user ปัจจุบันออกมา --}}
+    const USER_PERMISSIONS = @json($permissions[Auth::id()] ?? []);
+    
+    {{-- ✅ ส่ง money fields --}}
+    const MONEY_FIELDS = @json($moneyFields);
+    
+    {{-- ✅ ส่ง projectCols --}}
+    const PROJECT_COLS = @json(array_keys($projectCols));
+</script>
 
 
 
