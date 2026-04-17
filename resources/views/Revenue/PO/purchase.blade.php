@@ -11,15 +11,18 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons/css/all/all.css">
 
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
-    <!-- Load Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Load Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
 
 
 <!-- Hover สำหรับ Filter -->
@@ -427,6 +430,53 @@
                     XLSX.utils.book_append_sheet(wb, ws, "PO Revenue");
                     XLSX.writeFile(wb, `PO_Revenue_${new Date().toISOString().slice(0,10)}.xlsx`);
                 }
+                </script>
+                
+            <!-- SweetAlert เมื่อบันทึกสำเร็จให้แสดง SweetAlert บันทึกสำเร็จ -->
+                @if(session('success'))
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ',
+                            text: '{{ session('success') }}',
+                            confirmButtonColor: '#2563eb',
+                            confirmButtonText: 'ตกลง'
+                        });
+                    </script>
+                @endif
+
+            <!-- SweetAlert ยืนยันการบันทึก -->
+                <script>
+                    document.querySelectorAll("#poModal form, #decrementModal form")
+                    .forEach(form => {
+                        form.addEventListener("submit", function (e) {
+                            e.preventDefault(); // ❗ หยุด submit ก่อน
+
+                            Swal.fire({
+                                title: 'ยืนยันการบันทึก?',
+                                text: "คุณต้องการบันทึกข้อมูลใช่หรือไม่",
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonColor: '#2563eb',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'ใช่, บันทึกเลย',
+                                cancelButtonText: 'ยกเลิก'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+
+                                    // 🔥 ลบ comma ก่อน submit (กัน DB พัง)
+                                    const amount = form.querySelector("#po_amount");
+                                    if (amount) {
+                                        amount.value = amount.value.replace(/,/g, "");
+                                    }
+
+                                    form.submit(); // ✅ submit จริง
+                                }
+                            });
+                        });
+                    });
+
+                    
                 </script>
 
             </header>
