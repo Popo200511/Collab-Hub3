@@ -104,7 +104,7 @@
                 <div class="flex items-center gap-2">
                     <!-- ปุ่มกด Invoice Reques Log -->
                     <div class="flex items-center gap-2">
-                        <button type="button" class="shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white font-medium 
+                        <button type="button" class="shrink-0 bg-green-600 hover:bg-green-700 text-white font-medium 
                     py-1.5 px-4 rounded-lg shadow-sm
                     transition-all duration-200 flex items-center justify-center gap-1.5 text-xs sm:text-sm">
                             <span>Invoice Request Log</span>
@@ -113,7 +113,7 @@
 
                     <!-- ปุ่มกด PO Booking Log  -->
                     <div class="flex items-center gap-2">
-                        <button type="button" class="shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white font-medium 
+                        <button type="button" class="shrink-0 bg-green-600 hover:bg-green-700 text-white font-medium 
                     py-1.5 px-4 rounded-lg shadow-sm
                     transition-all duration-200 flex items-center justify-center gap-1.5 text-xs sm:text-sm">
                             <span>Invoice Request Log</span>
@@ -122,7 +122,7 @@
 
                     <!-- ปุ่มกด PO Decrement  -->
                     <div class="flex items-center gap-2">
-                        <button type="button" class="shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white font-medium 
+                        <button type="button" class="shrink-0 bg-green-600 hover:bg-green-700 text-white font-medium 
                     py-1.5 px-4 rounded-lg shadow-sm
                     transition-all duration-200 flex items-center justify-center gap-1.5 text-xs sm:text-sm">
                             <span>PO Decrement Log</span>
@@ -242,27 +242,6 @@
                         </form>
                     </div>
                 </div>
-
-                <script>
-                    function formatNumber(el) {
-                    let value = el.value.replace(/,/g, "");
-
-                    if (value === "") return;
-
-                    // แยก integer กับ decimal
-                    let parts = value.split(".");
-                    let integer = parts[0].replace(/\D/g, "");
-                    let decimal = parts[1] || "";
-
-                    // จำกัด decimal 2 ตำแหน่ง
-                    decimal = decimal.substring(0, 2);
-
-                    // ใส่ comma
-                    integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                    el.value = decimal ? `${integer}.${decimal}` : integer;
-                }
-                </script>
 
 
 

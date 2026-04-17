@@ -288,4 +288,4 @@ Route::post('Revenue/PO/purchase/PO_Received', [RevenuePurchaseController::class
 Route::post('Revenue/PO/purchase/PO_Decrement', [RevenuePurchaseController::class, 'PO_Decrement'])->name('revenue-purchase.PO_Decrement');
 
 
-
+////////////////////////////////////////////////////////แผนก Invoice Table (พี่ดวง) \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
