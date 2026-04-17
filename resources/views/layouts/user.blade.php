@@ -105,8 +105,7 @@
                         <a href="PO/purchase"
                             class="px-3 py-1 rounded-md transition font-sarabun {{ Route::currentRouteName() === 'newjobassignment.addjob' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             PO
-                        </a>
- -->
+                        </a>-->
 
                     </div>
                 </div>
@@ -127,10 +126,18 @@
                     <!-- เมนูย่อย -->
                     <div x-cloak x-show="open" x-transition
                         class="flex flex-col pl-8 mt-2 space-y-1">
+						
+                            <a href="{{ route('project.projectview_09') }}"
+                                class="px-1 py-1 rounded-md transition font-sarabun text-sm
+       {{ Route::currentRouteName() === 'project.projectview_09' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
+                              09 Infinera Installation Service
+
+                            </a>
+						
 
                         @if ($showProjectView83)
                         <a href="{{ route('project.projectview_83') }}"
-                            class="px-3 py-1 rounded-md transition font-sarabun text-sm
+                            class="px-1 py-1 rounded-md transition font-sarabun text-sm
        {{ Route::currentRouteName() === 'project.projectview_83' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             83 True Tower Strengthening
                         </a>
@@ -139,7 +146,7 @@
                         <!-- Project View -->
                         @if ($showProjectView84)
                         <a href="{{ route('project.projectview_84') }}"
-                            class="px-3 py-1 rounded-md transition font-sarabun text-sm
+                            class="px-1 py-1 rounded-md transition font-sarabun text-sm
        {{ Route::currentRouteName() === 'project.projectview_84' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             84 True Site dismantling
                         </a>
@@ -148,7 +155,7 @@
 
                         @if ($showProjectView85)
                         <a href="{{ route('project.projectview_85') }}"
-                            class="px-3 py-1 rounded-md transition font-sarabun text-sm
+                            class="px-1 py-1 rounded-md transition font-sarabun text-sm
        {{ Route::currentRouteName() === 'project.projectview_85' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             85 True Site Preparation
                         </a>
@@ -156,7 +163,7 @@
 
                         @if ($showProjectView88)
                         <a href="{{ route('project.projectview_88') }}"
-                            class="px-3 py-1 rounded-md transition font-sarabun text-sm
+                            class="px-1 py-1 rounded-md transition font-sarabun text-sm
        {{ Route::currentRouteName() === 'project.projectview_88' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             88 True New site Project
                         </a>
@@ -168,11 +175,20 @@
                         <!-- Project View -->
                         @if ($showProjectView16)
                         <a href="{{ route('project.projectview') }}"
-                            class="px-3 py-1 rounded-md transition font-sarabun text-sm
+                            class="px-1 py-1 rounded-md transition font-sarabun text-sm
        {{ Route::currentRouteName() === 'project.projectview' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             90 True Maintenance
                         </a>
                         @endif
+						
+						
+                            <a href="{{ route('project.projectview_91') }}"
+                                class="px-1 py-1 rounded-md transition font-sarabun text-sm
+       {{ Route::currentRouteName() === 'project.projectview_91' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
+                              91 Ericsson Equipment for True
+
+
+                            </a>
 
 
                     </div>
@@ -227,6 +243,52 @@
                         <a href="{{ route('billing.home') }}"
                             class="px-3 py-1 rounded-md text-sm transition font-sarabun {{ Route::currentRouteName() === 'billing.home' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             Billing
+                        </a>
+
+
+                        @endif
+                    </div>
+
+                </div>
+
+                <!-- PO -->
+                <div x-data="{ open: window.location.pathname.startsWith('/erp') }" class="flex flex-col">
+
+                    <!-- ปุ่ม PO -->
+                    <button type="button" @click="open = !open" class="flex items-center justify-between gap-2 px-3 py-2 rounded-md transition w-full
+               hover:bg-white hover:text-blue-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-building"></i>
+                            <span class="text-base font-sarabun ">Revenue</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                    </button>
+
+                    <!-- เมนูย่อย -->
+                    <div x-cloak x-show="open" x-transition
+                        class="flex flex-col pl-8 mt-2 space-y-1">
+
+                        <!-- Refcode -->
+                        @if (Auth::check())
+
+                        <a href="{{ route('revenue-purchase.index') }}"
+                            class="px-3 py-1 rounded-md text-sm transition font-sarabun {{ Route::currentRouteName() === 'purchase-orders.index' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
+                            PO Table
+                        </a>
+
+
+                        @endif
+                    </div>
+
+                    <div x-cloak x-show="open" x-transition
+                        class="flex flex-col pl-8 mt-2 space-y-1">
+
+                        <!-- Refcode -->
+                        @if (Auth::check())
+
+                        <a href="#"
+                            class="px-3 py-1 rounded-md text-sm transition font-sarabun {{ Route::currentRouteName() === 'purchase-orders.index' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
+                            Invoice (พี่ดวง)
                         </a>
 
 

@@ -6,7 +6,7 @@ use App\Http\Controllers\Implementcontroller;
 use App\Http\Controllers\ImportItemController;
 use App\Http\Controllers\Paymentcontroller;
 use App\Http\Controllers\Prcontroller;
-use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\RevenuePurchaseController;
 use App\Http\Controllers\Refcodecontroller;
 use App\Http\Controllers\SubcInvoicecontroller;
 use App\Http\Controllers\TowerDismantleController;
@@ -63,7 +63,6 @@ Route::post('user/permissions/save/83/{project_code}', [UserProjectDatabasescont
 // Inline update for collab_newjob
 Route::post('user/newjob/inline-update83', [UserProjectDatabasescontroller::class, 'inlineUpdate83'])->name('newjob.inlineUpdate_83');
 
-
 // Project Databases 85
 Route::get('user/project/projectview_85', [UserProjectDatabasescontroller::class, 'project85'])->name('project.projectview_85');
 // Project 85 permission
@@ -85,6 +84,21 @@ Route::get('user/project/projectview_84', [UserProjectDatabasescontroller::class
 Route::post('user/permissions/save/84/{project_code}', [UserProjectDatabasescontroller::class, 'save84'])->name('permissions.save_84');
 // Inline update for collab_newjob
 Route::post('user/newjob/inline-update_84', [UserProjectDatabasescontroller::class, 'inlineUpdate84'])->name('newjob.inlineUpdate_84');
+
+// Project Databases 09
+Route::get('user/project/projectview_09', [UserProjectDatabasescontroller::class, 'project09'])->name('project.projectview_09');
+// Project 90 permission
+Route::post('user/permissions/save/09/{project_code}', [UserProjectDatabasescontroller::class, 'save09'])->name('permissions.save_09');
+// Inline update for collab_newjob
+Route::post('user/newjob/inline-update_09', [UserProjectDatabasescontroller::class, 'inlineUpdate09'])->name('newjob.inlineUpdate_09');
+
+// Project Databases 91
+Route::get('user/project/projectview_91', [UserProjectDatabasescontroller::class, 'project91'])->name('project.projectview_91');
+// Project 91 permission
+Route::post('user/permissions/save/91/{project_code}', [UserProjectDatabasescontroller::class, 'save91'])->name('permissions.save_91');
+// Inline update for collab_newjob 91
+Route::post('user/newjob/inline-update_91', [UserProjectDatabasescontroller::class, 'inlineUpdate91'])->name('newjob.inlineUpdate_91');
+
 
 //END Collab HUB
 
@@ -117,7 +131,10 @@ Route::post('user/newjob/inline-update_84', [UserProjectDatabasescontroller::cla
 Route::get('refcode/saverefcode', [Refcodecontroller::class, 'saveAdd']);
 Route::post('refcode/saverefcode', [Refcodecontroller::class, 'saveAdd']);
 // export excel
-Route::get('/export-refcode', [RefcodeController::class, 'exportRefcode'])->name('exportRefcode');
+//Route::get('/export-refcode', [RefcodeController::class, 'exportRefcode'])->name('exportRefcode');
+
+Route::get('/payment/export-excel', [PaymentController::class, 'exportExcel'])
+    ->name('payment.export.excel');
 
 
 
@@ -260,43 +277,15 @@ Route::get('/test/user', [Dropdowncontroller::class, 'user'])->name('user');
 
 ////////////////////////////////////////////////////////แผนก PO \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+
 // หน้าแสดงรายการ PO
-Route::get('/PO/purchase', [PurchaseOrderController::class, 'index'])->name('purchase-orders.index');
+Route::get('Revenue/PO/purchase', [RevenuePurchaseController::class, 'index'])->name('revenue-purchase.index');
 
-// บันทึก PO ใหม่
-Route::post('/purchase-orders/store', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
+// บันทึก PO Modal PO Received From Customer
+Route::post('Revenue/PO/purchase/PO_Received', [RevenuePurchaseController::class, 'PO_Received'])->name('revenue-purchase.PO_Received');
 
-// แสดงรายละเอียด PO
-Route::get('/purchase-order/show/{id}', [PurchaseOrderController::class, 'show'])->name('purchase-order.show');
+// บันทึก Modal PO Decrement From
+Route::post('Revenue/PO/purchase/PO_Decrement', [RevenuePurchaseController::class, 'PO_Decrement'])->name('revenue-purchase.PO_Decrement');
 
-Route::post('/purchase-order/save', [PurchaseOrderController::class, 'save'])->name('purchase-order.save');
 
-Route::get('/po-items/{id}', [PurchaseOrderController::class, 'fetchPoItems']);
 
-// importItems
-Route::post('/import-items', [PurchaseOrderController::class, 'importItems']);
-
-Route::post('/check-items-duplicates', [PurchaseOrderController::class, 'checkItemsDuplicates']);
-
-// (หน้า Form สำหรับสร้าง PO)
-Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('purchase-orders.create');
-
-// ดึงข้อมูลจาก Filter (PO No / Date / Customer)
-Route::get('/purchase-order/get-data', [PurchaseOrderController::class, 'getPoData'])
-    ->name('purchase-order.getData');
-
-// Import Items (Excel → Database)
-Route::post('/purchase-order/import-items', [PurchaseOrderController::class, 'importItems'])
-    ->name('purchase-order.import-items');
-
-// Import PO Items (แบบ AJAX)
-Route::post('/purchase-order/import', [PurchaseOrderController::class, 'import'])
-    ->name('purchase-order.import');
-
-// Export Excel
-Route::get('/items/export', [PurchaseOrderController::class, 'export'])
-    ->name('items.export');
-
-// Check Import ก่อนบันทึกจริง
-Route::post('/items/check-import', [PurchaseOrderController::class, 'checkImport'])
-    ->name('items.check-import');

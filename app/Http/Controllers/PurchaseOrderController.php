@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+
 class PurchaseOrderController extends Controller
 {
     public function index()
@@ -41,8 +42,65 @@ class PurchaseOrderController extends Controller
     $customers = DB::table('customers')->orderBy('name')->get();
 
     // ส่งไปเฉพาะค่าที่ต้องใช้จริง
-    return view('PO.purchase', compact('purchaseOrders', 'customers', 'items', 'po'));
+    return view('Revenue.PO.purchase', compact('purchaseOrders', 'customers', 'items', 'po'));
 }
+
+    /* บันทึกข้อมูล PO Received จาก Modal */
+    public function PO_Received(Request $request)
+    {
+        //dd('po_no');
+        // 1️⃣ Validate ข้อมูล
+        $validated = $request->validate([
+            'customer_code'    => 'required|string|max:50',
+            'customer_name'    => 'required|string|max:255',
+            'po_no'            => 'required|string|max:100',
+            'po_amount'        => 'required|numeric|min:0',
+            'po_received_date' => 'required|date|before_or_equal:today',
+        ]);
+
+        $data = [
+            'customer_code'    => $request->customer_code,
+            'customer_name'    => $request->customer_name,
+            'po_no'            => $request->po_no,
+            'po_amount'        => $request->po_amount,
+            'po_received_date' => $request->po_received_date,
+        ];
+
+        //dd($data);
+
+        // 2️⃣ บันทึกข้อมูลที่ตาราง collab_revenue_po_receviedfromcustomer
+        $id = DB::table('collab_revenue_po_receviedfromcustomer')->insertGetId([
+            'customer_code'    => $validated['customer_code'],
+            'customer_name'    => $validated['customer_name'],
+            'po_no'            => $validated['po_no'],
+            'po_amount'        => $validated['po_amount'],
+            'po_received_date' => $validated['po_received_date'],
+        ]);
+
+        //dd($id);
+
+        // 3️⃣ Redirect กลับหน้าเดิมพร้อม Flash Message
+        return redirect()->back()->with('success', 'บันทึก PO Received เรียบร้อยแล้ว!');
+    }
+
+    /* บันทึกข้อมูล PO Decrement จาก Modal */
+    public function PO_Decrement(Request $request)
+    {
+        // 1️⃣ Validate ข้อมูล
+        $validated = $request->validate([
+            'po_decrement' => 'required|string|max:50',
+        ]);
+
+        // 2️⃣ บันทึกข้อมูลที่ตาราง collab_revenue_po_decremen
+        $id = DB::table('collab_revenue_po_decremen')->insertGetId([
+            'po_decrement' => $validated['po_decrement'],
+            'created_at'   => now(),
+            'updated_at'   => now(),
+        ]);
+
+        // 3️⃣ Redirect กลับหน้าเดิมพร้อม Flash Message
+        return redirect()->back()->with('success', 'บันทึก PO Decrement เรียบร้อยแล้ว!');
+    }
 
 
 public function fetchPoItems($id)

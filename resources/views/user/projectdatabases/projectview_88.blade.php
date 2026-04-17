@@ -22,6 +22,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
 
+<!-- ปฏิทิน -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <!-- แสดงข้อความ error -->
 @if (session('error'))
 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
@@ -126,126 +130,128 @@
 </style>
 
 <!-- Hover สำหรับ Filter -->
-<style>
-    .filter-active i {
-        color: #60a5fa !important;
-    }
+    <style>
+        .filter-active i {
+            color: #60a5fa !important;
+        }
 
-    thead th:hover .filter-icon:not(.filter-active) i {
-        color: #93c5fd;
-    }
+        thead th:hover .filter-icon:not(.filter-active) i {
+            color: #93c5fd;
+        }
 
-    .font-sarabun {
-        font-family: 'Sarabun', sans-serif !important;
-    }
+        .font-sarabun {
+            font-family: 'Sarabun', sans-serif !important;
+        }
 
         .date-wrapper {
-        position: relative;
-    }
+            position: relative;
+        }
 
-    .date-wrapper .date-input {
-        padding-right: 2.4rem;
-    }
+        .date-wrapper .date-input {
+            padding-right: 2.4rem;
+        }
 
-    .date-icon {
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #6b7280;
-        transition: color 0.2s ease, transform 0.2s ease;
-    }
+        .date-icon {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
 
 
-    .date-icon:hover {
-        color: #2563eb;
-        transform: translateY(-50%) scale(1.1);
-    }
+        .date-icon:hover {
+            color: #2563eb;
+            transform: translateY(-50%) scale(1.1);
+        }
 
-    .date-icon.disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-        pointer-events: none;
-    }
+        .date-icon.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
 
-    .date-empty,
-    .date-input:placeholder-shown {
-        color: #ffffff;
-    }
-    .fp-footer {
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-        padding: 6px;
-        border-top: 1px solid rgb(255, 255, 255);
-    }
+        .date-empty,
+        .date-input:placeholder-shown {
+            color: #9ca3af;
+        }
 
-    .fp-btn {
-        flex: 1;
-        font-size: 12px;
-        padding: 4px 0;
-        border-radius: 4px;
-        cursor: pointer;
-        border: 1px solid #d1d5db;
-        background: #f9fafb;
-    }
+        .fp-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 6px;
+            border-top: 1px solid #e5e7eb;
+        }
 
-    .fp-btn:hover {
-        background: #e5e7eb;
-    }
+        .fp-btn {
+            flex: 1;
+            font-size: 12px;
+            padding: 4px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #d1d5db;
+            background: #f9fafb;
+        }
 
-    .fp-today {
-        color: #2563eb;
-        font-weight: 600;
-    }
+        .fp-btn:hover {
+            background: #e5e7eb;
+        }
 
-    .fp-clear {
-        color: #dc2626;
-    }
-    /* container ของวันที่ (ตัวการหลัก) */
-    .flatpickr-days .dayContainer {
-        min-width: 238px;
-        max-width: 238px;
-    }
+        .fp-today {
+            color: #2563eb;
+            font-weight: 600;
+        }
 
-    /* ===== Flatpickr PERFECT ALIGN ===== */
-    .flatpickr-calendar {
-        font-size: 11px;
-        width: 238px !important;
-    }
+        .fp-clear {
+            color: #dc2626;
+        }
 
-    /* แถวชื่อวัน */
-    .flatpickr-weekdays {
-        display: flex;
-    }
+        /* container ของวันที่ (ตัวการหลัก) */
+        .flatpickr-days .dayContainer {
+            min-width: 238px;
+            max-width: 238px;
+        }
 
-    .flatpickr-weekday {
-        flex: 0 0 34px;
-        max-width: 34px;
-        text-align: center;
-        font-size: 10px;
-    }
+        /* ===== Flatpickr PERFECT ALIGN ===== */
+        .flatpickr-calendar {
+            font-size: 11px;
+            width: 238px !important;
+        }
 
-    /* container วันที่ */
-    .flatpickr-days {
-        display: flex;
-    }
+        /* แถวชื่อวัน */
+        .flatpickr-weekdays {
+            display: flex;
+        }
 
-    .flatpickr-days .dayContainer {
-        min-width: 238px;
-        max-width: 238px;
-    }
+        .flatpickr-weekday {
+            flex: 0 0 34px;
+            max-width: 34px;
+            text-align: center;
+            font-size: 10px;
+        }
 
-    /* ช่องวันที่ */
-    .flatpickr-day {
-        flex: 0 0 34px;
-        max-width: 34px;
-        height: 26px;
-        line-height: 26px;
-        font-size: 11px;
-    }
-</style>
+        /* container วันที่ */
+        .flatpickr-days {
+            display: flex;
+        }
+
+        .flatpickr-days .dayContainer {
+            min-width: 238px;
+            max-width: 238px;
+        }
+
+        /* ช่องวันที่ */
+        .flatpickr-day {
+            flex: 0 0 34px;
+            max-width: 34px;
+            height: 26px;
+            line-height: 26px;
+            font-size: 11px;
+        }
+    </style>
 
 
 
@@ -481,7 +487,7 @@
 
             .sticky-col-2 {
                 position: sticky;
-                left: 208px;
+                left: 208.5px;
                 width: 120px;
                 z-index: 50;
                 background: white;
@@ -490,7 +496,7 @@
             .sticky-col-3 {
                 position: sticky;
                 left: 365px;
-                width: 140px;
+                width: 130px;
                 z-index: 50;
                 background: white;
             }
@@ -558,15 +564,15 @@
                                         </th>
 
                                         <th class="sticky top-0 sticky-col-3 sticky-header border px-1 group">
-                                            <div class="flex items-center justify-center gap-2">
-                                                <span>Project Role</span>
+                                                <div class="flex items-center justify-center gap-2">
+                                                    <span>Project Role</span>
 
-                                                <span
-                                                    class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
-                                                    data-table="permission" data-col="2">
-                                                    <i class="fi fi-br-bars-filter text-xs text-white"></i>
-                                                </span>
-                                            </div>
+                                                    <span
+                                                        class="filter-icon cursor-pointer opacity-60 group-hover:opacity-100"
+                                                        data-table="permission" data-col="2">
+                                                        <i class="fi fi-br-bars-filter text-xs text-white"></i>
+                                                    </span>
+                                                </div>
                                         </th>
 
                                         <th class="sticky top-0 border px-1 w-[120px]" style="background-color: green">
@@ -2155,48 +2161,48 @@
                                         </td>
 
 
-                                        <!-- Project Role -->
-                                        <td data-col="2"
-                                            class="sticky-col-3 z-[40] group-hover:bg-red-100 px-2 transition">
-                                            <select name="project_role[{{ $user->id }}]"
-                                                class="text-xs p-1 border rounded w-full bg-white hover:bg-gray-50 font-medium project-role"
-                                                data-user-id="{{ $user->id }}">
+                                         <!-- Project Role -->
+                                                <td data-col="2"
+                                                    class="sticky-col-3  z-[40] group-hover:bg-red-100 px-2 transition">
+                                                    <select name="project_role[{{ $user->id }}]"
+                                                        class="text-xs p-1 border rounded w-full bg-white hover:bg-gray-50 font-medium project-role"
+                                                        data-user-id="{{ $user->id }}">
 
-                                                <!-- ค่าเริ่มต้น No -->
-                                                <option value="" {{ !isset($permissions[$user->id]) ||
-                                                    $permissions[$user->id]->project_role === null ? 'selected' : '' }}>
-                                                    No
-                                                </option>
+                                                        <!-- ค่าเริ่มต้น No -->
+                                                        <option value=""
+                                                            {{ !isset($permissions[$user->id]) || $permissions[$user->id]->project_role === null ? 'selected' : '' }}>
+                                                            No
+                                                        </option>
 
-                                                <option value="Project Manager" {{ isset($permissions[$user->id]) &&
-                                                    $permissions[$user->id]->project_role === 'Project Manager'
-                                                    ? 'selected'
-                                                    : '' }}>
-                                                    Project Manager
-                                                </option>
+                                                        <option value="Project Manager"
+                                                            {{ isset($permissions[$user->id]) && $permissions[$user->id]->project_role === 'Project Manager'
+                                                                ? 'selected'
+                                                                : '' }}>
+                                                            Project Manager
+                                                        </option>
 
-                                                <option value="Project Admin" {{ isset($permissions[$user->id]) &&
-                                                    $permissions[$user->id]->project_role === 'Project Admin'
-                                                    ? 'selected'
-                                                    : '' }}>
-                                                    Project Admin
-                                                </option>
+                                                        <option value="Project Admin"
+                                                            {{ isset($permissions[$user->id]) && $permissions[$user->id]->project_role === 'Project Admin'
+                                                                ? 'selected'
+                                                                : '' }}>
+                                                            Project Admin
+                                                        </option>
 
-                                                <option value="Site Supervisor" {{ isset($permissions[$user->id]) &&
-                                                    $permissions[$user->id]->project_role === 'Site Supervisor'
-                                                    ? 'selected'
-                                                    : '' }}>
-                                                    Site Supervisor
-                                                </option>
+                                                        <option value="Site Supervisor"
+                                                            {{ isset($permissions[$user->id]) && $permissions[$user->id]->project_role === 'Site Supervisor'
+                                                                ? 'selected'
+                                                                : '' }}>
+                                                            Site Supervisor
+                                                        </option>
 
-                                                <option value="Project Director" {{ isset($permissions[$user->id]) &&
-                                                    $permissions[$user->id]->project_role === 'Project Director'
-                                                    ? 'selected'
-                                                    : '' }}>
-                                                    Project Director
-                                                </option>
-                                            </select>
-                                        </td>
+                                                        <option value="Project Director"
+                                                            {{ isset($permissions[$user->id]) && $permissions[$user->id]->project_role === 'Project Director'
+                                                                ? 'selected'
+                                                                : '' }}>
+                                                            Project Director
+                                                        </option>
+                                                    </select>
+                                                </td>
 
 
 
@@ -2431,7 +2437,7 @@
                                 <th class="sticky left-[var(--col-1)] z-[210] py-1 border-b shadow-sm"
                                     style="background-color: white; width: var(--col-2); min-width: var(--col-2);">
                                 </th>
-								
+                                
                                 <th style="background-color: white;"></th>
                                 <th style="background-color: white;"></th>
 
@@ -2461,7 +2467,10 @@
                                     <span data-summary-field="Estimated_Gross_Profit_Margin_PJ" data-type="avg"></span>
                                 </th>
 
-                                 @php
+
+
+                                {{-- ===== col 1–120 (tbody) ===== --}}
+                            @php
                             $columnConfig = [
                             //1 => ['type' => 'select', 'options' => ['Go', 'NoGo']],
                             1 => ['type' => 'text'],
@@ -2570,7 +2579,7 @@
                             @endphp
 
 
-							@for ($i = 1; $i <= 120; $i++)
+                            @for ($i = 1; $i <= 120; $i++)
                                     @php
                                         $col = "col$i";
                                         $config = $columnConfig[$i] ?? ['type' => 'text'];
@@ -2587,7 +2596,7 @@
                                     @endphp
 
                                     <th class="border-b"
-    style="background: white; color: red; {{ $visibility === 'invisible' ? 'display:none;' : '' }}">
+                                        style="background: white; color: red; {{ $visibility === 'invisible' ? 'display:none;' : '' }}">
 
                                         @if ($summaryType)
                                             <span data-summary-field="{{ $col }}"
@@ -2595,6 +2604,10 @@
                                         @endif
                                     </th>
                                 @endfor
+
+                                
+
+
 
                             </tr>
 
@@ -2998,9 +3011,6 @@
                                 @php $colIndex++; @endphp
                                 @endfor
 
-
-
-
                         </tr>
                     </thead>
 
@@ -3209,62 +3219,72 @@
                                 @endphp
 
                                 <td data-col="col{{ $i }}" class="col-{{ $i }}"
-                                style="{{ $isInvisible ? 'display:none;' : '' }}"
-                                title="{{ $value }}">
+                                            style="{{ $isInvisible ? 'display:none;' : '' }}"
+                                            title="{{ $value }}">
 
-                                {{-- TEXT --}}
-                                @if ($config['type'] === 'text')
-                                    <input type="text"
-                                        class="excel-input {{ $isRead ? 'readonly-cell' : '' }}"
-                                        value="{{ $value }}"
-                                        data-id="{{ $item->Refcode_PJ }}"
-                                        data-field="{{ $col }}"
-                                        {{ $isRead ? 'readonly tabindex=-1' : '' }}>
+                                            {{-- TEXT --}}
+                                            @if ($config['type'] === 'text')
+                                                <input type="text"
+                                                    class="excel-input {{ $isRead ? 'readonly-cell' : '' }}"
+                                                    value="{{ $value }}" data-id="{{ $item->Refcode_PJ }}"
+                                                    data-field="{{ $col }}"
+                                                    {{ $isRead ? 'readonly tabindex=-1' : '' }}>
 
-                                {{-- DATE --}}
-                               @elseif ($config['type'] === 'date')
-                                <div class="date-wrapper">
-                                    <input type="text"
-                                        class="excel-input date-input {{ empty($value) ? 'date-empty' : '' }} {{ $isRead ? 'readonly-cell' : '' }}"
-                                        value="{{ $value ? \Carbon\Carbon::parse($value)->format('d-m-Y') : '' }}"
-                                        placeholder="DD-MMM-YYYY"
-                                        inputmode="numeric"
-                                        pattern="\d{2}-\d{2}-\d{4}"
-                                        data-id="{{ $item->Refcode_PJ }}"
-                                        data-field="{{ $col }}"
-                                        {{ $isRead ? 'readonly tabindex=-1' : '' }}>
+                                                {{-- DATE --}}
+                                            @elseif ($config['type'] === 'date')
+                                                <div class="date-wrapper">
+                                                    <input type="text"
+                                                        class="excel-input date-input {{ empty($value) ? 'date-empty' : '' }} {{ $isRead ? 'readonly-cell' : '' }}"
+                                                        value="{{ $value ? \Carbon\Carbon::parse($value)->format('d-m-Y') : '' }}"
+                                                        placeholder="DD-MMM-YYYY" inputmode="numeric"
+                                                        pattern="\d{2}-\d{2}-\d{4}" data-id="{{ $item->Refcode_PJ }}"
+                                                        data-field="{{ $col }}"
+                                                        {{ $isRead ? 'readonly tabindex=-1' : '' }}>
 
-                                    <span class="date-icon {{ $isRead ? 'disabled' : '' }}">
-                                        <i class="fa-regular fa-calendar-days"></i>
-                                    </span>
-                                </div>
+                                                    <span class="date-icon {{ $isRead ? 'disabled' : '' }}">
+                                                        <i class="fa-regular fa-calendar-days"></i>
+                                                    </span>
+                                                </div>
 
-                                {{-- MONEY --}}
-                                @elseif ($config['type'] === 'money')
-                                    <input type="text"
-                                        class="excel-input money-input text-end
-                                            {{ $isRead || ($config['calculated'] ?? false) ? 'readonly-cell' : '' }}"
-                                        value="{{ is_numeric($value) ? number_format($value, 2) : $value }}"
-                                        data-id="{{ $item->Refcode_PJ }}"
-                                        data-field="{{ $col }}"
-                                        {{ $isRead || ($config['calculated'] ?? false) ? 'readonly tabindex=-1' : '' }}>
+                                                {{-- MONEY --}}
+                                            @elseif ($config['type'] === 'money')
+                                                <div class="relative flex items-center group w-full">
 
-                                {{-- SELECT --}}
-                                @elseif ($config['type'] === 'select')
-                                    <select class="excel-input {{ $isRead ? 'readonly-cell' : '' }}"
-                                        data-id="{{ $item->Refcode_PJ }}"
-                                        data-field="{{ $col }}"
-                                        style="{{ $isRead ? 'pointer-events:none;background:#f3f4f6;' : '' }}">
-                                        @foreach ($config['options'] as $option)
-                                            <option value="{{ $option }}" {{ $value == $option ? 'selected' : '' }}>
-                                                {{ $option }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                @endif
+                                                    @if ($i === 15 || $i === 17)
+                                                        <a href="{{ url('/ERP/payment/home') }}?search={{ $item->Refcode_PJ }}"
+                                                            target="_blank"
+                                                            class="w-full text-end text-blue-600 underline cursor-pointer pr-2 block"
+                                                            title="คลิกเพื่อดู Timeline ของ {{ $item->Refcode_PJ }}">
+                                                            {{ is_numeric($value) ? number_format($value, 2) : $value }}
+                                                        </a>
+                                                    @else
+                                                        <input type="text"
+                                                            class="excel-input money-input text-end
+            {{ $isRead || ($config['calculated'] ?? false) ? 'readonly-cell' : '' }}"
+                                                            value="{{ is_numeric($value) ? number_format($value, 2) : $value }}"
+                                                            data-id="{{ $item->Refcode_PJ }}"
+                                                            data-field="{{ $col }}"
+                                                            {{ $isRead || ($config['calculated'] ?? false) ? 'readonly' : '' }}>
+                                                    @endif
 
-                            </td>
-                            @endfor
+                                                </div>
+
+                                                {{-- SELECT --}}
+                                            @elseif ($config['type'] === 'select')
+                                                <select class="excel-input {{ $isRead ? 'readonly-cell' : '' }}"
+                                                    data-id="{{ $item->Refcode_PJ }}" data-field="{{ $col }}"
+                                                    style="{{ $isRead ? 'pointer-events:none;background:#f3f4f6;' : '' }}">
+                                                    @foreach ($config['options'] as $option)
+                                                        <option value="{{ $option }}"
+                                                            {{ $value == $option ? 'selected' : '' }}>
+                                                            {{ $option }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            @endif
+
+                                        </td>
+                                @endfor
 
                         </tr>
                         @endforeach
@@ -3274,114 +3294,53 @@
         </div>
 
         <div id="listViewPagination"
-                class="mt-4 p-4 sm:p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
+            class="mt-4 flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0 p-5 bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-300">
 
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-
-                    {{-- Left: Rows per page --}}
-                        <div class="flex items-center gap-2">
-                            <!-- Label with Icon -->
-                            <label class="flex items-center gap-1.5 text-xs font-sarabun font-medium text-gray-600 whitespace-nowrap">
-                                <i class="fa-solid fa-list-ul text-indigo-400"></i>
-                                แสดงรายการ:
-                            </label>
-
-                            @php
-                                $total = $projectData->count();
-                                $baseOptions = [10, 20, 50, 100];
-                                $options = array_filter($baseOptions, fn($v) => $v < $total);
-                                $options[] = $total;
-                            @endphp
-
-                            <!-- Custom Select Container -->
-                            <div class="relative group">
-                                @php
-                                    $query = request()->except(['per_page','page']);
-                                @endphp
-
-                                <select 
-                                onchange="window.location='{{ request()->url() }}?{{ http_build_query($query) }}&per_page='+this.value+'&page=1'"
-                                class="appearance-none py-2 pl-3 pr-8 border border-gray-200 rounded-xl text-xs font-sarabun font-medium
-                                bg-white text-gray-700 cursor-pointer min-w-[80px] text-center
-                                hover:border-indigo-300 hover:bg-indigo-50/50
-                                focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500
-                                transition-all duration-300 shadow-sm hover:shadow-md">
-                                    
-                                    @foreach($options as $size)
-                                        <option value="{{ $size }}"
-                                            {{ $projectData->perPage() == $size ? 'selected' : '' }}>
-                                            {{ $size == $total ? 'ทั้งหมด ('.$total.')' : $size }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                
-                                <!-- Custom Dropdown Arrow -->
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-                                    <i class="fa-solid fa-chevron-down text-[9px] text-gray-400 
-                                            group-hover:text-indigo-500 transition-colors"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                    {{-- Center: Pagination --}}
-                    <nav class="flex items-center gap-1.5">
-
-                        {{-- Previous --}}
-                        @if ($projectData->onFirstPage())
-                            <button disabled
-                                class="w-9 h-9 rounded-xl border opacity-30">
-                                <i class="fa-solid fa-chevron-left text-xs"></i>
-                            </button>
-                        @else
-                            <a href="{{ $projectData->previousPageUrl() }}"
-                                class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
-                                <i class="fa-solid fa-chevron-left text-xs"></i>
-                            </a>
-                        @endif
-
-
-                        {{-- Page Numbers --}}
-                        @for ($i = 1; $i <= $projectData->lastPage(); $i++)
-                            <a href="{{ $projectData->url($i) }}"
-                                class="w-9 h-9 flex items-center justify-center rounded-xl text-xs
-                                {{ $projectData->currentPage() == $i
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'bg-white text-gray-600 border hover:bg-indigo-50' }}">
-                                {{ $i }}
-                            </a>
-                        @endfor
-
-
-                        {{-- Next --}}
-                        @if ($projectData->hasMorePages())
-                            <a href="{{ $projectData->nextPageUrl() }}"
-                                class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
-                                <i class="fa-solid fa-chevron-right text-xs"></i>
-                            </a>
-                        @else
-                            <button disabled
-                                class="w-9 h-9 rounded-xl border opacity-30">
-                                <i class="fa-solid fa-chevron-right text-xs"></i>
-                            </button>
-                        @endif
-
-                    </nav>
-
-                    {{-- Right: Summary --}}
-                    <div>
-                        <span class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full">
-                            แสดง
-                            <span class="text-indigo-600 font-semibold">
-                                {{ $projectData->firstItem() }}-{{ $projectData->lastItem() }}
-                            </span>
-                            จากทั้งหมด
-                            <span class="font-semibold">
-                                {{ $projectData->total() }}
-                            </span>
-                            รายการ
-                        </span>
+            <div class="flex items-center space-x-3 order-2 lg:order-1">
+                <label for="rowsPerPageList"
+                    class="font-sarabun text-xs font-medium tracking-wide text-gray-600">แสดงรายการ:</label>
+                <div class="relative">
+                    <select id="rowsPerPageList" onchange="changeRowsPerPage(this.value)"
+                        class="block py-2 pl-4 pr-10 border border-gray-200 rounded-xl text-xs font-sarabun bg-gray-50 cursor-pointer appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                    </select>
+                    {{-- Custom Arrow Icon --}}
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                        <i class="fa-solid fa-chevron-down text-[10px]"></i>
                     </div>
+                </div>
+            </div>
 
+            <nav class="flex items-center space-x-2 order-1 lg:order-2" aria-label="Pagination">
+                {{-- Previous Button --}}
+                <button id="prevPageBtnList" onclick="goToPage(tables.main.currentPage - 1)"
+                    class="pagination-btn group flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none shadow-sm">
+                    <i class="fa-solid fa-chevron-left text-xs transition-transform group-hover:-translate-x-0.5"></i>
+                </button>
+
+                {{-- Page Numbers Container --}}
+                <div id="pageNumbersList" class="flex items-center space-x-1">
+                    {{-- ตัวอย่างปุ่ม Active --}}
+                    <button
+                        class="w-10 h-10 rounded-xl bg-indigo-600 text-white font-sarabun text-sm shadow-md shadow-indigo-200">1</button>
+                    <button
+                        class="w-10 h-10 rounded-xl bg-white text-gray-600 font-sarabun text-sm hover:bg-indigo-50 transition-all">2</button>
+                    <button
+                        class="w-10 h-10 rounded-xl bg-white text-gray-600 font-sarabun text-sm hover:bg-indigo-50 transition-all">3</button>
+                </div>
+
+                {{-- Next Button --}}
+                <button id="nextPageBtnList" onclick="goToPage(tables.main.currentPage + 1)"
+                    class="pagination-btn group flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none shadow-sm">
+                    <i class="fa-solid fa-chevron-right text-xs transition-transform group-hover:translate-x-0.5"></i>
+                </button>
+            </nav>
+
+            <div class="order-3 text-right">
+                <span id="paginationSummaryList"
+                    class="text-xs font-sarabun text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
+                    แสดง <span class="text-indigo-600 font-sarabun">1-10</span> จากทั้งหมด <span
+                        class="text-gray-900 font-sarabun">15</span> รายการ
+                </span>
             </div>
         </div>
     </div>
@@ -3470,121 +3429,6 @@
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.date-wrapper').forEach(wrapper => {
-        const input = wrapper.querySelector('.date-input');
-        const icon  = wrapper.querySelector('.date-icon');
-
-        toggleDateValueStyle(input);
-
-        if (input.hasAttribute('readonly')) return;
-
-        const fp = flatpickr(input, {
-            dateFormat: 'd-m-Y',
-            allowInput: true,
-            clickOpens: false,
-            disableMobile: true,
-            locale: { firstDayOfWeek: 1 },
-
-            onChange: function(selectedDates, dateStr) {
-                if (dateStr) {
-                    input.classList.remove('date-empty');
-                    input.classList.add('has-value');
-                } else {
-                    input.classList.add('date-empty');
-                    input.classList.remove('has-value');
-                }
-            },
-            onReady: function(_, __, instance) {
-                const footer = document.createElement('div');
-                footer.className = 'fp-footer';
-
-                const btnToday = document.createElement('button');
-                btnToday.type = 'button';
-                btnToday.innerHTML = '<i class="fa-solid fa-calendar-check"></i> Today';
-                btnToday.className = 'fp-btn fp-today';
-
-                const btnClear = document.createElement('button');
-                btnClear.type = 'button';
-                btnClear.innerHTML = '<i class="fa-solid fa-trash-can"></i> Clear';
-                btnClear.className = 'fp-btn fp-clear';
-
-                footer.appendChild(btnToday);
-                footer.appendChild(btnClear);
-                instance.calendarContainer.appendChild(footer);
-
-                btnToday.addEventListener('click', () => {
-                    instance.setDate(new Date(), true);
-                    input.classList.remove('date-empty');
-                    toggleDateValueStyle(input);
-                    instance.close();
-                });
-
-                btnClear.addEventListener('click', () => {
-                    instance.clear();
-                    input.value = '';
-                    input.classList.add('date-empty');
-                    toggleDateValueStyle(input);
-                    instance.close();
-                });
-            },
-
-            onOpen: function(_, __, instance) {
-                input.classList.add('active-input');
-
-                instance._keyHandler = (e) => {
-                    // Enter = Today
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        instance.setDate(new Date(), true);
-                        input.classList.remove('date-empty');
-                        toggleDateValueStyle(input);
-                        instance.close();
-                    }
-
-                    // Esc = Close
-                    if (e.key === 'Escape') {
-                        e.preventDefault();
-                        instance.close();
-                    }
-                };
-
-                document.addEventListener('keydown', instance._keyHandler);
-            },
-
-            onClose: function(_, __, instance) {
-                input.classList.remove('active-input');
-
-                if (instance._keyHandler) {
-                    document.removeEventListener('keydown', instance._keyHandler);
-                    instance._keyHandler = null;
-                }
-            }
-        });
-
-        icon.addEventListener('click', () => fp.open());
-        
-        // ปรับปรุงการพิมพ์ให้รองรับ d-m-Y อัตโนมัติ (Optional)
-        input.addEventListener('input', (e) => {
-            let v = e.target.value.replace(/\D/g, '').slice(0, 8);
-            if (v.length >= 2 && v.length < 4) v = v.slice(0,2) + '-' + v.slice(2);
-            if (v.length >= 4) v = v.slice(0,2) + '-' + v.slice(2,4) + '-' + v.slice(4);
-            e.target.value = v;
-
-            toggleDateValueStyle(input);
-        });
-    });
-});
-function toggleDateValueStyle(input) {
-    if (input.value && input.value.trim() !== '') {
-        input.classList.add('has-value');
-    } else {
-        input.classList.remove('has-value');
-    }
-}
-</script>
 
 <script>
     function storeOriginal(input) {
@@ -3765,51 +3609,46 @@ function toggleDateValueStyle(input) {
 
 <!--แปลงเป็น Editable-->
 
-<style>
-    /* Input field แบบ Excel */
-    .excel-input {
-        width: 100%;
-        min-width: 100px;
-        /* ให้ cell แสดงเต็มความยาวที่ต้องการ */
+    <style>
+        /* Input field แบบ Excel */
+        .excel-input {
+            width: 100%;
+            min-width: 100px;
+            /* ให้ cell แสดงเต็มความยาวที่ต้องการ */
 
-        background: transparent;
-        /* พื้นหลังใส */
-        font-size: 10px;
-        text-align: center;
-        box-sizing: border-box;
-        /* รวม padding + border ใน width */
-        white-space: nowrap;
-        /* อยู่บรรทัดเดียว */
+            background: transparent;
+            /* พื้นหลังใส */
+            font-size: 10px;
+            text-align: center;
+            box-sizing: border-box;
+            /* รวม padding + border ใน width */
+            white-space: nowrap;
+            /* อยู่บรรทัดเดียว */
 
-        text-overflow: ellipsis;
-        /* แสดง ... ถ้ายาวเกิน */
-        transition: all 0.2s;
-        /* effect เวลา focus */
-    }
+            text-overflow: ellipsis;
+            /* แสดง ... ถ้ายาวเกิน */
+            transition: all 0.2s;
+            /* effect เวลา focus */
+        }
 
-    .money-input {
-        text-align: right;
-        /* 👈 money ชิดขวา */
-    }
+        /* Focus / editable state */
+        .excel-input:focus,
+        .excel-input.active-hover {
+            outline: 1px solid #3b82f6;
+            /* สีฟ้า */
+            background: #eef6ff;
+            /* ฟีล Excel */
+            border-radius: 10%;
+            /* มุมโค้งเล็กน้อย */
+        }
 
-    /* Focus / editable state */
-    .excel-input:focus,
-    .excel-input.active-hover {
-        outline: 1px solid #3b82f6;
-        /* สีฟ้า */
-        background: #eef6ff;
-        /* ฟีล Excel */
-        border-radius: 10%;
-        /* มุมโค้งเล็กน้อย */
-    }
-
-    /* Readonly cell */
-    .readonly-cell {
-        background-color: #f5f5f5;
-        /* เทาอ่อน */
-        cursor: not-allowed;
-    }
-</style>
+        /* Readonly cell */
+        .readonly-cell {
+            background-color: #f5f5f5;
+            /* เทาอ่อน */
+            cursor: not-allowed;
+        }
+    </style>
 
 
 <script>
@@ -3873,73 +3712,58 @@ function toggleDateValueStyle(input) {
 
 
 
+
+
 <!-- Export -->
 <script>
-function exportToExcel() {
-    const table = document.getElementById("table");
-    const rows = table.querySelectorAll("tr");
+    function exportToExcel() {
+            const table = document.getElementById("table");
+            const rows = table.querySelectorAll("tr");
 
-    let data = [];
+            let data = [];
 
-    rows.forEach(row => {
-        // ❌ ข้าม row ที่ถูกซ่อน
-        if (row.offsetParent === null) return;
+            rows.forEach(row => {
+                let rowData = [];
 
-        let rowData = [];
-        const cells = row.querySelectorAll("th, td");
+                const cells = row.querySelectorAll("th, td");
 
-        cells.forEach(cell => {
-            // ❌ ข้าม cell ที่ถูกซ่อน
-            if (cell.offsetParent === null) return;
+                cells.forEach(cell => {
+                    // ข้าม cell ที่ถูกซ่อน
+                    if (cell.offsetParent === null) return;
 
-            let value = "";
+                    let value = "";
 
-            // input / select / textarea
-            const input = cell.querySelector("input, select, textarea");
-            if (input) {
-                value = input.value;
-            } else {
-                value = cell.innerText.trim();
-            }
+                    // ถ้ามี input ให้ดึง value
+                    const input = cell.querySelector("input");
+                    if (input) {
+                        value = input.value;
+                    } else {
+                        value = cell.innerText.trim();
+                    }
 
-            // ลบ comma
-            const raw = value.replace(/,/g, "");
+                    rowData.push(value);
+                });
 
-            // ถ้าเป็นตัวเลข → number
-            if (raw !== "" && !isNaN(raw)) {
-                rowData.push(Number(raw));
-            } else {
-                rowData.push(value);
-            }
-        });
+                if (rowData.length > 0) {
+                    data.push(rowData);
+                }
+            });
 
-        if (rowData.length > 0) {
-            data.push(rowData);
+            // สร้าง workbook
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(data);
+
+            XLSX.utils.book_append_sheet(wb, ws, "Visible Data");
+
+            // export
+            XLSX.writeFile(wb, "project_visible_data.xlsx");
         }
-    });
-
-    // ===== Excel =====
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.aoa_to_sheet(data);
-
-    // บังคับ type number
-    Object.keys(ws).forEach(cell => {
-        if (cell[0] === "!") return;
-        if (typeof ws[cell].v === "number") {
-            ws[cell].t = "n";
-            ws[cell].z = "0.00";
-        }
-    });
-
-    XLSX.utils.book_append_sheet(wb, ws, "Visible Data");
-    XLSX.writeFile(wb, "88_True_New_Site_Project.xlsx");
-}
 </script>
 
 
 <!-- ฟังชั่น Filter -->
 <script>
-const tables = {
+    const tables = {
     main: {
         tbody: "#tableBody",
         allRows: [],
@@ -3949,7 +3773,6 @@ const tables = {
         rowsPerPage: 10,
         currentPage: 1
     },
-
     permission: {
         tbody: "#permissionTableBody",
         allRows: [],
@@ -3958,13 +3781,6 @@ const tables = {
         sort: { col: null, dir: null }
     }
 };
-
-const urlParams = new URLSearchParams(window.location.search);
-const perPage = parseInt(urlParams.get("per_page"));
-
-if (perPage) {
-    tables.main.rowsPerPage = perPage;
-}
 
 let openFilter = { table: null, col: null };
 let openFilterColumn = null;
@@ -4132,11 +3948,6 @@ function initTable(tableKey) {
     t.sort = { col: null, dir: null };
     t.currentPage = 1;
 
-    // ✅ แสดง 10 แถวแรกทันทีก่อน render เต็ม
-    t.allRows.forEach((r, i) => {
-        r.style.display = i < t.rowsPerPage ? "" : "none";
-    });
-
     renderTable(tableKey);
 }
 
@@ -4249,10 +4060,9 @@ function loadFilterValues(tableKey, colIndex) {
 
     sourceRows.forEach(row => {
         const v = getCellValue(row, colIndex, false);
-
-        if (v !== null) {
+        if (v !== null && v !== "") {
+            hasRealValue = true;
             values.add(v);
-            if (v !== "") hasRealValue = true;
         }
     });
 
@@ -4261,16 +4071,13 @@ function loadFilterValues(tableKey, colIndex) {
     values.forEach(v => {
         const label = document.createElement("label");
         label.className = "flex gap-2 text-xs py-1";
-
-        const displayText = v === "" ? "DD/MMM/YYYY" : v;
         label.innerHTML = `
             <input type="checkbox"
-                class="filter-checkbox"
-                value="${v}"
-                ${selected.includes(v) ? "checked" : ""}>
-            <span>${displayText}</span>
+                   class="filter-checkbox"
+                   value="${v}"
+                   ${selected.includes(v) ? "checked" : ""}>
+            <span>${v}</span>
         `;
-
         list.appendChild(label);
         originalFilterOrder.push(label);
     });
@@ -4307,9 +4114,9 @@ function applyAll(tableKey) {
         for (let col in t.filters) {
             let cellVal = getCellValue(row, col, false);
 
-            // ✅ สำคัญมาก
-            if (cellVal === null) {
-                cellVal = "";
+            // ⭐ FIX สำคัญมาก
+            if (cellVal === "" || cellVal === null) {
+                cellVal = "Invisible"; // หรือค่าที่ default แสดงใน select
             }
 
             if (!t.filters[col].includes(cellVal)) return false;
@@ -4364,105 +4171,45 @@ function sortTable(tableKey, col, dir) {
     renderTable(tableKey);
 }
 
-function parseDMY(value) {
-    if (!value) return null;
-
-    // รองรับเฉพาะ DD/MMM/YYYY เท่านั้น
-    const parts = value.split("/");
-    if (parts.length !== 3) return null;
-
-    const day   = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10);
-    const year  = parseInt(parts[2], 10);
-
-    if (
-        isNaN(day)   || day < 1 || day > 31 ||
-        isNaN(month) || month < 1 || month > 12 ||
-        isNaN(year)
-    ) {
-        return null;
-    }
-
-    return { day, month, year };
-}
-
-function parseDMYToTime(value) {
-    if (!value) return null;
-
-
-    if (value === "DD-MMM-YYYY") return null;
-
-    const parts = value.split("-");
-    if (parts.length !== 3) return null;
-
-    const day   = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year  = parseInt(parts[2], 10);
-
-    if (
-        isNaN(day) || isNaN(month) || isNaN(year)
-    ) return null;
-
-    return new Date(year, month, day).getTime();
-}
 
 
 function applySort(tableKey) {
     const t = tables[tableKey];
-    if (!t.sort.col || !t.sort.dir) return;
+    if (t.sort.col === null || t.sort.col === undefined || !t.sort.dir) return;
 
     const colKey = String(t.sort.col);
 
     t.visibleRows.sort((a, b) => {
-        const v1 = getCellValue(a, colKey, false);
-        const v2 = getCellValue(b, colKey, false);
+    let v1 = getCellValue(a, colKey, false) ?? "";
+    let v2 = getCellValue(b, colKey, false) ?? "";
 
-        // =============================
-        // ⭐ DATE SORT (DD-MMM-YYYY)
-        // =============================
-        const d1 = parseDMYToTime(v1);
-        const d2 = parseDMYToTime(v2);
-
-        // ✅ ถ้าไม่มีวันที่จริง → ดันลงล่างเสมอ
-        if (d1 === null && d2 !== null) return 1;
-        if (d1 !== null && d2 === null) return -1;
-        if (d1 !== null && d2 !== null) {
-            return t.sort.dir === "asc" ? d1 - d2 : d2 - d1;
-        }
-
-        // =============================
-        // SORT NUMBER
-        // =============================
-        const n1 = parseFloat(v1.replace(/,/g, "").replace('%',''));
-        const n2 = parseFloat(v2.replace(/,/g, "").replace('%',''));
-
-        if (!isNaN(n1) && !isNaN(n2)) {
-            return t.sort.dir === "asc" ? n1 - n2 : n2 - n1;
-        }
-
-        // =============================
-        // SORT TEXT (fallback สุดท้าย)
-        // =============================
+    // FIX เฉพาะ Refcode
+    if (colKey === "Refcode_PJ") {
         return t.sort.dir === "asc"
-            ? v1.localeCompare(v2, 'th', { sensitivity: "base" })
-            : v2.localeCompare(v1, 'th', { sensitivity: "base" });
-    });
+            ? v1.localeCompare(v2, 'en', { numeric: true, sensitivity: "base" })
+            : v2.localeCompare(v1, 'en', { numeric: true, sensitivity: "base" });
+    }
+
+    const n1 = parseFloat(v1.replace(/,/g, "").replace('%',''));
+    const n2 = parseFloat(v2.replace(/,/g, "").replace('%',''));
+
+    const isNum1 = !isNaN(n1);
+    const isNum2 = !isNaN(n2);
+
+    if (isNum1 && !isNum2) return 1;
+    if (!isNum1 && isNum2) return -1;
+
+    if (isNum1 && isNum2) {
+        return t.sort.dir === "asc" ? n1 - n2 : n2 - n1;
+    }
+
+    return t.sort.dir === "asc"
+        ? v1.localeCompare(v2, 'th', { sensitivity: "base" })
+        : v2.localeCompare(v1, 'th', { sensitivity: "base" });
+});
+
 
     reorderDOM(tableKey);
-}
-
-function sortByDatePart(part) {
-    const { table, col } = openFilter;
-    if (!table || col == null) return;
-
-    tables[table].sort = {
-        col: String(col),
-        dir: part // day | month | year
-    };
-
-    applySort(table);
-    renderTable(table);
-    closeColumnFilterModal();
 }
 
 
@@ -4575,45 +4322,51 @@ function updateRowsPerPageOptions() {
     }
 }
 
+// ฟังชั่นอัปเดต dropdown ตัวเลือกจำนวนแถวต่อหน้า
 function updateRowsPerPageDropdown() {
     const t = tables.main;
     const select = document.getElementById("rowsPerPageList");
     if (!select) return;
-
+    
     const total = t.visibleRows.length;
     const current = t.rowsPerPage;
-
+    
     select.innerHTML = "";
-
-    // ✅ กรณีไม่มีข้อมูล
-    if (total === 0) {
-        select.innerHTML = `<option value="10">ทั้งหมด (0 แถว)</option>`;
-        t.rowsPerPage = 10;      
-        t.currentPage = 1;
-        return;
-    }
-
-    const options = [10, 20];
-
+    
+    // ✅ กำหนดตัวเลือกแบบคงที่ (แสดงเสมอ ไม่ว่าข้อมูลจะมีกี่แถว)
+    const options = [10, 20, 50, 100];
+    let hasCurrentSelected = false;
+    
     options.forEach(v => {
-        if (v < total) {
-            select.innerHTML += `
-                <option value="${v}" ${current === v ? "selected" : ""}>
-                    ${v} รายการ
-                </option>
-            `;
-        }
-    });
-
-    select.innerHTML += `
-        <option value="${total}" ${current === total ? "selected" : ""}>
-            ทั้งหมด (${total} แถว)
+        const isSelected = current === v;
+        if (isSelected) hasCurrentSelected = true;
+        
+        select.innerHTML += `
+        <option value="${v}" ${isSelected ? "selected" : ""}>
+        ${v} รายการ
         </option>
+        `;
+    });
+    
+    // ✅ เพิ่มตัวเลือก "ทั้งหมด" (แสดงจำนวนแถวจริงเสมอ แม้จะเป็น 0)
+    const isAllSelected = current === total;
+    if (isAllSelected) hasCurrentSelected = true;
+    
+    select.innerHTML += `
+    <option value="${total}" ${isAllSelected ? "selected" : ""}>
+    ทั้งหมด (${total} แถว)
+    </option>
     `;
-
-    // ✅ FIX เพิ่มความปลอดภัย
+    
+    // ✅ FIX: ถ้าไม่มีตัวเลือกไหนถูกเลือก → เลือกค่าเริ่มต้น (ป้องกัน dropdown ว่าง)
+    if (!hasCurrentSelected) {
+        select.value = total === 0 ? 10 : Math.min(10, total);
+        t.rowsPerPage = parseInt(select.value);
+    }
+    
+    // ✅ FIX: ป้องกัน rowsPerPage = 0 (กรณีเลือก "ทั้งหมด" ตอนไม่มีข้อมูล)
     if (t.rowsPerPage <= 0) {
-        t.rowsPerPage = Math.min(10, total);
+        t.rowsPerPage = 10;
         t.currentPage = 1;
     }
 }
@@ -4734,6 +4487,124 @@ function changeRowsPerPage(value) {
 
 
 </script>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.date-wrapper').forEach(wrapper => {
+                const input = wrapper.querySelector('.date-input');
+                const icon = wrapper.querySelector('.date-icon');
+
+                toggleDateValueStyle(input);
+
+                if (input.hasAttribute('readonly')) return;
+
+                const fp = flatpickr(input, {
+                    dateFormat: 'd-m-Y',
+                    allowInput: true,
+                    clickOpens: false,
+                    disableMobile: true,
+                    locale: {
+                        firstDayOfWeek: 1
+                    },
+
+                    onChange: function(selectedDates, dateStr) {
+                        if (dateStr) {
+                            input.classList.remove('date-empty');
+                            input.classList.add('has-value');
+                        } else {
+                            input.classList.add('date-empty');
+                            input.classList.remove('has-value');
+                        }
+                    },
+                    onReady: function(_, __, instance) {
+                        const footer = document.createElement('div');
+                        footer.className = 'fp-footer';
+
+                        const btnToday = document.createElement('button');
+                        btnToday.type = 'button';
+                        btnToday.innerHTML = '<i class="fa-solid fa-calendar-check"></i> Today';
+                        btnToday.className = 'fp-btn fp-today';
+
+                        const btnClear = document.createElement('button');
+                        btnClear.type = 'button';
+                        btnClear.innerHTML = '<i class="fa-solid fa-trash-can"></i> Clear';
+                        btnClear.className = 'fp-btn fp-clear';
+
+                        footer.appendChild(btnToday);
+                        footer.appendChild(btnClear);
+                        instance.calendarContainer.appendChild(footer);
+
+                        btnToday.addEventListener('click', () => {
+                            instance.setDate(new Date(), true);
+                            input.classList.remove('date-empty');
+                            toggleDateValueStyle(input);
+                            instance.close();
+                        });
+
+                        btnClear.addEventListener('click', () => {
+                            instance.clear();
+                            input.value = '';
+                            input.classList.add('date-empty');
+                            toggleDateValueStyle(input);
+                            instance.close();
+                        });
+                    },
+
+                    onOpen: function(_, __, instance) {
+                        input.classList.add('active-input');
+
+                        instance._keyHandler = (e) => {
+                            // Enter = Today
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                instance.setDate(new Date(), true);
+                                input.classList.remove('date-empty');
+                                toggleDateValueStyle(input);
+                                instance.close();
+                            }
+
+                            // Esc = Close
+                            if (e.key === 'Escape') {
+                                e.preventDefault();
+                                instance.close();
+                            }
+                        };
+
+                        document.addEventListener('keydown', instance._keyHandler);
+                    },
+
+                    onClose: function(_, __, instance) {
+                        input.classList.remove('active-input');
+
+                        if (instance._keyHandler) {
+                            document.removeEventListener('keydown', instance._keyHandler);
+                            instance._keyHandler = null;
+                        }
+                    }
+                });
+
+                icon.addEventListener('click', () => fp.open());
+
+                // ปรับปรุงการพิมพ์ให้รองรับ d-m-Y อัตโนมัติ (Optional)
+                input.addEventListener('input', (e) => {
+                    let v = e.target.value.replace(/\D/g, '').slice(0, 8);
+                    if (v.length >= 2 && v.length < 4) v = v.slice(0, 2) + '-' + v.slice(2);
+                    if (v.length >= 4) v = v.slice(0, 2) + '-' + v.slice(2, 4) + '-' + v.slice(4);
+                    e.target.value = v;
+
+                    toggleDateValueStyle(input);
+                });
+            });
+        });
+
+        function toggleDateValueStyle(input) {
+            if (input.value && input.value.trim() !== '') {
+                input.classList.add('has-value');
+            } else {
+                input.classList.remove('has-value');
+            }
+        }
+    </script>
 
 
 

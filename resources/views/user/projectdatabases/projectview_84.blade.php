@@ -2103,117 +2103,56 @@
             </div>
         </div>
 
-            <div id="listViewPagination"
-                class="mt-4 p-4 sm:p-5 bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div id="listViewPagination"
+            class="mt-4 flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0 p-5 bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-300">
 
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-
-                    {{-- Left: Rows per page --}}
-                        <div class="flex items-center gap-2">
-                            <!-- Label with Icon -->
-                            <label class="flex items-center gap-1.5 text-xs font-sarabun font-medium text-gray-600 whitespace-nowrap">
-                                <i class="fa-solid fa-list-ul text-indigo-400"></i>
-                                แสดงรายการ:
-                            </label>
-
-                            @php
-                                $total = $projectData->count();
-                                $baseOptions = [10, 20, 50, 100];
-                                $options = array_filter($baseOptions, fn($v) => $v < $total);
-                                $options[] = $total;
-                            @endphp
-
-                            <!-- Custom Select Container -->
-                            <div class="relative group">
-                                @php
-                                    $query = request()->except(['per_page','page']);
-                                @endphp
-
-                                <select 
-                                onchange="window.location='{{ request()->url() }}?{{ http_build_query($query) }}&per_page='+this.value+'&page=1'"
-                                class="appearance-none py-2 pl-3 pr-8 border border-gray-200 rounded-xl text-xs font-sarabun font-medium
-                                bg-white text-gray-700 cursor-pointer min-w-[80px] text-center
-                                hover:border-indigo-300 hover:bg-indigo-50/50
-                                focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500
-                                transition-all duration-300 shadow-sm hover:shadow-md">
-                                    
-                                    @foreach($options as $size)
-                                        <option value="{{ $size }}"
-                                            {{ $projectData->perPage() == $size ? 'selected' : '' }}>
-                                            {{ $size == $total ? 'ทั้งหมด ('.$total.')' : $size }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                
-                                <!-- Custom Dropdown Arrow -->
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-                                    <i class="fa-solid fa-chevron-down text-[9px] text-gray-400 
-                                            group-hover:text-indigo-500 transition-colors"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                    {{-- Center: Pagination --}}
-                    <nav class="flex items-center gap-1.5">
-
-                        {{-- Previous --}}
-                        @if ($projectData->onFirstPage())
-                            <button disabled
-                                class="w-9 h-9 rounded-xl border opacity-30">
-                                <i class="fa-solid fa-chevron-left text-xs"></i>
-                            </button>
-                        @else
-                            <a href="{{ $projectData->previousPageUrl() }}"
-                                class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
-                                <i class="fa-solid fa-chevron-left text-xs"></i>
-                            </a>
-                        @endif
-
-
-                        {{-- Page Numbers --}}
-                        @for ($i = 1; $i <= $projectData->lastPage(); $i++)
-                            <a href="{{ $projectData->url($i) }}"
-                                class="w-9 h-9 flex items-center justify-center rounded-xl text-xs
-                                {{ $projectData->currentPage() == $i
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'bg-white text-gray-600 border hover:bg-indigo-50' }}">
-                                {{ $i }}
-                            </a>
-                        @endfor
-
-
-                        {{-- Next --}}
-                        @if ($projectData->hasMorePages())
-                            <a href="{{ $projectData->nextPageUrl() }}"
-                                class="w-9 h-9 flex items-center justify-center rounded-xl border hover:bg-indigo-600 hover:text-white transition">
-                                <i class="fa-solid fa-chevron-right text-xs"></i>
-                            </a>
-                        @else
-                            <button disabled
-                                class="w-9 h-9 rounded-xl border opacity-30">
-                                <i class="fa-solid fa-chevron-right text-xs"></i>
-                            </button>
-                        @endif
-
-                    </nav>
-
-                    {{-- Right: Summary --}}
-                    <div>
-                        <span class="text-xs text-gray-500 bg-gray-100 px-3 py-2 rounded-full">
-                            แสดง
-                            <span class="text-indigo-600 font-semibold">
-                                {{ $projectData->firstItem() }}-{{ $projectData->lastItem() }}
-                            </span>
-                            จากทั้งหมด
-                            <span class="font-semibold">
-                                {{ $projectData->total() }}
-                            </span>
-                            รายการ
-                        </span>
+            <div class="flex items-center space-x-3 order-2 lg:order-1">
+                <label for="rowsPerPageList"
+                    class="font-sarabun text-xs font-medium tracking-wide text-gray-600">แสดงรายการ:</label>
+                <div class="relative">
+                    <select id="rowsPerPageList" onchange="changeRowsPerPage(this.value)"
+                        class="block py-2 pl-4 pr-10 border border-gray-200 rounded-xl text-xs font-sarabun bg-gray-50 cursor-pointer appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                    </select>
+                    {{-- Custom Arrow Icon --}}
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                        <i class="fa-solid fa-chevron-down text-[10px]"></i>
                     </div>
-
                 </div>
             </div>
+
+            <nav class="flex items-center space-x-2 order-1 lg:order-2" aria-label="Pagination">
+                {{-- Previous Button --}}
+                <button id="prevPageBtnList" onclick="goToPage(tables.main.currentPage - 1)"
+                    class="pagination-btn group flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none shadow-sm">
+                    <i class="fa-solid fa-chevron-left text-xs transition-transform group-hover:-translate-x-0.5"></i>
+                </button>
+
+                {{-- Page Numbers Container --}}
+                <div id="pageNumbersList" class="flex items-center space-x-1">
+                    {{-- ตัวอย่างปุ่ม Active --}}
+                    <button
+                        class="w-10 h-10 rounded-xl bg-indigo-600 text-white font-sarabun text-sm shadow-md shadow-indigo-200">1</button>
+                    <button
+                        class="w-10 h-10 rounded-xl bg-white text-gray-600 font-sarabun text-sm hover:bg-indigo-50 transition-all">2</button>
+                    <button
+                        class="w-10 h-10 rounded-xl bg-white text-gray-600 font-sarabun text-sm hover:bg-indigo-50 transition-all">3</button>
+                </div>
+
+                {{-- Next Button --}}
+                <button id="nextPageBtnList" onclick="goToPage(tables.main.currentPage + 1)"
+                    class="pagination-btn group flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none shadow-sm">
+                    <i class="fa-solid fa-chevron-right text-xs transition-transform group-hover:translate-x-0.5"></i>
+                </button>
+            </nav>
+
+            <div class="order-3 text-right">
+                <span id="paginationSummaryList"
+                    class="text-xs font-sarabun text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
+                    แสดง <span class="text-indigo-600 font-sarabun">1-10</span> จากทั้งหมด <span
+                        class="text-gray-900 font-sarabun">15</span> รายการ
+                </span>
+            </div>
+        </div>
     </div>
 
 </main>
@@ -2790,13 +2729,13 @@ function exportToExcel() {
     });
 
     XLSX.utils.book_append_sheet(wb, ws, "Visible Data");
-    XLSX.writeFile(wb, "84_True Site dismantling.xlsx");
+    XLSX.writeFile(wb, "90 True Maintenance_data.xlsx");
 }
 </script>
 
 <!-- ฟังชั่น Filter -->
 <script>
-const tables = {
+    const tables = {
     main: {
         tbody: "#tableBody",
         allRows: [],
@@ -2806,7 +2745,6 @@ const tables = {
         rowsPerPage: 10,
         currentPage: 1
     },
-
     permission: {
         tbody: "#permissionTableBody",
         allRows: [],
@@ -2815,13 +2753,6 @@ const tables = {
         sort: { col: null, dir: null }
     }
 };
-
-const urlParams = new URLSearchParams(window.location.search);
-const perPage = parseInt(urlParams.get("per_page"));
-
-if (perPage) {
-    tables.main.rowsPerPage = perPage;
-}
 
 let openFilter = { table: null, col: null };
 let openFilterColumn = null;
@@ -2989,11 +2920,6 @@ function initTable(tableKey) {
     t.sort = { col: null, dir: null };
     t.currentPage = 1;
 
-    // ✅ แสดง 10 แถวแรกทันทีก่อน render เต็ม
-    t.allRows.forEach((r, i) => {
-        r.style.display = i < t.rowsPerPage ? "" : "none";
-    });
-
     renderTable(tableKey);
 }
 
@@ -3119,7 +3045,7 @@ function loadFilterValues(tableKey, colIndex) {
         const label = document.createElement("label");
         label.className = "flex gap-2 text-xs py-1";
 
-        const displayText = v === "" ? "DD/MMM/YYYY" : v;
+        const displayText = v === "" ? "" : v;
         label.innerHTML = `
             <input type="checkbox"
                 class="filter-checkbox"
@@ -3432,45 +3358,51 @@ function updateRowsPerPageOptions() {
     }
 }
 
+// ฟังชั่นอัปเดต dropdown ตัวเลือกจำนวนแถวต่อหน้า
 function updateRowsPerPageDropdown() {
     const t = tables.main;
     const select = document.getElementById("rowsPerPageList");
     if (!select) return;
-
+    
     const total = t.visibleRows.length;
     const current = t.rowsPerPage;
-
+    
     select.innerHTML = "";
-
-    // ✅ กรณีไม่มีข้อมูล
-    if (total === 0) {
-        select.innerHTML = `<option value="10">ทั้งหมด (0 แถว)</option>`;
-        t.rowsPerPage = 10;      
-        t.currentPage = 1;
-        return;
-    }
-
-    const options = [10, 20];
-
+    
+    // ✅ กำหนดตัวเลือกแบบคงที่ (แสดงเสมอ ไม่ว่าข้อมูลจะมีกี่แถว)
+    const options = [10, 20, 50, 100];
+    let hasCurrentSelected = false;
+    
     options.forEach(v => {
-        if (v < total) {
-            select.innerHTML += `
-                <option value="${v}" ${current === v ? "selected" : ""}>
-                    ${v} รายการ
-                </option>
-            `;
-        }
-    });
-
-    select.innerHTML += `
-        <option value="${total}" ${current === total ? "selected" : ""}>
-            ทั้งหมด (${total} แถว)
+        const isSelected = current === v;
+        if (isSelected) hasCurrentSelected = true;
+        
+        select.innerHTML += `
+        <option value="${v}" ${isSelected ? "selected" : ""}>
+        ${v} รายการ
         </option>
+        `;
+    });
+    
+    // ✅ เพิ่มตัวเลือก "ทั้งหมด" (แสดงจำนวนแถวจริงเสมอ แม้จะเป็น 0)
+    const isAllSelected = current === total;
+    if (isAllSelected) hasCurrentSelected = true;
+    
+    select.innerHTML += `
+    <option value="${total}" ${isAllSelected ? "selected" : ""}>
+    ทั้งหมด (${total} แถว)
+    </option>
     `;
-
-    // ✅ FIX เพิ่มความปลอดภัย
+    
+    // ✅ FIX: ถ้าไม่มีตัวเลือกไหนถูกเลือก → เลือกค่าเริ่มต้น (ป้องกัน dropdown ว่าง)
+    if (!hasCurrentSelected) {
+        select.value = total === 0 ? 10 : Math.min(10, total);
+        t.rowsPerPage = parseInt(select.value);
+    }
+    
+    // ✅ FIX: ป้องกัน rowsPerPage = 0 (กรณีเลือก "ทั้งหมด" ตอนไม่มีข้อมูล)
     if (t.rowsPerPage <= 0) {
-        t.rowsPerPage = Math.min(10, total);
+        t.rowsPerPage = 10;
         t.currentPage = 1;
     }
 }
