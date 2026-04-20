@@ -286,8 +286,8 @@
                         <!-- Refcode -->
                         @if (Auth::check())
 
-                        <a href="#"
-                            class="px-3 py-1 rounded-md text-sm transition font-sarabun {{ Route::currentRouteName() === 'purchase-orders.index' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
+                        <a href="{{ route('revenue-invoice.index') }}"
+                            class="px-3 py-1 rounded-md text-sm transition font-sarabun {{ Route::currentRouteName() === 'revenue-invoice.index' ? 'bg-white text-blue-800' : 'text-blue hover:bg-white hover:text-blue-800' }}">
                             Invoice (พี่ดวง)
                         </a>
 

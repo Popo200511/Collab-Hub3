@@ -104,37 +104,8 @@
         <div class="pt-1">
             <header class="flex flex-wrap items-center justify-between gap-3 mb-4">
 
-                <div class="flex items-center gap-2">
-                    <!-- ปุ่มกด Invoice Reques Log -->
-                    <div class="flex items-center gap-2">
-                        <button type="button" class="shrink-0 bg-green-600 hover:bg-green-700 text-white font-medium 
-                    py-1.5 px-4 rounded-lg shadow-sm
-                    transition-all duration-200 flex items-center justify-center gap-1.5 text-xs sm:text-sm">
-                            <span>Invoice Request Log</span>
-                        </button>
-                    </div>
-
-                    <!-- ปุ่มกด PO Booking Log  -->
-                    <div class="flex items-center gap-2">
-                        <button type="button" class="shrink-0 bg-green-600 hover:bg-green-700 text-white font-medium 
-                    py-1.5 px-4 rounded-lg shadow-sm
-                    transition-all duration-200 flex items-center justify-center gap-1.5 text-xs sm:text-sm">
-                            <span>Invoice Request Log</span>
-                        </button>
-                    </div>
-
-                    <!-- ปุ่มกด PO Decrement  -->
-                    <div class="flex items-center gap-2">
-                        <button type="button" class="shrink-0 bg-green-600 hover:bg-green-700 text-white font-medium 
-                    py-1.5 px-4 rounded-lg shadow-sm
-                    transition-all duration-200 flex items-center justify-center gap-1.5 text-xs sm:text-sm">
-                            <span>PO Decrement Log</span>
-                        </button>
-                    </div>
-                </div>
-
                 <!-- ปุ่มกด PO Received From Customer -->
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 ml-auto">
                     <!-- ปุ่มกด PO Decrement -->
                     <div class="flex items-center gap-2">
                         <button type="button" onclick="openDecrementModal()" class="shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white font-medium 
@@ -179,8 +150,8 @@
                                     ยกเลิก
                                 </button>
 
-                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded 
-                                        hover:bg-blue-700 hover:scale-105 
+                                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded 
+                                        hover:bg-green-700 hover:scale-105 
                                         transition duration-200 ease-in-out shadow-md hover:shadow-lg">
                                     บันทึก
                                 </button>
@@ -235,8 +206,8 @@
                                     ยกเลิก
                                 </button>
 
-                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded 
-                                        hover:bg-blue-700 hover:scale-105 
+                                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded 
+                                        hover:bg-green-700 hover:scale-105 
                                         transition duration-200 ease-in-out shadow-md hover:shadow-lg">
                                     บันทึก
                                 </button>
@@ -431,21 +402,21 @@
                     XLSX.writeFile(wb, `PO_Revenue_${new Date().toISOString().slice(0,10)}.xlsx`);
                 }
                 </script>
-                
-            <!-- SweetAlert เมื่อบันทึกสำเร็จให้แสดง SweetAlert บันทึกสำเร็จ -->
+
+                <!-- SweetAlert เมื่อบันทึกสำเร็จให้แสดง SweetAlert บันทึกสำเร็จ -->
                 @if(session('success'))
-                    <script>
-                        Swal.fire({
+                <script>
+                    Swal.fire({
                             icon: 'success',
                             title: 'สำเร็จ',
                             text: '{{ session('success') }}',
-                            confirmButtonColor: '#2563eb',
+                            confirmButtonColor: '#16a34a',
                             confirmButtonText: 'ตกลง'
                         });
-                    </script>
+                </script>
                 @endif
 
-            <!-- SweetAlert ยืนยันการบันทึก -->
+                <!-- SweetAlert ยืนยันการบันทึก -->
                 <script>
                     document.querySelectorAll("#poModal form, #decrementModal form")
                     .forEach(form => {
@@ -457,7 +428,7 @@
                                 text: "คุณต้องการบันทึกข้อมูลใช่หรือไม่",
                                 icon: 'question',
                                 showCancelButton: true,
-                                confirmButtonColor: '#2563eb',
+                                confirmButtonColor: '#16a34a',
                                 cancelButtonColor: '#d33',
                                 confirmButtonText: 'ใช่, บันทึกเลย',
                                 cancelButtonText: 'ยกเลิก'
@@ -488,7 +459,7 @@
 
                 <!-- Table Container with Responsive Scroll -->
                 <div class="overflow-x-auto overflow-y-auto flex-1"
-                    style="max-height: calc(100vh - 250px); min-height: 578px;">
+                    style="max-height: calc(100vh - 250px); min-height: 530px;">
                     <style>
                         /* Custom Compact Scrollbar */
                         .compact-table::-webkit-scrollbar {
@@ -826,8 +797,39 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="flex items-center gap-2 mt-4">
+            <!-- ปุ่มกด Invoice Reques Log -->
+            <div class="flex items-center gap-2">
+                <button type="button" class="shrink-0 bg-orange-500 hover:bg-orange-600 text-white font-medium 
+                    py-1.5 px-4 rounded-lg shadow-sm
+                    transition-all duration-200 flex items-center justify-center gap-1.5 text-xs sm:text-sm">
+                    <span>Invoice Request Log</span>
+                </button>
+            </div>
+
+            <!-- ปุ่มกด PO Booking Log  -->
+            <div class="flex items-center gap-2">
+                <button type="button" class="shrink-0 bg-orange-500 hover:bg-orange-600 text-white font-medium 
+                    py-1.5 px-4 rounded-lg shadow-sm
+                    transition-all duration-200 flex items-center justify-center gap-1.5 text-xs sm:text-sm">
+                    <span>Invoice Request Log</span>
+                </button>
+            </div>
+
+            <!-- ปุ่มกด PO Decrement  -->
+            <div class="flex items-center gap-2">
+                <button type="button" class="shrink-0 bg-orange-500 hover:bg-orange-600 text-white font-medium 
+                    py-1.5 px-4 rounded-lg shadow-sm
+                    transition-all duration-200 flex items-center justify-center gap-1.5 text-xs sm:text-sm">
+                    <span>PO Decrement Log</span>
+                </button>
+            </div>
+        </div>
     </main>
 </div>
+
 
 
 

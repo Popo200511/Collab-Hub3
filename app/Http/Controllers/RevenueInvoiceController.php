@@ -14,11 +14,10 @@ class RevenueInvoiceController extends Controller
     public function index()
     {
         // ตัวอย่าง: ดึงข้อมูลจากตาราง
-        $data = DB::table('collab_revenue_po_receviedfromcustomer')
-                  ->orderBy('po_received_date', 'desc')
+        $data = DB::table('collab_revenue_invoice')
                   ->get();
 
-        return view('Revenue.Invoice.Invoice-Table', compact('data'));
+        return view('Revenue/PO.Invoice.RevenueInvoice', compact('data'));
     }
 
 }

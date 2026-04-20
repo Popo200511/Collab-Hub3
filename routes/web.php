@@ -7,6 +7,7 @@ use App\Http\Controllers\ImportItemController;
 use App\Http\Controllers\Paymentcontroller;
 use App\Http\Controllers\Prcontroller;
 use App\Http\Controllers\RevenuePurchaseController;
+use App\Http\Controllers\RevenueInvoiceController;
 use App\Http\Controllers\Refcodecontroller;
 use App\Http\Controllers\SubcInvoicecontroller;
 use App\Http\Controllers\TowerDismantleController;
@@ -289,3 +290,6 @@ Route::post('Revenue/PO/purchase/PO_Decrement', [RevenuePurchaseController::clas
 
 
 ////////////////////////////////////////////////////////แผนก Invoice Table (พี่ดวง) \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+// หน้าแสดงรายการ Invoice
+Route::get('Revenue/PO/Invoice/RevenueInvoice', [RevenueInvoiceController::class, 'index'])->name('revenue-invoice.index');
